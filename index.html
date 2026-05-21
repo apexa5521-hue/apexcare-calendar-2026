@@ -928,11 +928,18 @@ function rebuildFromLocal() {
 
  allNotes = visible;
  
+ let addedToMap = 0;
  visible.forEach(n => {
-  if (!notesMap[n.date]) notesMap[n.date] = [];
-  const exists = notesMap[n.date].some(x => x.id === n.id);
-  if (!exists) notesMap[n.date].push(n);
+  const key = normalizeDate(n.date);
+  if (!key) return;
+  if (!notesMap[key]) notesMap[key] = [];
+  const exists = notesMap[key].some(x => x.id === n.id);
+  if (!exists) {
+   notesMap[key].push({...n, date: key});
+   addedToMap++;
+  }
  });
+ console.log("[REBUILD] mapped", addedToMap, "notes into", Object.keys(notesMap).length, "dates");
  
  renderAllCells();
  updateInboxBadge();
@@ -995,6 +1002,30 @@ function syncFromSheet() {
  });
 }
 
+function normalizeDate(raw) {
+ if (!raw) return null;
+ const s = String(raw).trim();
+ // Already YYYY-MM-DD
+ if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+ // Try parsing various formats
+ // DD/MM/YYYY or MM/DD/YYYY → try both, prefer YYYY-MM-DD output
+ const slashMatch = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ if (slashMatch) {
+  // Assume DD/MM/YYYY (common in Arabic sheets)
+  const [, d, m, y] = slashMatch;
+  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+ }
+ // Try native Date parse as last resort
+ const parsed = new Date(s);
+ if (!isNaN(parsed.getTime())) {
+  const y = parsed.getFullYear();
+  const m = String(parsed.getMonth()+1).padStart(2,'0');
+  const d = String(parsed.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+ }
+ return null;
+}
+
 function processNotes(remoteNotes) {
  if (!Array.isArray(remoteNotes)) {
    console.warn('[PROCESS] invalid notes data');
@@ -1007,6 +1038,14 @@ function processNotes(remoteNotes) {
  
  remoteNotes.forEach(n => {
   if (!n?.id || !n?.date || !n?.text) return;
+
+  // Normalize date to YYYY-MM-DD so it matches calendar cell IDs
+  const normalizedDate = normalizeDate(n.date);
+  if (!normalizedDate) {
+   console.warn('[PROCESS] skipping note with unrecognized date:', n.date);
+   return;
+  }
+  n = { ...n, date: normalizedDate };
   
   // Check visibility
   const roleObj = ROLE_META[currentRole];
