@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzBmMTcyYSIvPgogIDxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIyNiIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iIzNEQkRBRCIvPgogIDxyZWN0IHg9IjMiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzRBNEE5QSIvPgogIDxyZWN0IHg9IjMiIHk9IjE2IiB3aWR0aD0iMjAiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzdCNTJBQiIvPgogIDxyZWN0IHg9IjMiIHk9IjIyIiB3aWR0aD0iMTMiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzNEQkRBRCIvPgogIDxjaXJjbGUgY3g9IjI2IiBjeT0iMjMuNSIgcj0iNSIgZmlsbD0iIzNEQkRBRCIvPgogIDxwYXRoIGQ9Ik0yMy41IDIzLjUgTDI1LjUgMjUuNSBMMjkgMjIiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>تقويم أبكس كير 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══ TOKENS ══════════════════════════════════════════ */
+:root{
+ --teal:#3DBDAD;--tl:#d8f4f0;
+ --pur:#7B52AB; --pl:#ede4f7;
+ --ind:#4A4A9A; --il:#e4e3f5;
+ --red:#c0152a; --rl:#fff0f2;
+ --bg:#f0f3f8;--card:#fff;--bdr:#d4dfe9;
+ --txt:#18181b;--muted:#6b7280;
+ --H:58px;--NAV:40px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--H)+var(--NAV)+8px)}
+body{font-family:'Tajawal',sans-serif;direction:rtl;background:var(--bg);color:var(--txt)}
+
+/* ══ LOGIN SCREEN ════════════════════════════════════ */
+#loginScreen{
+ position:fixed;inset:0;z-index:2000;
+ background:linear-gradient(145deg,#0f172a 0%,#1e293b 40%,#0f2027 100%);
+ display:flex;align-items:center;justify-content:center;
+}
+#loginScreen.gone{display:none}
+.login-card{
+ background:rgba(255,255,255,.05);backdrop-filter:blur(10px);
+ border:1px solid rgba(255,255,255,.1);border-radius:20px;
+ padding:36px 32px;width:100%;max-width:380px;
+ display:flex;flex-direction:column;gap:16px;
+}
+.login-logo{height:48px;width:auto;object-fit:contain;margin:0 auto 6px;display:block;
+ filter:drop-shadow(0 0 12px rgba(61,189,173,.4))}
+.login-title{text-align:center;font-size:18px;font-weight:800;
+ background:linear-gradient(90deg,#3DBDAD,#7B52AB);
+ -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-sub{text-align:center;font-size:12px;color:#94a3b8;margin-top:-8px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.role-card{
+ border:1.5px solid rgba(255,255,255,.1);border-radius:12px;
+ padding:14px 10px;cursor:pointer;text-align:center;
+ transition:all .2s;background:rgba(255,255,255,.04);
+ display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.role-card:hover{border-color:var(--teal);background:rgba(61,189,173,.08);transform:translateY(-2px)}
+.role-card.selected{border-color:var(--teal);background:rgba(61,189,173,.15)}
+.role-abbr{font-size:11px;font-weight:800;color:#3DBDAD;letter-spacing:1px;background:rgba(61,189,173,.15);padding:4px 8px;border-radius:6px}
+.role-name{font-size:12px;font-weight:700;color:#e2e8f0}
+.pin-row{display:flex;flex-direction:column;gap:6px}
+.pin-label{font-size:12px;color:#94a3b8;font-weight:600}
+.pin-field{
+ background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);
+ border-radius:10px;padding:11px 14px;font-size:20px;letter-spacing:8px;
+ text-align:center;color:#e2e8f0;outline:none;font-family:'Tajawal',sans-serif;width:100%
+}
+.pin-field:focus{border-color:var(--teal)}
+.pin-err{color:#f87171;font-size:12px;text-align:center;font-weight:600;display:none}
+.login-btn{
+ background:linear-gradient(135deg,#3DBDAD,#4A4A9A);color:#fff;
+ border:none;border-radius:12px;padding:13px;font-family:'Tajawal',sans-serif;
+ font-size:15px;font-weight:800;cursor:pointer;transition:opacity .15s;
+}
+.login-btn:active{opacity:.8}
+
+/* ══ MAIN APP (hidden until login) ══════════════════ */
+#appShell{display:none;padding-top:calc(var(--H)+var(--NAV));padding-bottom:32px;min-height:100vh}
+#appShell.visible{display:block}
+
+/* ══ TOP BAR ═════════════════════════════════════════ */
+.topbar{position:fixed;top:0;inset-inline:0;height:var(--H);z-index:300;
+ background:var(--card);border-bottom:3px solid var(--teal);
+ box-shadow:0 2px 12px rgba(61,189,173,.12);
+ display:flex;align-items:center;gap:8px;padding:0 12px}
+.tb-logo{height:34px;width:auto;flex-shrink:0}
+.tb-mid{flex:1;text-align:center;min-width:0}
+.tb-title{font-size:14px;font-weight:800;
+ background:linear-gradient(90deg,var(--teal),var(--pur));
+ -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tb-user{font-size:10px;color:var(--muted);margin-top:1px}
+.tb-btns{display:flex;gap:5px;flex-shrink:0}
+.btn{border:none;border-radius:8px;padding:6px 11px;font-family:'Tajawal',sans-serif;
+ font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-note{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff}
+.btn-inbox{background:#1e293b;color:#e2e8f0;font-size:12px;padding:6px 10px}
+.btn-imp{background:linear-gradient(135deg,#0f766e,#1e3a5f);color:#fff}
+.btn-pdf{background:linear-gradient(135deg,var(--teal),var(--ind));color:#fff}
+.btn-logout{background:#334155;color:#94a3b8;font-size:11px}
+
+/* ══ MONTH NAV ═══════════════════════════════════════ */
+.mnav{position:fixed;top:var(--H);inset-inline:0;height:var(--NAV);z-index:200;
+ background:var(--card);border-bottom:1px solid var(--bdr);
+ display:flex;align-items:center;overflow-x:auto;padding:0 10px;gap:5px;
+ scrollbar-width:none}
+.mnav::-webkit-scrollbar{display:none}
+.nv{flex-shrink:0;text-decoration:none;font-size:10.5px;font-weight:700;
+ padding:4px 10px;border-radius:20px;color:var(--ind);background:var(--il);
+ border:1.5px solid transparent;transition:all .18s;white-space:nowrap}
+.nv.active{background:var(--ind);color:#fff}
+
+/* ══ LEGEND BAR ══════════════════════════════════════ */
+.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+ margin:10px 12px 0;padding:8px 12px;background:var(--card);
+ border-radius:12px;border:1px solid var(--bdr)}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted)}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ══ LOADING ═════════════════════════════════════════ */
+.load-screen{position:fixed;inset:0;background:var(--card);z-index:998;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.load-screen.gone{display:none}
+.spinner{width:32px;height:32px;border:3px solid var(--il);border-top-color:var(--ind);
+ border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-size:12px;font-weight:600;color:var(--muted)}
+
+/* ══ MONTHS ══════════════════════════════════════════ */
+.months{display:flex;flex-direction:column;gap:12px;padding:10px 12px 0}
+.mc{background:var(--card);border-radius:14px;overflow:hidden;
+ border:1px solid var(--bdr);box-shadow:0 2px 10px rgba(74,74,154,.06)}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:11px 14px 9px;color:#fff}
+.mh-ar{font-size:17px;font-weight:800;line-height:1}
+.mh-hij{font-size:9.5px;opacity:.88;font-weight:500;margin-top:2px}
+.mh-num{font-size:32px;font-weight:800;opacity:.18;letter-spacing:3px;line-height:1}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ctbl{width:100%;min-width:320px;border-collapse:collapse;table-layout:fixed}
+.ctbl thead th{color:#fff;text-align:center;font-size:10px;font-weight:700;
+ padding:6px 2px;border:1px solid rgba(255,255,255,.18);white-space:nowrap}
+.ctbl tbody td{border:1px solid var(--bdr);vertical-align:top;
+ padding:5px 4px 3px;background:var(--card);min-height:60px;cursor:pointer}
+.ctbl tbody td:active{filter:brightness(.96)}
+.emp{background:#f6f8fc!important;cursor:default!important}
+.wk {background:#f3f2fb!important}
+.hl {background:var(--rl)!important;border-right:3px solid var(--red)!important}
+.hl .dn{color:var(--red)!important}
+.dt{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+.dn{font-size:13px;font-weight:800;line-height:1;color:var(--txt)}
+.wk .dn{color:#c0bdd8}
+.dh{font-size:7.5px;color:#b0b8c4;background:#f2f4f8;padding:1px 3px;border-radius:3px}
+.pills{display:flex;flex-direction:column;gap:1.5px;overflow:hidden}
+.pill{font-size:7px;font-weight:700;line-height:1.3;padding:1.5px 4px;border-radius:3px;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ph{background:var(--tl);color:#0c6060}
+.pe{background:var(--il);color:var(--ind)}
+.pn{background:var(--pl);color:var(--pur)}
+.px{background:#ebebeb;color:#888}
+
+/* ══ NOTES ON CELL ═══════════════════════════════════ */
+.nw-wrap{display:flex;flex-direction:column;gap:1.5px;margin-top:2px;overflow:hidden}
+.note-chip{font-size:7px;font-weight:700;padding:2px 5px;border-radius:3px;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;
+ display:flex;align-items:center;gap:2px}
+.note-chip-lock{font-size:8px;opacity:.7;flex-shrink:0}
+
+/* ══ UNREAD BADGE ════════════════════════════════════ */
+.unread-dot{
+ position:absolute;top:4px;right:4px;
+ width:8px;height:8px;border-radius:50%;
+ background:#ef4444;border:2px solid white;
+ display:none;
+}
+
+/* ══ OVERLAYS ════════════════════════════════════════ */
+.ov{display:none;position:fixed;inset:0;background:rgba(10,10,20,.52);
+ z-index:999;align-items:center;justify-content:center;padding:14px}
+.ov.show{display:flex}
+.modal{background:var(--card);border-radius:18px;width:100%;max-width:460px;
+ padding:18px;display:flex;flex-direction:column;gap:12px;
+ max-height:88vh;overflow-y:auto;animation:up .2s ease}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-size:16px;font-weight:800;text-align:center;color:var(--txt)}
+.modal-sub{font-size:11px;color:var(--muted);text-align:center;margin-top:-7px}
+.frow{display:flex;flex-direction:column;gap:4px}
+.flabel{font-size:12px;font-weight:700;color:var(--txt)}
+.finput{border:1.5px solid var(--bdr);border-radius:9px;padding:9px 12px;
+ font-family:'Tajawal',sans-serif;font-size:13px;color:var(--txt);
+ background:var(--bg);outline:none;width:100%}
+.finput:focus{border-color:var(--teal)}
+textarea.finput{resize:vertical;min-height:70px}
+.to-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.ttab{flex:1;min-width:72px;padding:7px 6px;border-radius:9px;border:1.5px solid var(--bdr);
+ font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;cursor:pointer;
+ background:var(--bg);color:var(--muted);text-align:center;transition:all .15s}
+.colors{display:flex;gap:7px;flex-wrap:wrap}
+.co{width:26px;height:26px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform .12s}
+.co.sel{transform:scale(1.2);border-color:#fff;box-shadow:0 0 0 2.5px #333}
+.ma{display:flex;gap:8px}
+.mbtn{flex:1;padding:10px;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.mbtn-p{background:linear-gradient(135deg,var(--teal),var(--ind));color:#fff}
+.mbtn-c{background:var(--bg);color:var(--muted);border:1.5px solid var(--bdr)}
+.mbtn-r{background:var(--rl);color:var(--red);border:1.5px solid var(--red)}
+
+/* note list item */
+.note-item{
+ display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+ border-radius:11px;border:1px solid var(--bdr);background:var(--bg);
+}
+.ni-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.ni-body{flex:1;min-width:0}
+.ni-text{font-size:13px;font-weight:600;color:var(--txt);line-height:1.5;word-break:break-word}
+.ni-meta{font-size:10px;color:var(--muted);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap}
+.ni-tag{padding:1px 7px;border-radius:4px;font-size:9.5px;font-weight:700}
+.ni-del{border:none;background:none;color:#e53e3e;font-size:17px;cursor:pointer;padding:0;line-height:1}
+.ni-share{border:none;background:#e0f2fe;color:#0369a1;border-radius:5px;
+  padding:3px 8px;font-family:'Tajawal',sans-serif;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ni-share:active{background:#bae6fd}
+.ni-shared-badge{background:#dcfce7;color:#15803d;border-radius:5px;
+  padding:2px 7px;font-size:9.5px;font-weight:700;white-space:nowrap}
+
+/* ══ INBOX BADGE ═════════════════════════════════════ */
+.inbox-badge{
+ display:inline-flex;align-items:center;justify-content:center;
+ background:#ef4444;color:#fff;border-radius:50%;
+ width:16px;height:16px;font-size:9px;font-weight:800;
+ position:absolute;top:-4px;left:-4px;
+}
+
+/* ══ TOAST ═══════════════════════════════════════════ */
+#toast{
+ position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+ padding:10px 20px;border-radius:10px;font-family:'Tajawal',sans-serif;
+ font-size:13px;font-weight:700;z-index:9999;direction:rtl;
+ box-shadow:0 4px 20px rgba(0,0,0,.2);transition:opacity .3s;
+ opacity:0;pointer-events:none;white-space:nowrap;
+}
+
+/* ══ PRINT ═══════════════════════════════════════════ */
+@media print{
+ @page{size:A3 landscape;margin:5mm}
+ *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+ #loginScreen,.topbar,.mnav,.legend,.ov,.load-screen,#toast{display:none!important}
+ #appShell{display:block!important;padding:0}
+ .months{display:grid!important;grid-template-columns:repeat(4,1fr);gap:3mm;padding:0}
+ .mc{border-radius:4pt;box-shadow:none;page-break-inside:avoid;break-inside:avoid}
+ .mh{padding:2.5mm 3mm 2mm}
+ .mh-ar{font-size:8.5pt}.mh-hij{font-size:5pt}.mh-num{font-size:13pt}
+ .ctbl thead th{font-size:5.5pt;padding:1.5mm 1mm}
+ .ctbl tbody td{padding:.8mm 1mm;min-height:0}
+ .dn{font-size:7pt}.dh{font-size:4pt}
+ .pill,.note-chip{font-size:4pt;padding:.4mm 1mm}
+ .tw{overflow:visible}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ════════════════════════════════════════════════ -->
+<div id="loginScreen">
+ <div class="login-card">
+ <img class="login-logo" src="data:image/jpeg;base64,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2maHyW1IamNCZhoYgOxmFhsrVzhThMEVkHFOdBayQwwk81+LvVobgLcaUrESdGy3g45WRRuS71ensCWqwFfBSI7IhklIkmRQJRB1xJPO9Y61DCSqkVLAheMmQZLzUgZz7W4EiePNC9BNxGwACBG3+XYzsinO6wzQb1mlZEjPBe82xTEQgxcTmEWBuUfQhc2QJDz0ySodCRrKhT3afq1Y5Vl9qGLCBW13k+5oUjAWYxJm5kvrUgIylM7AA4OmRuRKGsFDoozgBp0l4he9SAtSzaM0Z0pba3KrdR4HpklfdC3zIcEUNjBZilBXJ2UElkWxhnqOSp22eYaywDqTFKiBAbgwXQUTEFx12JIIsGOmSxPLg5yK+X/fX//ZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=" alt="APEXCARE">
+ <div class="login-title">تقويم عيادات أبكس كير 2026</div>
+ <div class="login-sub">اختر حسابك للدخول</div>
+
+ <div class="role-grid" id="roleGrid">
+ <div class="role-card" data-role="ceo" onclick="selectRole(this)">
+ 
+ <div class="role-name">المدير التنفيذي</div>
+ </div>
+ <div class="role-card" data-role="marketing" onclick="selectRole(this)">
+ 
+ <div class="role-name">التسويق</div>
+ </div>
+ <div class="role-card" data-role="hr" onclick="selectRole(this)">
+ 
+ <div class="role-name">الموارد البشرية</div>
+ </div>
+ <div class="role-card" data-role="ops" onclick="selectRole(this)">
+ 
+ <div class="role-name">العمليات</div>
+ </div>
+ <div class="role-card" data-role="quality" onclick="selectRole(this)">
+ 
+ <div class="role-name">الجودة</div>
+ </div>
+ <div class="role-card" data-role="general" onclick="selectRole(this)">
+ 
+ <div class="role-name">عام / عرض فقط</div>
+ </div>
+ </div>
+
+ <div class="pin-row">
+ <div class="pin-label" id="pinLabel">أدخل رقم السري</div>
+ <input class="pin-field" id="pinField" type="password" inputmode="numeric"
+ maxlength="4" placeholder="••••" autocomplete="off"
+ oninput="this.value=this.value.replace(/\D/g,'').slice(0,4);if(this.value.length===4)setTimeout(doLogin,120)"
+ onkeydown="if(event.key==='Enter')doLogin()">
+ <div class="pin-err" id="pinErr">رقم سري خاطئ — حاول مجدداً</div>
+ </div>
+
+ <button class="login-btn" onclick="doLogin()">دخول ←</button>
+ </div>
+</div>
+
+<!-- ══ LOADING ═════════════════════════════════════════════════════ -->
+<div class="load-screen" id="loadScreen">
+ <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gKgSUNDX1BST0ZJTEUAAQEAAAKQbGNtcwQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwQVBQTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWxjbXMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtkZXNjAAABCAAAADhjcHJ0AAABQAAAAE53dHB0AAABkAAAABRjaGFkAAABpAAAACxyWFlaAAAB0AAAABRiWFlaAAAB5AAAABRnWFlaAAAB+AAAABRyVFJDAAACDAAAACBnVFJDAAACLAAAACBiVFJDAAACTAAAACBjaHJtAAACbAAAACRtbHVjAAAAAAAAAAEAAAAMZW5VUwAAABwAAAAcAHMAUgBHAEIAIABiAHUAaQBsAHQALQBpAG4AAG1sdWMAAAAAAAAAAQAAAAxlblVTAAAAMgAAABwATgBvACAAYwBvAHAAeQByAGkAZwBoAHQALAAgAHUAcwBlACAAZgByAGUAZQBsAHkAAAAAWFlaIAAAAAAAAPbWAAEAAAAA0y1zZjMyAAAAAAABDEoAAAXj///zKgAAB5sAAP2H///7ov///aMAAAPYAADAlFhZWiAAAAAAAABvlAAAOO4AAAOQWFlaIAAAAAAAACSdAAAPgwAAtr5YWVogAAAAAAAAYqUAALeQAAAY3nBhcmEAAAAAAAMAAAACZmYAAPKnAAANWQAAE9AAAApbcGFyYQAAAAAAAwAAAAJmZgAA8qcAAA1ZAAAT0AAACltwYXJhAAAAAAADAAAAAmZmAADypwAADVkAABPQAAAKW2Nocm0AAAAAAAMAAAAAo9cAAFR7AABMzQAAmZoAACZmAAAPXP/bAEMABQMEBAQDBQQEBAUFBQYHDAgHBwcHDwsLCQwRDxISEQ8RERMWHBcTFBoVEREYIRgaHR0fHx8TFyIkIh4kHB4fHv/bAEMBBQUFBwYHDggIDh4UERQeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHv/CABEIAZABkAMBIgACEQEDEQH/xAAcAAEAAwEBAQEBAAAAAAAAAAAABgcIBQQDAQL/xAAYAQEBAQEBAAAAAAAAAAAAAAAAAgEEA//aAAwDAQACEAMQAAABuUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACOyKjSPXVmKyy+wVJBvdzT69ScVyXT8s/wB0FW/kMvYrz9sT9LBhFg8W58Mqp+0brlUlz5T4rb6X3zOTiK8uxDk2zR8RNdOJ2yL0p2azNRyOi70FE3tlM7H9dCbEYuDNUkLtoO68vE1Tb3ldX5CLGPSAD45MvmiSzar1tk41f6a2skzz6PPCDXtX1LxT733FJYZ61Blz1Gm/RlyXmkAQeA2Zmap6mo4hO5qv6Kt2Ami/WH5TlyCvpx6a3KKtSudTGT9ZZJvssLKerMplpWxj7+ifcqJ6FOvl7UOXjSPUzH+moe9l7UIAOYUN1qw0kTOh74hJUWk8cauKS8fs9BZPW74V9YNemfNhY6sI0Mz1+mhPh8qfILL4VqIraxoV4+nJFmrYFJc22TJceyk0XnHhSAsavryy2Wxd0UlZn/xWhnc2LlPTGZywpZwraMc6lojslsZe1Dl41h2c5eg0Kz1dx1wI9IRUds/2Hz+gqObyUQD6TsAOP2BUK3hUP9W4PNVttiMyYPhCp22fj9/zi5XPis69BFpxW1mkahVsR4kP9R3pHpqn62sR+Iy+IEllfNrUmcOm8RLBrKaRQ8qy/sVdakInR9wAAAAAAAAAAAAflB2/T58pVDrDKutj1SQjVPXJ/ZTMunXzKh788/kgHT9NgFfyeQR0gHotD4FL++z+sVj+8/1HDviMSo9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/xAArEAACAgIBAgYCAQUBAAAAAAAEBQIDAQYAFBYHEBESEzUVIDYyMzRAkCb/2gAIAQEAAQUC/wC9ewsPxirup3zWWWWivy3B8cAw7pd87qd8E3JjXJI4Ea07OwtWqe6XfO6XfO6XfO6XfBMzkI/OZC2omPVx5sLOCtf3S7zlHg78eURSLQy3T0lnbHWZA7mXCSpoGzp8tlZZWK+6nfNdYfklfk+2ZnU07pd8xtTvgG6ExkvNHPGcFZCWZ2p3690u+d0u+d0u+JrLrlf6+IhvvL9svZ4fG/Cy8vED77U1o7RhnTVXps+vZU414uYTff8A6COPWWNLXZx2Uu5jS12M4x6YbB9VQDGVJNZNUhdkaSasNGT9SRZONdeyOLWpiVIa1lDSK/Y51c4CsAu8EpKwrZAc8QTflYe2Xs8PDfjM8tg+71FIG2pnpizMXyu1SZoRk6G+1fx/i/UQCAeyl3Oy13B6o0UfpbONVbImRh81H/hAr5CljWwIH54gffeHf3PPEImqKwGGbDN++gr/AK4vFHt/Op+DNVpN3k6Cn822H4GHTAWsjxKKhRt7KyOjVCZOYi0VDD+TrUbrz9TUHKZE2xoHNvkUWco9mkriZCHU2Rtp5sH3fht/i5z6Y3w6gtjplcp7DtX8f4pcq6ln51Pylwrut/XejelTKhcmsc1w+FmNkNhoJvUKueIH3whRAln5ptnlllls9KR3dTv/ANBzpiOdMRzT6bobD5bI0irXSlO63U1tSwbniRjPQ6XKMdi/XfjfgVJBcmtbaoWDm0SFL0Q3qVHNg+7rtsr5K+6WKq522akjyrq2r+P8wPfnHTEc16i+Lr9d5N6p14dh/IdzxDD+NhphvRu+eIH32mgCsWXayTgidYLLm/fQV/3If0+d1kKadhZzaMdIU5tni2/qxL4E0bWDk9KPbMe9E2HaC8MJoEHcvCzT9CrLso3M3rHXh0J7iOb+H8LXRzelc82D7vQQhChthRB3Ko5zGWvH4Yqtq/j/ABJ9P+zMqIS+ycrLNND6RFzcxOrRRzmMkxeDlniB994d/c+e/fQYz6ZxuDb07xbc7xb8ElOYu+OPfNGusZsBqKx6NmolTWjN+Ajm3a7OFlNttFkNmdRgaaWZPXURDS5hbSpSylmc9UE6NHzeA+pS1zzXYqKwav2D7vw2/wAXm3L+gcaGx6ZjtX8f4NtbQcfvFtzvFtxRdaSt83q78oFHSaMZjHEY8sjicM6TT6oFf4kV7rcGpyDXYKS/NsBSyB7Ip52RTzsinmNJpxmyEvgnpUJzRKB1FHLa4210a9is2mGYQ4y19WfLOkheoOqqRpRjGEX6v8sLVpVEbMYxjHLq4209kU8RLfxYZ+oVFma8ninq5sCapvTXpdddhI0CQs6RT69kU87Ip52RTwWrFA3+2E0BMJtaA1MGZdYIOoGlmeWc+mB3S2+j80t6CsuiwLX2hTFxyLUK6/R2Bh02WSIgdTtX4tadCwfTWBphtL5XaZuLE0NicaOCOORSQMTtqqm+myNtX+3rzARdsJ7QOzbn7JG2oKDRwH0cy0lMRsqbEFJww6zB43adDNVfrMwde9unvaAqdcthfs3hx/c2dkWBsPdCTiC6BW46TdWOVs9iO3m2yljO2u1pygN4uhquplJB6wbqLxf9p6ZYAsVp53i4+LCVbrqggDtZJwEIUIeWsJZSlrSWWJa2lzZPWEkpdrJOS1dJiOme3Jq1WEuywAEPq7WScXKV6/g6RbREfXE9FrFaEwhgUSnYtZXAtZdrJOCD1CD/APer/8QAIBEAAgEDBAMAAAAAAAAAAAAAAQISESFAAAMxgBNBUf/aAAgBAwEBPwHoGyysDpVMa/LZO2IAgezXKeHkZgeaZJUHnpD/AP/EABwRAAIBBQEAAAAAAAAAAAAAAAECEQMSIUCAAP/aAAgBAgEBPwHgNInPq6hWxsl5EbRp3U7tkMRgcQ//xABFEAACAQMBAQoKCAUCBwAAAAABAgMABBESIQUQExQiMTRBUZMjMmFxc4GSwdHhIDM1QlKDkaEVQENysSSQJVNiY6Kj8P/aAAgBAQAGPwL/AH65LkYL+KgPbXSl7taWd8cKp0yY7d9LWzZYxo1FtOc10pe7WulL3a1/qI4Z182k0WgJV18aNucU9xCAZMhVz1V0pe7WulL3a10pe7WulL3a1EZDlyg1Hy1FFBKAWP4RTwzMDPH/AOQ3mnO2Q7I17TWy5Xb1cGtI26MmudtpGANPkppriQRxrzk0U3PtgR+OX4Vnhox5ODFAXdvHKvanJNcJayZ/Ep5xvtOmOEPJTPbXSl7tajuDgPzOB2780FtIsUcbaQNANdKXu1rpKn8sUBe28ci9sew0J7aTWh/UVPcqAzRrkCukqPy1rpS92tdKXu1rpS92tW8s7apHTLHGPpQ2KnZGNbec1rwdOcZp7RjyZ12f3Df/ACV99PBc6woj1cg4rx7r2x8KWaKUywMcbRtBq3mU7NWlvKDR9ItAUDxi6/UfCukXX6j4VnjF1+o+FYHVWV+sTxaN0BhlP61xnUAgGTnqppdvArsiHkr+ITr4KI8gH7zUzucKoyTR2kW6Hwae+swKFjHPI3NXL3QfV5I6M0ZFzEOcqNo9VLcW76XX96S5j2Z2MOw7yWankwjJ85rXg6TszUtkx2SjUvnG/d+lNTvctMChAGhsVyJrlT26gfdXAOwdSMq3bXFs+DnGMeWrz0e9BO09wGkQMcEfCukXX6j4V0i6/UfCkhTxUGB9FpHOFUZNTXTc8j5oHT4bpP8A96qiuE8aNg1RzoeS66hvfkr76l9Cf8jeS21DhHfOPIKhjXnZwKPpFpfPQ/4hB7VfaMHtUIYLyKSRuZQd8SwgkOcEDtobj27bee4YH9qjto+vax7BSW8K6UQYFGNTgzNo9VQ2o/qNikghUKiDAG+81i8EcT7dLZGDUy3EsLxP1KTz08z7FRcmpbh+eRs1EdPhU8MfX8qhuU50bNJKm1XGRvXfpTV3/ctZNRxwOHEK4LDtq3x93JNXno962jkvoVZYwCM19owe1SxxX0LO2wAH6RhU8u4Oj1ddQWo/qPg+auC0jRp048lT2p/puRRtmPKgOPUd78lffRktpnibGMqa+0bn26LyOzsetjk0u6N3GURNsSnnJ7aPpF3vqJfYNfUS+watmaGRRt2lfJvmTYZm2RDy0WYl3c7fKa4OQjjko1yDsHZvWzdQk91W2rr1D9vpC2U8qc49VQW/UzbfNTQkcll04qW3bnjYiuBY8uA6fV1b136U14OR18xrDTSMPK1LHGNTMcAUZrjBuZB1fdFXfo97IhlI/tr6iX2DVoTDIAJPw/SMSnkW40evrqW8YbIl0r5zvRXijZMuD5xUYY4SbwZ929+SvvqSG7j1oI84ziuiHvG+NaoLKFW7cZO8fSLS+eh5voNLIwVFGSaac7IxsjXsFHdOZNSR/VL+JqNznDg5OaWVOY1LGgzIvLT1Uk0Zw6HIoPGwEoHhE6xvNPcSBEXrNPNFcTQxcyKrkbKlvbmeZ1bkoHcmnCnkQ8ge+p71h4g0LvLcqOTOv7iljY8icaD5+reu/Smrk3NtDMQwxrXNS8UtIYplGpSiYoEbCKinzy/Ffz1d+j3rT0S/Tmum/prmmkc5Zjk1DkcuXwjevm/belwMtF4QernoMOcVBc9bryvP11+SvvqX0J/yPoH0i1mua29j51zW3sfOua29j51E8mNbIC2K/hlu3JG2Yj/FJbJsXnduwUkES6UQYArjES8lj4TFRwseTN1dm89/Yx6kbbJGOryihJFI0bjrU4NaeOk+dBmtd1cSSn/qNBiDHbA8qTt81SNGAqRR4QUWbaScmoEI5TjW3r3mkA5UJ1/GldTgqciobkffXb56u/Smrv8AvG84UeDl5aUbRz4Ofm/uq89HvJAgt9KDAynzrmtvY+dc1t7HzqCefHCOmTj6HFeMGFdWWwuc0Cb+Qj0dBV2AbBvFGGQRg0cX8gHo6a3FwZlLahlcYrjTXTRcnTgJmmuFuml1JpwVx9B7WbIVusdVfaEnd/OvtCTu/nX2hJ3fzrP8Qfu/nRjjfQ2nAbHNRdt0pCSck8H86ZIiXd/Gc853mjkGVYYIpbjjbHTsC6KCltWN4vLBokP34zg1svLjHqoMyPcN/wBw7P0oKoCgcwFLbm4MKhsnC5zSsb52AOccHWBzbzRP4rDBr7Qk7v50bbjBmXVkZXGKluTfOvCNnHB1KizmbhDnauN5EeQxMhyGAzSuu6MgZTkeD+dNbT8oOuljWy/k7uvtCTu/nX2hJ3fzr7Qk7v51HCu0IuP5yS2t5tcsfjDSdlLYvNi4bmXSalupPFQVLdX18NLHEcRI3snqqaaK4ykAzIdJ2Vx7jH+n1adWk89ccSTwOnVq8lT3Et4IrNDyYiQM9m9NaQT5njByNJ2Yq643O0ujGnPVU7WoJnCHRs661cHJxnhf+Uvi4pIZriPjoTwkeRqB81XiXU7SKnig9W2jai50yhtOGGNtWcdtcNEr+MB17a4e6k0R82cZpbmJ8xMMhuajGOGkx95F2Usi+KwyP5y/lu5ODVi4B05+9UN+khNuhXLYpIW3VeFFOTiI7adrfdh3lAyqmEjNeHYsYm0gnsqRONcrBGODat04JWIedMRjHPRsNR4fhtWMdVRbmz7oPbNpw+IyaOnduTPV4A1Lb39yRGPqthNXs0Ryjo5Bq99VW3h5Y7QhSwHXt210z/1t8KuLiHJjcOQfVW6U0p0ogyx9dJJuVnh2fMh5Xvrcl5s6uBBb9q4vazl5NQONJFcSNwUuOBZcaTz1MN040Lk8kvHqGKjltTmEjk7MfzclzFHwjrjC+ur7dTdC0J5JaJDkZajJ/BIdZm04w+cY8+ahnlsirumSOEb410Q943xri9rFwcfZRY2pydv1jfGlHEgNPYxoPxFdnVqOKLcTx5nYe+uiHvG+NE8UPeN8auoBucluunxuVk7fLTm0i0a/G5RNcHdwrIvV5K6Ie8b403FLcIW2E5yanSKDAnGJOWdtCVLMal5tTE0Eu4BIF5uointF3IjaJM4ZtZ6vPirhrvctYNOMaS499dEPeN8aW3gXTGnMM5/36//EACkQAAIBAgQFBQEBAQAAAAAAAAERACExEEFRYXGBkaHwILHB0fHhQJD/2gAIAQEAAT8h/wC9ajiqyE7ffKVH4XCBAEkVqZ9MRRIJwGxNK8J518Txr4gJqX5Ap2ngkKdxvHD5AMETeedfE86+J518QHK8rhGT1oTSsI6ey5jWoh7iAUtxYJwr/wCaGcs+agfVKErtINqBeCixVxQC53AfkxQD6Fd5mwn+DDAExZrjjECxmAQo31Kj5P8AKJnW2wD4ManmQBWZJE86+IMWdsfrmc1dL5Gh7QV7qDQjIws8JFnCCIG0/lPOviedfE86+Ilcihidh6sifPS7e86fVR3UpOMV7ns8bfhWDjGwVTBA03hKAW8GRcHss1eFYBIeCM8JrHdRlS9SGGbCrCmEOxQIJGKxLXUc4RQSXucfxtOWS7jaBwbq4mXN0s5nAe8BFMFGwEMAPgd3bmGhLKjHhqZ1IRId5UU2iHqfpCjTOjQ7RXxXO3cYV6/C23vCMCdIlCZvjV8KeiiyKwXPUGHAyKXYRRPVwl4awIukmyVBndMBN4hFkYm3JgiLtvSE0XPoBWNVa4RkOQibCOSsnjQJyMaCG4JDwt+FcUg7yDjnFwwPhRus8ZrCAMTRIGA28AtUXFnELc0mZ84xjx4Npe2AVHbuYNUn4iU/vHsJSnSR0GfaLRsQwIBCMuOQepJC0DkEEFiB4jSH0YG4R/Dp/AiZTL+aDYUfJDYoTbGuNPFaGAIQADUwkrBVgkbPaZCy4ICd0wNRrdYIGAihMu0n1UnFXf8ATnGQ0NjMejhRbSaUJRuLA8Mj0ldxdXeHd4W/CsFh9ixWkIyPWy8z4wnMw6jGFbJoJ4TXDxz4njnxB0heQL8R75jdXAR1SpGpJANCcxlcmBQwqQeZQ7IkDuTXqoQ07bU/XODGKHlVMGucLYlBmnsWJ3G1c1cVARDG7w+k2tgQwz0JqjKJ0CKhpPWd6wBCxYg5458QJfDJP1VjVHf9OU8nOXT3wpUeXtl0lMRXdfthb8KwcAbFtTAygAXICwqsa3Ms4eU1na52b0H3DPNhGYePOZj4JLqIz4D3hJw18doc/V2OksTianJzDELQFn3EvtGNX6wGj6pOw3mVeBncjeUpaYKXNTKzouePt7S3A13N+2FKCoK2j2Uo6Xh4V98aCmjmFaHWBlNkGVlSF7JbC1igiI4I3+53rDyWnrNKEUBqch1hkBc+pNTLGsm8LMHhzFHwo4ckgjBg3kI8A07pb8K+lI8prDCDKsDQU98fr4BCu/iy8EUZDMzCrC5y5bmNwsIccwHoPtodGkQaGhgqUHYblxD1iltTzBpCEpoYDpAYQNSepRDDtYHAWEqJZQ6NRnGLqth3hpi2NTKcFpZ/xhW6WcP4howQkJeKZ9zvhTxOhhqEZQJ5U7jrKA9GqwW62ndMFC3eNCP18fr4XdCXQ9B3S4GsOV9UeUCQBqEr3gvgCgZDAOgsDaHmaKBKd4bqTxHOP5AKyx77w/rIYNxBd9vQYNQRfMWM/Kx+Vj8rAyyslgjXUy26hJXiAZMHL4x+ANhgKq8WYic+p2BJNwjTUWGeBjFxyPMQxxNBBfECHm/0EOsEXJAICG6A8xzgH8iQH3gmIAAhgJRli2MJTQA4IOJqjvOV4QgkNRXeDjQCNAueFbwdpZiDDgIlxB1ytQTpeMkhkw+5+Vj8rH5WD5EMJI0/2VDTplBRqQryiNYvjtVKERTa1OQhg5LHe7V9hgI5kAZlhZg15iMK09nknEyEyEgqOMzEbJNArXeAghghS3w3nMIUBLdSjVpDkgBDbaGHZhVStkleFeHQIAqwtLbnQOxAzCjsSBSBNIKtdCMjUS99CrqPCDZOYLOcTFkiJ0shxz6bhkf9ZtKwtEVV5CV+3FyvS8UnjHvk6RcbyQ9HlCFoSTJViPBRBctpK5Ewlq9IJV2/qyrtAaDU9dqyjcatBv8ASHOOCRR1AQtDeFnJgzufnNH5DgMib6AsCSSpDh6qNAbI8RkiAAXXmekPegwRXVHILLIOIiDyLnjVQFA0zckgoVAcLHscD/rHPNArqwGU1qM3zJQIKhDaSZFqCwaHWB0qHCjzwflsMJQks7k1hxcrSHpsDfGtYXAClAehqFY45DOgwfggeBMQkU6QvQmZ7Q+s1zBcTAIVVah4CKjD9SBrREGjJhGJ+sqeJpyh/QjR3wJUM6B1ngCKys+N2p6tldoXGOEeXehwfj2BEYk5n/vX/9oADAMBAAIAAwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgBBCBzygfDDiwBQgSDBDywADTwhQjjzgAtigBADDxQBgDwgAThQhRAQwxxksiSTiBBRiQCwwACABCAADCACC6gDjQCQwAijyQAAAAAAAAAAAABgxghDzBwDBDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/8QAHhEBAAEEAgMAAAAAAAAAAAAAAREAIUBhgMExQaH/2gAIAQMBAT8Q4BqLDdKZuKTsB7yfSuQbgOskb0BHCwOgH7kxsPFBHCD/xAAcEQEAAgEFAAAAAAAAAAAAAAABAECAESExQVH/2gAIAQIBAT8QwDYPWePtlAU0skQ5LIymzhD/AP/EACcQAQABAwMEAwEAAwEAAAAAAAERACExQVFhEHGBkSCh8LFAkMHh/9oACAEBAAE/EP8AfXukEBYkWkCUbUVcAWYsdq2n1BWCA0FD3mOrZQV0QEUANBLPSmAzJXLpRi4eFfZUTMC2JNbWTQeYaRAbIgpGsEwb/CPTplchivb6MiQVQWLzaKEqOpDBLiI1pZ52xxIsI2Q46Z2IDIWUzqcLZSmNQugy2CW0KzShQYCkF2dWNKnqahA2DVXQLtIoEgj5oENvRX7iKoL91K3mcBvCr7Qd6IAZdO/XySO/WZQ05aiWkEscUFeCZwO2umnY2TkINBFeeqOkTC5IrrtBHSmHCGyvotJzLE4m8j2varU43QGc4NvVqzZQ9AtPE0iUMhgOCW/fwp06e+X0AMAFtj5X+IaxgLyTaxG+dicm8XpLFqNl0e2fB8GScz8ILSqtC0pYpcSo91vf2SSFGAIMIF7RSJ2LbIBfDJyD0eKyhqOWKcEwvcOkjedIwwMVt3EdgIKtAvVg/wDF7oeyk5JYHCLNOoSTAiZNIoKyVto27Ny74NK0jNbDvlnLzDZqJMhIJKrwVbfmIQWj15sFjWbiByp1IC8Qd0oxGIuE3Za+yjpkqBNRNt1PNSarCY1C1WEaBoPJP1DU4emDhMxtPJQL0nBAlB3BqwDEnRXDvL11/U3qFcs0gTPCpHtLVDzDPunOrA2xeTA1JaQr0hAkRvaOz1iWPGoAUJTHnqR636BGSCCefi1VA4Ip8BVv8IddjxAeKTWTbCQm+/vXd9wYGHhw0ZJ/cAf34sqQRKWjKKmhMBvNI4EZmUhRgNq0DYIuwNEZoR8el5TOXOMVg4BeovTT0GKGyzz3pl7RmhCPBZeINWjSy5jO/FjdQoxph7GV3Vuuq1K5aTMh98D3pBO0Pu/AWgSmiVjV3XK6vRgEjZHWlprNImIUlk804w7wkTAkKZvtQH180BNJciR0F+ggq88TUQLPEHuVAw7rDceErlWrwA+np+pvQa5LC0rABy0BAPwgoFmy8atKxlC2Ss9Yw2b5iRE3OlwCvkqtA+VkOoMgu9ohVAy5xvT4gqTsz6QG0WoIZMupZ8yGsR7rde9MPrqybAZyzRUmkhTGMcwf2UwYryvKK0IQLmIs1czE5YSx0eBWC7U1zpTo4I5gk5VIOraSbdYzNi74NaaU69MleVWphxh2n5X3Z0Dp7Zk8D+NQepW2n2bfLP8AJGcz2bUTqEuKS+ApyrSJKx6oghrOorPkhrUXwuZk/p46fqb0MlvJsN5E0jQMlvS0RczxLMATa7TDAHtQjqTlLaHWpPQl+I6iHTo1oM+Be6pHys3TC2Vd7zCrcZAz5U7FOnNGmeFe7pvctLZLJeCeF6sgCF6OTMocLR2RGjHS6qGee44eHr9+xuUn8GPhGKcUESrSjzDtBsp5H1pQvcII2+2w/wDDS5TyAEWWbARG1SUAs1LK7fyoBuD5ukcwHeta+kRJKBZIUblDK3D4z0lyIiJdAyrQLtSYtHQMIAll9aUgDyFpSYhmAe9aLlOMi/imEXI76Owjz0sUylZ/0F6VcPqSwV16R0fqb0joS8WQEMTU6BE7vWgUS1FkS9iBk9NPuAbUYJ728utZ/mx+cwp8248yDzT30Dlynla1AzAcIenS1j3cmJA8uo71nsiMjT9kQOAej4+bKk9mPYJ3L0CigBx9HYhlMVmZwKIWAZglrSqrAO8hp7EGjUxIb0DfY4DVSiJMLQb7rldW9bx4zcdhbPMb19pWh9HDVtwaaUyTPuBlt0LjfGL4Jmr3g0MIEHv5N80D1wd7JHgCg9ksUDM+TfBrTOVAxMh5VXdWmgmTlmV8rQ7G8nKeodLa/Rl42Hsvij+EXIjJT/lhaCx8Br9TfoEIgSNkprleDElrt9Eo7T6az/3XkdYoLy94EEoJfHXt2EAEVFdhVPfwPADMxJGIgoCJpY2I3JxmgwlwQEAdjopow4UQlLiSZ+C2JzikK3g2kAEKRgaOR+1YSmU54UWEoqFwC8Pgg1YZNSE2s6OS3whQoSiGh1MUl6ChZrCRBjMTTQnFlMquStDWCKIcAYLwS3c9H4qxCENF4Gis4cGbsXawUwODGhlx0yNRPfcAtyjTCQ82jvD+U/Y5E5Oyng0YGwEJgAsFCBrFuBYyIBvVlEkxGYmcTRq1CYAsHSXTAahDTlZtieDaaTYWIOAkQpJJoTZ0A3QUz6o9IdbZIIUzPRMwAgIhRSznOSgDgUkSRpcWnlnBBeGbmYp6T+xqHKGfR8IUKFCtDwoImOf8tYJqFqXxlwUKLLUgQTJLaoTGrUtsTqxhysBUNIIKrIGIFpM36T+EfYLtcouFC8CuHA0AmacL7YvEUVQ0Y3JYAmHJS9VBetACsSvm1E3ESJcSp3jLsBmwUOzRrSABcyiBmKNgE5oMLDfRqKNteqJdBbeJqFihKWa0MpFYAqELhaBpV/OIMgEJkte+lNiLMCwvJotFoI7YgIC37U8QyoJUVAIEOSp8nu0izJQ5CtAcBMEkm/8Al5u1ZveM44QzgagGKpsNkMEE7VAQCfgi4cZKWcgNHFgu30ovXagABW7FztS9ZjIRGE255ojSAbAKEZGaScDG8GHY2maHyW1IamNCZhoYgOxmFhsrVzhThMEVkHFOdBayQwwk81+LvVobgLcaUrESdGy3g45WRRuS71ensCWqwFfBSI7IhklIkmRQJRB1xJPO9Y61DCSqkVLAheMmQZLzUgZz7W4EiePNC9BNxGwACBG3+XYzsinO6wzQb1mlZEjPBe82xTEQgxcTmEWBuUfQhc2QJDz0ySodCRrKhT3afq1Y5Vl9qGLCBW13k+5oUjAWYxJm5kvrUgIylM7AA4OmRuRKGsFDoozgBp0l4he9SAtSzaM0Z0pba3KrdR4HpklfdC3zIcEUNjBZilBXJ2UElkWxhnqOSp22eYaywDqTFKiBAbgwXQUTEFx12JIIsGOmSxPLg5yK+X/fX//ZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=" style="height:40px;width:auto;opacity:.9">
+ <div class="spinner"></div>
+ <div class="load-txt" id="loadTxt">جاري تحميل الملاحظات...</div>
+</div>
+
+<!-- ══ APP SHELL ════════════════════════════════════════════════════ -->
+<div id="appShell">
+
+ <header class="topbar">
+  <img class="tb-logo" src="data:image/jpeg;base64,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2maHyW1IamNCZhoYgOxmFhsrVzhThMEVkHFOdBayQwwk81+LvVobgLcaUrESdGy3g45WRRuS71ensCWqwFfBSI7IhklIkmRQJRB1xJPO9Y61DCSqkVLAheMmQZLzUgZz7W4EiePNC9BNxGwACBG3+XYzsinO6wzQb1mlZEjPBe82xTEQgxcTmEWBuUfQhc2QJDz0ySodCRrKhT3afq1Y5Vl9qGLCBW13k+5oUjAWYxJm5kvrUgIylM7AA4OmRuRKGsFDoozgBp0l4he9SAtSzaM0Z0pba3KrdR4HpklfdC3zIcEUNjBZilBXJ2UElkWxhnqOSp22eYaywDqTFKiBAbgwXQUTEFx12JIIsGOmSxPLg5yK+X/fX//ZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=" alt="APEXCARE">
+  <div class="tb-mid">
+    <div class="tb-title">تقويم أبكس كير 2026</div>
+    <div class="tb-user" id="tbUser"></div>
+  </div>
+  <div class="tb-btns">
+    <button class="btn btn-note" id="btnAddNote" onclick="showAddNote()">+ ملاحظة</button>
+    <button class="btn btn-inbox" id="btnInbox" onclick="showInbox()" style="position:relative">
+      الوارد
+      <span class="inbox-badge" id="inboxBadge" style="display:none">0</span>
+    </button>
+    <button class="btn btn-imp" onclick="doImport()">استيراد</button>
+    <button class="btn btn-pdf" onclick="window.print()">PDF</button>
+    <button class="btn btn-logout" onclick="logout()">خروج</button>
+  </div>
+</header>
+
+ <nav class="mnav" id="mnav"><a class="nv" href="#m1">يناير</a><a class="nv" href="#m2">فبراير</a><a class="nv" href="#m3">مارس</a><a class="nv" href="#m4">أبريل</a><a class="nv" href="#m5">مايو</a><a class="nv" href="#m6">يونيو</a><a class="nv" href="#m7">يوليو</a><a class="nv" href="#m8">أغسطس</a><a class="nv" href="#m9">سبتمبر</a><a class="nv" href="#m10">أكتوبر</a><a class="nv" href="#m11">نوفمبر</a><a class="nv" href="#m12">ديسمبر</a></nav>
+
+ <!-- ═══ MODALS ════════════════════════════════════════════ -->
+
+ <!-- Add Note Modal -->
+ <div class="ov" id="ovAdd" onclick="closeOv('ovAdd')">
+ <div class="modal" onclick="event.stopPropagation()">
+ <div class="modal-title"> إضافة ملاحظة</div>
+ <div class="frow">
+ <label class="flabel"> التاريخ</label>
+ <input class="finput" type="date" id="nDate" min="2026-01-01" max="2026-12-31">
+ </div>
+ <div class="frow">
+ <label class="flabel"> الملاحظة</label>
+ <textarea class="finput" id="nText" placeholder="اكتب ملاحظتك هنا..."></textarea>
+ </div>
+ <div class="frow">
+ <label class="flabel"> إرسال إلى</label>
+ <div class="to-tabs" id="toTabs">
+ <div class="ttab" data-to="all" onclick="selTo(this)" style="background:var(--ind);color:#fff;border-color:var(--ind)">الكل</div>
+ <div class="ttab" data-to="ceo" onclick="selTo(this)">المدير</div>
+ <div class="ttab" data-to="marketing" onclick="selTo(this)">التسويق</div>
+ <div class="ttab" data-to="hr" onclick="selTo(this)">HR</div>
+ <div class="ttab" data-to="ops" onclick="selTo(this)">العمليات</div>
+ <div class="ttab" data-to="quality" onclick="selTo(this)">الجودة</div>
+ </div>
+ </div>
+ <div class="frow">
+ <label class="flabel"> اللون</label>
+ <div class="colors">
+ <div class="co sel" style="background:#f59e0b" data-c="#f59e0b" onclick="selColor(this)"></div>
+ <div class="co" style="background:#ef4444" data-c="#ef4444" onclick="selColor(this)"></div>
+ <div class="co" style="background:#3b82f6" data-c="#3b82f6" onclick="selColor(this)"></div>
+ <div class="co" style="background:#10b981" data-c="#10b981" onclick="selColor(this)"></div>
+ <div class="co" style="background:#8b5cf6" data-c="#8b5cf6" onclick="selColor(this)"></div>
+ <div class="co" style="background:#ec4899" data-c="#ec4899" onclick="selColor(this)"></div>
+ <div class="co" style="background:#f97316" data-c="#f97316" onclick="selColor(this)"></div>
+ <div class="co" style="background:#06b6d4" data-c="#06b6d4" onclick="selColor(this)"></div>
+ </div>
+ </div>
+ <div class="ma">
+ <button class="mbtn mbtn-p" onclick="submitNote()"> إرسال</button>
+ <button class="mbtn mbtn-c" onclick="closeOv('ovAdd')">إلغاء</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Day Notes Modal -->
+ <div class="ov" id="ovDay" onclick="closeOv('ovDay')">
+ <div class="modal" onclick="event.stopPropagation()">
+ <div class="modal-title" id="dayTitle"></div>
+ <div class="modal-sub" id="daySub"></div>
+ <div id="dayNoteList" style="display:flex;flex-direction:column;gap:7px"></div>
+ <div class="ma" style="margin-top:4px">
+ <button class="mbtn mbtn-p" onclick="openAddForDay()">＋ إضافة ملاحظة</button>
+ <button class="mbtn mbtn-c" onclick="closeOv('ovDay')">إغلاق</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Inbox / All Notes Modal -->
+ <div class="ov" id="ovInbox" onclick="closeOv('ovInbox')">
+ <div class="modal" onclick="event.stopPropagation()" style="max-width:520px">
+ <div class="modal-title" id="inboxTitle"> الوارد</div>
+ <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px" id="inboxFilters">
+ <button class="ttab" data-if="all" onclick="filterInbox(this)" style="background:var(--ind);color:#fff;border-color:var(--ind)">الكل</button>
+ <button class="ttab" data-if="unread" onclick="filterInbox(this)">غير مقروء</button>
+ <button class="ttab" data-if="sent" onclick="filterInbox(this)">المُرسَل</button>
+ </div>
+ <div id="inboxList" style="display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow-y:auto"></div>
+ <button class="mbtn mbtn-c" onclick="closeOv('ovInbox')" style="margin-top:4px">إغلاق</button>
+ </div>
+ </div>
+
+ <!-- Setup Guide Modal -->
+ <div class="ov" id="ovSetup" onclick="closeOv('ovSetup')">
+ <div class="modal" onclick="event.stopPropagation()" style="max-width:500px">
+ <div class="modal-title"> إعداد Google Sheets</div>
+ <div style="background:#f8f9ff;border:1.5px solid var(--il);border-radius:12px;padding:14px;font-size:12px;line-height:1.8">
+ <strong>خطوات مرة واحدة:</strong>
+ <ol style="padding-right:18px;margin-top:6px">
+ <li>افتح Google Sheets جديد</li>
+ <li>Extensions → Apps Script</li>
+ <li>احذف الكود والصق الكود أدناه</li>
+ <li>Deploy → New deployment → Web app</li>
+ <li>Execute as: Me | Who has access: Anyone</li>
+ <li>انسخ الرابط وضعه في <code style="background:#e4e3f5;border-radius:3px;padding:1px 4px">const GAS_URL</code></li>
+ </ol>
+ </div>
+ <div class="frow">
+ <label class="flabel">كود Apps Script</label>
+ <textarea class="finput" rows="10" readonly style="font-size:9px;direction:ltr;font-family:monospace">// ══════════════════════════════════════════════════════════════════════════
+// تقويم عيادات أبكس كير 2026 — Google Apps Script
+// Deploy: Web App | Execute as: Me | Who has access: Anyone
+// ══════════════════════════════════════════════════════════════════════════
+
+const SHEET_NAME = 'الملاحظات';
+
+// ── نقطة الدخول الرئيسية مع حماية كاملة من الأخطاء ──────────────────────
+function doGet(e) {
+  // حماية: e أو e.parameter قد يكون undefined في بعض الحالات
+  const p  = (e &amp;&amp; e.parameter) ? e.parameter : {};
+  const cb = p.callback || '';
+
+  let result;
+  try {
+    const action = p.action || '';
+    if      (action === 'getAll') result = getAllNotes(p);
+    else if (action === 'save')   result = saveNote(p);
+    else if (action === 'delete') result = deleteNote(p);
+    else if (action === 'share')  result = shareNote(p);
+    else if (action === 'ping')   result = { ok: true, msg: 'متصل', time: new Date().toISOString() };
+    else result = { ok: false, error: 'إجراء غير معروف: ' + action };
+  } catch (err) {
+    result = { ok: false, error: String(err) };
+  }
+
+  const jsonStr = JSON.stringify(result);
+
+  // JSONP إذا طُلب callback
+  if (cb) {
+    return ContentService
+      .createTextOutput(cb + '(' + jsonStr + ')')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  return ContentService
+    .createTextOutput(jsonStr)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ── الحصول على الشيت أو إنشاؤه ──────────────────────────────────────────
+function getSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // بحث بالاسم العربي أو الإنجليزي للتوافق مع القديم
+  let sheet = ss.getSheetByName(SHEET_NAME)
+           || ss.getSheetByName('Notes')
+           || ss.getSheetByName('CalendarEvents');
+
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.appendRow(['id', 'date', 'text', 'from_role', 'to_role', 'color', 'shared', 'ts']);
+    sheet.setFrozenRows(1);
+    
+    const r = sheet.getRange(1, 1, 1, 8);
+    r.setBackground('#1e293b');
+    r.setFontColor('#ffffff');
+    r.setFontWeight('bold');
+    sheet.setColumnWidths(1, 8, [150, 100, 320, 130, 130, 80, 80, 180]);
+  }
+  return sheet;
+}
+
+// ── مساعد: إيجاد رقم العمود ─────────────────────────────────────────────
+function findCol(headers, names) {
+  for (const name of names) {
+    const idx = headers.indexOf(name.toLowerCase().trim());
+    if (idx &gt;= 0) return idx;
+  }
+  return -1;
+}
+
+// ── جلب الملاحظات مع فلترة الصلاحية ─────────────────────────────────────
+function getAllNotes(p) {
+  const viewer = p.viewer || 'general';
+  const sheet  = getSheet();
+  const data   = sheet.getDataRange().getValues();
+
+  if (data.length &lt;= 1) return { ok: true, notes: [] };
+
+  const headers = data[0].map(h =&gt; String(h).toLowerCase().trim());
+
+  // خريطة الأعمدة
+  const cols = {
+    id:        findCol(headers, ['id', 'المعرف']),
+    date:      findCol(headers, ['date', 'التاريخ']),
+    text:      findCol(headers, ['text', 'نص الملاحظة', 'نص']),
+    from_role: findCol(headers, ['from_role', 'المرسل', 'المرسِل']),
+    to_role:   findCol(headers, ['to_role', 'المستقبل', 'المستقبِل']),
+    color:     findCol(headers, ['color', 'اللون']),
+    shared:    findCol(headers, ['shared', 'مشترك (للجميع)', 'مشترك']),
+    ts:        findCol(headers, ['ts', 'وقت الإنشاء', 'timestamp']),
+  };
+
+  const get = (row, col) =&gt; col &gt;= 0 ? String(row[col] || '') : '';
+
+  const notes = data.slice(1)
+    .filter(row =&gt; get(row, cols.id))
+    .map(row =&gt; ({
+      id:        get(row, cols.id),
+      date:      get(row, cols.date),
+      text:      get(row, cols.text),
+      from_role: get(row, cols.from_role) || 'general',
+      to_role:   get(row, cols.to_role)   || 'all',
+      color:     get(row, cols.color)     || '#f59e0b',
+      shared:    get(row, cols.shared)    || 'no',
+      ts:        get(row, cols.ts),
+    }))
+    .filter(n =&gt; {
+      if (!n.date || !n.text) return false;
+      if (viewer === 'ceo')           return true;
+      if (n.from_role === viewer)     return true;
+      if (n.to_role   === viewer)     return true;
+      if (n.to_role   === 'all')      return true;
+      if (n.shared    === 'yes')      return true;
+      return false;
+    });
+
+  return { ok: true, notes, count: notes.length };
+}
+
+// ── حفظ ملاحظة جديدة ────────────────────────────────────────────────────
+function saveNote(p) {
+  if (!p.id || !p.date || !p.text) {
+    return { ok: false, error: 'حقول مطلوبة مفقودة: id, date, text' };
+  }
+
+  const sheet = getSheet();
+  const data  = sheet.getDataRange().getValues();
+
+  // تحقق من عدم التكرار
+  for (let i = 1; i &lt; data.length; i++) {
+    if (String(data[i][0]) === String(p.id)) {
+      return { ok: true, msg: 'موجودة مسبقاً', id: p.id };
+    }
+  }
+
+  const ts = new Date().toLocaleString('ar-SA', { timeZone: 'Asia/Riyadh' });
+  sheet.appendRow([
+    p.id,
+    p.date,
+    p.text,
+    p.from_role || 'general',
+    p.to_role   || 'all',
+    p.color     || '#f59e0b',
+    p.shared    || 'no',
+    ts
+  ]);
+
+  // تلوين الصف حسب الجهة
+  const rowColors = {
+    ceo:'#fee2e2', marketing:'#ede9fe', hr:'#dcfce7',
+    ops:'#ffedd5', quality:'#e0f2fe', general:'#f8fafc'
+  };
+  const lastRow = sheet.getLastRow();
+  sheet.getRange(lastRow, 1, 1, 8)
+    .setBackground(rowColors[p.from_role] || '#ffffff');
+
+  return { ok: true, id: p.id };
+}
+
+// ── حذف ملاحظة ──────────────────────────────────────────────────────────
+function deleteNote(p) {
+  if (!p.id) return { ok: false, error: 'id مطلوب' };
+  const sheet = getSheet();
+  const data  = sheet.getDataRange().getValues();
+
+  for (let i = data.length - 1; i &gt;= 1; i--) {
+    if (String(data[i][0]) === String(p.id)) {
+      sheet.deleteRow(i + 1);
+      return { ok: true };
+    }
+  }
+  return { ok: true, msg: 'لم تُعثر على الملاحظة' };
+}
+
+// ── مشاركة ملاحظة مع الجميع ────────────────────────────────────────────
+function shareNote(p) {
+  if (!p.id) return { ok: false, error: 'id مطلوب' };
+  const sheet   = getSheet();
+  const data    = sheet.getDataRange().getValues();
+  const headers = data[0].map(h =&gt; String(h).toLowerCase().trim());
+  const sharedCol = findCol(headers, ['shared', 'مشترك (للجميع)', 'مشترك']);
+
+  for (let i = data.length - 1; i &gt;= 1; i--) {
+    if (String(data[i][0]) === String(p.id)) {
+      sheet.getRange(i + 1, sharedCol + 1).setValue('yes');
+      return { ok: true };
+    }
+  }
+  return { ok: false, error: 'ملاحظة غير موجودة: ' + p.id };
+}
+</textarea>
+ </div>
+ <button class="mbtn mbtn-p" onclick="closeOv('ovSetup')">فهمت </button>
+ </div>
+ </div>
+
+ <div id="toast"></div>
+
+ <div class="legend">
+ <span class="leg"><span class="ldot" style="background:var(--teal)"></span>يوم صحي عالمي</span>
+ <span class="leg"><span class="ldot" style="background:var(--ind)"></span>إجازة تعليم</span>
+ <span class="leg"><span class="ldot" style="background:var(--pur)"></span>إجازة رسمية</span>
+ <span class="leg"><span class="ldot" style="background:var(--red)"></span>يوم إجازة</span>
+ <span class="leg"><span class="ldot" style="background:#f59e0b"></span>ملاحظة مخصصة</span>
+ </div>
+
+ <div class="months"><section class="mc" id="m1">
+<div class="mh" style="background:linear-gradient(135deg,#3DBDAD,#4A4A9A)">
+<div><div class="mh-ar">يناير 2026م</div><div class="mh-hij">جمادى الآخرة - رجب</div></div>
+<div class="mh-num">01</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-01-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-01"></div></td><td class="dc wk" data-date="2026-01-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-02"></div></td><td class="dc wk" data-date="2026-01-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-03"></div></td></tr><tr><td class="dc" data-date="2026-01-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">15هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للبرايل</span></div><div class="nw-wrap" id="nw-2026-01-04"></div></td><td class="dc" data-date="2026-01-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-05"></div></td><td class="dc" data-date="2026-01-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-06"></div></td><td class="dc" data-date="2026-01-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-07"></div></td><td class="dc" data-date="2026-01-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-08"></div></td><td class="dc wk" data-date="2026-01-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">20هـ</span></div><div class="pills"><span class="pill pe">انتهاء إجازة منتصف العام</span></div><div class="nw-wrap" id="nw-2026-01-09"></div></td><td class="dc wk" data-date="2026-01-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-10"></div></td></tr><tr><td class="dc" data-date="2026-01-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-11"></div></td><td class="dc" data-date="2026-01-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-12"></div></td><td class="dc" data-date="2026-01-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-13"></div></td><td class="dc" data-date="2026-01-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-14"></div></td><td class="dc" data-date="2026-01-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-15"></div></td><td class="dc wk" data-date="2026-01-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-16"></div></td><td class="dc wk" data-date="2026-01-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-17"></div></td></tr><tr><td class="dc" data-date="2026-01-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-18"></div></td><td class="dc" data-date="2026-01-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-19"></div></td><td class="dc" data-date="2026-01-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-20"></div></td><td class="dc" data-date="2026-01-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-21"></div></td><td class="dc" data-date="2026-01-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-22"></div></td><td class="dc wk" data-date="2026-01-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-23"></div></td><td class="dc wk" data-date="2026-01-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">5هـ</span></div><div class="pills"><span class="pill ph">اليوم الدولي للتعليم</span></div><div class="nw-wrap" id="nw-2026-01-24"></div></td></tr><tr><td class="dc" data-date="2026-01-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-25"></div></td><td class="dc" data-date="2026-01-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-26"></div></td><td class="dc" data-date="2026-01-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-27"></div></td><td class="dc" data-date="2026-01-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">9هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لمرض الجذام</span></div><div class="nw-wrap" id="nw-2026-01-28"></div></td><td class="dc" data-date="2026-01-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-29"></div></td><td class="dc wk" data-date="2026-01-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-30"></div></td><td class="dc wk" data-date="2026-01-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-01-31"></div></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m2">
+<div class="mh" style="background:linear-gradient(135deg,#4A4A9A,#7B52AB)">
+<div><div class="mh-ar">فبراير 2026م</div><div class="mh-hij">رجب - شعبان</div></div>
+<div class="mh-num">02</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="dc" data-date="2026-02-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">13هـ</span></div><div class="pills"><span class="pill ph">اليوم الخليجي لحقوق المريض</span></div><div class="nw-wrap" id="nw-2026-02-01"></div></td><td class="dc" data-date="2026-02-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-02"></div></td><td class="dc" data-date="2026-02-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-03"></div></td><td class="dc" data-date="2026-02-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">16هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لمكافحة السرطان</span></div><div class="nw-wrap" id="nw-2026-02-04"></div></td><td class="dc" data-date="2026-02-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-05"></div></td><td class="dc wk" data-date="2026-02-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-06"></div></td><td class="dc wk" data-date="2026-02-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-07"></div></td></tr><tr><td class="dc" data-date="2026-02-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-08"></div></td><td class="dc" data-date="2026-02-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-09"></div></td><td class="dc" data-date="2026-02-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-10"></div></td><td class="dc" data-date="2026-02-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">23هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمرأة في العلوم</span></div><div class="nw-wrap" id="nw-2026-02-11"></div></td><td class="dc" data-date="2026-02-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-12"></div></td><td class="dc wk" data-date="2026-02-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-13"></div></td><td class="dc wk" data-date="2026-02-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-14"></div></td></tr><tr><td class="dc" data-date="2026-02-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">27هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لسرطان الأطفال</span></div><div class="nw-wrap" id="nw-2026-02-15"></div></td><td class="dc" data-date="2026-02-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-16"></div></td><td class="dc" data-date="2026-02-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-17"></div></td><td class="dc" data-date="2026-02-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-18"></div></td><td class="dc" data-date="2026-02-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-19"></div></td><td class="dc wk" data-date="2026-02-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">2هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للعدالة</span></div><div class="nw-wrap" id="nw-2026-02-20"></div></td><td class="dc wk" data-date="2026-02-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">3هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للغة الأم</span></div><div class="nw-wrap" id="nw-2026-02-21"></div></td></tr><tr><td class="dc hl" data-date="2026-02-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">4هـ</span></div><div class="pills"><span class="pill pn">يوم التأسيس</span><span class="pill pe">إجازة يوم التأسيس</span></div><div class="nw-wrap" id="nw-2026-02-22"></div></td><td class="dc" data-date="2026-02-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-23"></div></td><td class="dc" data-date="2026-02-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-24"></div></td><td class="dc" data-date="2026-02-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-25"></div></td><td class="dc" data-date="2026-02-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-26"></div></td><td class="dc wk" data-date="2026-02-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-02-27"></div></td><td class="dc wk" data-date="2026-02-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">10هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للأمراض النادرة</span></div><div class="nw-wrap" id="nw-2026-02-28"></div></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m3">
+<div class="mh" style="background:linear-gradient(135deg,#3DBDAD,#4A4A9A)">
+<div><div class="mh-ar">مارس 2026م</div><div class="mh-hij">شعبان - رمضان</div></div>
+<div class="mh-num">03</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="dc" data-date="2026-03-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-01"></div></td><td class="dc" data-date="2026-03-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-02"></div></td><td class="dc" data-date="2026-03-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-03"></div></td><td class="dc" data-date="2026-03-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-04"></div></td><td class="dc hl" data-date="2026-03-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">17هـ</span></div><div class="pills"><span class="pill pn">بداية إجازة عيد الفطر</span><span class="pill pe">إجازة عيد الفطر</span></div><div class="nw-wrap" id="nw-2026-03-05"></div></td><td class="dc wk hl" data-date="2026-03-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill pn">إجازة عيد الفطر</span></div><div class="nw-wrap" id="nw-2026-03-06"></div></td><td class="dc wk hl" data-date="2026-03-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">19هـ</span></div><div class="pills"><span class="pill pn">إجازة عيد الفطر</span></div><div class="nw-wrap" id="nw-2026-03-07"></div></td></tr><tr><td class="dc hl" data-date="2026-03-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">20هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمرأة</span><span class="pill pn">إجازة عيد الفطر</span></div><div class="nw-wrap" id="nw-2026-03-08"></div></td><td class="dc hl" data-date="2026-03-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">21هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-09"></div></td><td class="dc hl" data-date="2026-03-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">22هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-10"></div></td><td class="dc hl" data-date="2026-03-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">23هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-11"></div></td><td class="dc hl" data-date="2026-03-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">24هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-12"></div></td><td class="dc wk hl" data-date="2026-03-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">25هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-13"></div></td><td class="dc wk" data-date="2026-03-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">26هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للكلى</span></div><div class="nw-wrap" id="nw-2026-03-14"></div></td></tr><tr><td class="dc hl" data-date="2026-03-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">27هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للنوم</span><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-15"></div></td><td class="dc hl" data-date="2026-03-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">28هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-16"></div></td><td class="dc hl" data-date="2026-03-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">29هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-17"></div></td><td class="dc hl" data-date="2026-03-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">30هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-18"></div></td><td class="dc hl" data-date="2026-03-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">1هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-19"></div></td><td class="dc wk hl" data-date="2026-03-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">2هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لصحة الفم</span><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-20"></div></td><td class="dc wk hl" data-date="2026-03-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">3هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للسعادة</span><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-03-21"></div></td></tr><tr><td class="dc" data-date="2026-03-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">4هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمياه</span></div><div class="nw-wrap" id="nw-2026-03-22"></div></td><td class="dc" data-date="2026-03-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-23"></div></td><td class="dc" data-date="2026-03-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">6هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للسل</span></div><div class="nw-wrap" id="nw-2026-03-24"></div></td><td class="dc" data-date="2026-03-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-25"></div></td><td class="dc" data-date="2026-03-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">8هـ</span></div><div class="pills"><span class="pill pe">عودة الدراسة</span></div><div class="nw-wrap" id="nw-2026-03-26"></div></td><td class="dc wk" data-date="2026-03-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-27"></div></td><td class="dc wk" data-date="2026-03-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-28"></div></td></tr><tr><td class="dc" data-date="2026-03-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-29"></div></td><td class="dc" data-date="2026-03-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-30"></div></td><td class="dc" data-date="2026-03-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-03-31"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m4">
+<div class="mh" style="background:linear-gradient(135deg,#4A4A9A,#3DBDAD)">
+<div><div class="mh-ar">أبريل 2026م</div><div class="mh-hij">رمضان - شوال</div></div>
+<div class="mh-num">04</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-04-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-01"></div></td><td class="dc" data-date="2026-04-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">13هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للتوحد</span></div><div class="nw-wrap" id="nw-2026-04-02"></div></td><td class="dc wk" data-date="2026-04-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-03"></div></td><td class="dc wk" data-date="2026-04-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-04"></div></td></tr><tr><td class="dc" data-date="2026-04-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-05"></div></td><td class="dc" data-date="2026-04-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-06"></div></td><td class="dc" data-date="2026-04-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill ph">يوم الصحة العالمي</span></div><div class="nw-wrap" id="nw-2026-04-07"></div></td><td class="dc" data-date="2026-04-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-08"></div></td><td class="dc" data-date="2026-04-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-09"></div></td><td class="dc wk" data-date="2026-04-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-10"></div></td><td class="dc wk" data-date="2026-04-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">22هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لشلل الرعاش</span></div><div class="nw-wrap" id="nw-2026-04-11"></div></td></tr><tr><td class="dc" data-date="2026-04-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-12"></div></td><td class="dc" data-date="2026-04-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-13"></div></td><td class="dc" data-date="2026-04-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-14"></div></td><td class="dc" data-date="2026-04-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-15"></div></td><td class="dc" data-date="2026-04-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-16"></div></td><td class="dc wk" data-date="2026-04-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-17"></div></td><td class="dc wk" data-date="2026-04-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-18"></div></td></tr><tr><td class="dc" data-date="2026-04-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-19"></div></td><td class="dc" data-date="2026-04-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-20"></div></td><td class="dc" data-date="2026-04-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">2هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للإبداع</span></div><div class="nw-wrap" id="nw-2026-04-21"></div></td><td class="dc" data-date="2026-04-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-22"></div></td><td class="dc" data-date="2026-04-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-23"></div></td><td class="dc wk" data-date="2026-04-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-24"></div></td><td class="dc wk" data-date="2026-04-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">6هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للملاريا</span></div><div class="nw-wrap" id="nw-2026-04-25"></div></td></tr><tr><td class="dc" data-date="2026-04-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-26"></div></td><td class="dc" data-date="2026-04-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-27"></div></td><td class="dc" data-date="2026-04-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">9هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لصحة العمل</span></div><div class="nw-wrap" id="nw-2026-04-28"></div></td><td class="dc" data-date="2026-04-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-29"></div></td><td class="dc" data-date="2026-04-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-04-30"></div></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m5">
+<div class="mh" style="background:linear-gradient(135deg,#7B52AB,#3DBDAD)">
+<div><div class="mh-ar">مايو 2026م</div><div class="mh-hij">شوال - ذو القعدة</div></div>
+<div class="mh-num">05</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc wk" data-date="2026-05-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-01"></div></td><td class="dc wk" data-date="2026-05-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-02"></div></td></tr><tr><td class="dc" data-date="2026-05-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-03"></div></td><td class="dc" data-date="2026-05-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-04"></div></td><td class="dc" data-date="2026-05-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-05"></div></td><td class="dc" data-date="2026-05-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-06"></div></td><td class="dc" data-date="2026-05-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-07"></div></td><td class="dc wk" data-date="2026-05-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-08"></div></td><td class="dc wk" data-date="2026-05-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-09"></div></td></tr><tr><td class="dc" data-date="2026-05-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-10"></div></td><td class="dc" data-date="2026-05-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-11"></div></td><td class="dc" data-date="2026-05-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">23هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للتمريض</span></div><div class="nw-wrap" id="nw-2026-05-12"></div></td><td class="dc" data-date="2026-05-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-13"></div></td><td class="dc" data-date="2026-05-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-14"></div></td><td class="dc wk" data-date="2026-05-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-15"></div></td><td class="dc wk" data-date="2026-05-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-16"></div></td></tr><tr><td class="dc" data-date="2026-05-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">28هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للاتصالات</span></div><div class="nw-wrap" id="nw-2026-05-17"></div></td><td class="dc" data-date="2026-05-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-18"></div></td><td class="dc" data-date="2026-05-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-19"></div></td><td class="dc" data-date="2026-05-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-20"></div></td><td class="dc" data-date="2026-05-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-05-21"></div></td><td class="dc wk hl" data-date="2026-05-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">3هـ</span></div><div class="pills"><span class="pill pn">بداية إجازة عيد الأضحى</span><span class="pill pe">إجازة عيد الأضحى</span></div><div class="nw-wrap" id="nw-2026-05-22"></div></td><td class="dc wk hl" data-date="2026-05-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">4هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-23"></div></td></tr><tr><td class="dc hl" data-date="2026-05-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">5هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-24"></div></td><td class="dc hl" data-date="2026-05-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">6هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-25"></div></td><td class="dc hl" data-date="2026-05-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">7هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-26"></div></td><td class="dc hl" data-date="2026-05-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">8هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-27"></div></td><td class="dc hl" data-date="2026-05-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">9هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لصحة المرأة</span><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-28"></div></td><td class="dc wk hl" data-date="2026-05-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">10هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-29"></div></td><td class="dc wk hl" data-date="2026-05-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">11هـ</span></div><div class="pills"><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-30"></div></td></tr><tr><td class="dc hl" data-date="2026-05-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">12هـ</span></div><div class="pills"><span class="pill ph">الامتناع عن التبغ</span><span class="pill pn">إجازة</span></div><div class="nw-wrap" id="nw-2026-05-31"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m6">
+<div class="mh" style="background:linear-gradient(135deg,#3DBDAD,#7B52AB)">
+<div><div class="mh-ar">يونيو 2026م</div><div class="mh-hij">ذو القعدة - ذو الحجة</div></div>
+<div class="mh-num">06</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="dc hl" data-date="2026-06-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">11هـ</span></div><div class="pills"><span class="pill pn">نهاية إجازة الأضحى</span></div><div class="nw-wrap" id="nw-2026-06-01"></div></td><td class="dc" data-date="2026-06-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-02"></div></td><td class="dc" data-date="2026-06-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-03"></div></td><td class="dc" data-date="2026-06-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-04"></div></td><td class="dc wk" data-date="2026-06-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">15هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للبيئة</span></div><div class="nw-wrap" id="nw-2026-06-05"></div></td><td class="dc wk" data-date="2026-06-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-06"></div></td></tr><tr><td class="dc" data-date="2026-06-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-07"></div></td><td class="dc" data-date="2026-06-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمحيطات</span></div><div class="nw-wrap" id="nw-2026-06-08"></div></td><td class="dc" data-date="2026-06-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-09"></div></td><td class="dc" data-date="2026-06-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-10"></div></td><td class="dc" data-date="2026-06-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-11"></div></td><td class="dc wk" data-date="2026-06-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-12"></div></td><td class="dc wk" data-date="2026-06-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-13"></div></td></tr><tr><td class="dc" data-date="2026-06-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">24هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمتبرعين بالدم</span></div><div class="nw-wrap" id="nw-2026-06-14"></div></td><td class="dc" data-date="2026-06-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-15"></div></td><td class="dc" data-date="2026-06-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-16"></div></td><td class="dc" data-date="2026-06-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-17"></div></td><td class="dc" data-date="2026-06-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-18"></div></td><td class="dc wk" data-date="2026-06-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-19"></div></td><td class="dc wk" data-date="2026-06-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-20"></div></td></tr><tr><td class="dc" data-date="2026-06-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-21"></div></td><td class="dc" data-date="2026-06-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-22"></div></td><td class="dc" data-date="2026-06-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-23"></div></td><td class="dc" data-date="2026-06-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-24"></div></td><td class="dc" data-date="2026-06-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">5هـ</span></div><div class="pills"><span class="pill pe">نهاية العام الدراسي</span></div><div class="nw-wrap" id="nw-2026-06-25"></div></td><td class="dc wk" data-date="2026-06-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-26"></div></td><td class="dc wk" data-date="2026-06-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-27"></div></td></tr><tr><td class="dc" data-date="2026-06-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-28"></div></td><td class="dc" data-date="2026-06-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-29"></div></td><td class="dc" data-date="2026-06-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-06-30"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m7">
+<div class="mh" style="background:linear-gradient(135deg,#4A4A9A,#3DBDAD)">
+<div><div class="mh-ar">يوليو 2026م</div><div class="mh-hij">ذو الحجة - محرم</div></div>
+<div class="mh-num">07</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-07-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-01"></div></td><td class="dc" data-date="2026-07-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-02"></div></td><td class="dc wk" data-date="2026-07-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-03"></div></td><td class="dc wk" data-date="2026-07-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-04"></div></td></tr><tr><td class="dc" data-date="2026-07-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-05"></div></td><td class="dc" data-date="2026-07-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-06"></div></td><td class="dc" data-date="2026-07-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-07"></div></td><td class="dc" data-date="2026-07-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-08"></div></td><td class="dc" data-date="2026-07-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-09"></div></td><td class="dc wk" data-date="2026-07-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-10"></div></td><td class="dc wk" data-date="2026-07-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">21هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للسكان</span></div><div class="nw-wrap" id="nw-2026-07-11"></div></td></tr><tr><td class="dc" data-date="2026-07-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-12"></div></td><td class="dc" data-date="2026-07-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-13"></div></td><td class="dc" data-date="2026-07-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-14"></div></td><td class="dc" data-date="2026-07-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-15"></div></td><td class="dc" data-date="2026-07-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-16"></div></td><td class="dc wk" data-date="2026-07-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-17"></div></td><td class="dc wk" data-date="2026-07-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-18"></div></td></tr><tr><td class="dc" data-date="2026-07-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-19"></div></td><td class="dc" data-date="2026-07-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-20"></div></td><td class="dc" data-date="2026-07-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-21"></div></td><td class="dc" data-date="2026-07-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-22"></div></td><td class="dc" data-date="2026-07-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-23"></div></td><td class="dc wk" data-date="2026-07-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-24"></div></td><td class="dc wk" data-date="2026-07-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-25"></div></td></tr><tr><td class="dc" data-date="2026-07-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-26"></div></td><td class="dc" data-date="2026-07-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-27"></div></td><td class="dc" data-date="2026-07-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">8هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لالتهاب الكبد</span></div><div class="nw-wrap" id="nw-2026-07-28"></div></td><td class="dc" data-date="2026-07-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-29"></div></td><td class="dc" data-date="2026-07-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-30"></div></td><td class="dc wk" data-date="2026-07-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-07-31"></div></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m8">
+<div class="mh" style="background:linear-gradient(135deg,#3DBDAD,#4A4A9A)">
+<div><div class="mh-ar">أغسطس 2026م</div><div class="mh-hij">محرم - صفر</div></div>
+<div class="mh-num">08</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc wk" data-date="2026-08-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-01"></div></td></tr><tr><td class="dc" data-date="2026-08-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-02"></div></td><td class="dc" data-date="2026-08-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-03"></div></td><td class="dc" data-date="2026-08-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-04"></div></td><td class="dc" data-date="2026-08-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-05"></div></td><td class="dc" data-date="2026-08-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-06"></div></td><td class="dc wk" data-date="2026-08-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-07"></div></td><td class="dc wk" data-date="2026-08-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-08"></div></td></tr><tr><td class="dc" data-date="2026-08-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-09"></div></td><td class="dc" data-date="2026-08-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-10"></div></td><td class="dc" data-date="2026-08-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">20هـ</span></div><div class="pills"><span class="pill pe">عودة المشرفين</span></div><div class="nw-wrap" id="nw-2026-08-11"></div></td><td class="dc" data-date="2026-08-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-12"></div></td><td class="dc" data-date="2026-08-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-13"></div></td><td class="dc wk" data-date="2026-08-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-14"></div></td><td class="dc wk" data-date="2026-08-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-15"></div></td></tr><tr><td class="dc" data-date="2026-08-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">25هـ</span></div><div class="pills"><span class="pill pe">عودة المعلمين</span></div><div class="nw-wrap" id="nw-2026-08-16"></div></td><td class="dc" data-date="2026-08-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-17"></div></td><td class="dc" data-date="2026-08-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-18"></div></td><td class="dc" data-date="2026-08-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-19"></div></td><td class="dc" data-date="2026-08-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-20"></div></td><td class="dc wk" data-date="2026-08-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-21"></div></td><td class="dc wk" data-date="2026-08-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-22"></div></td></tr><tr><td class="dc" data-date="2026-08-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">2هـ</span></div><div class="pills"><span class="pill pe">بداية العام الدراسي 2026-2027</span></div><div class="nw-wrap" id="nw-2026-08-23"></div></td><td class="dc" data-date="2026-08-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-24"></div></td><td class="dc" data-date="2026-08-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-25"></div></td><td class="dc" data-date="2026-08-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-26"></div></td><td class="dc" data-date="2026-08-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-27"></div></td><td class="dc wk" data-date="2026-08-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-28"></div></td><td class="dc wk" data-date="2026-08-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-29"></div></td></tr><tr><td class="dc" data-date="2026-08-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-30"></div></td><td class="dc" data-date="2026-08-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-08-31"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m9">
+<div class="mh" style="background:linear-gradient(135deg,#7B52AB,#4A4A9A)">
+<div><div class="mh-ar">سبتمبر 2026م</div><div class="mh-hij">صفر - ربيع الأول</div></div>
+<div class="mh-num">09</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-09-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-01"></div></td><td class="dc" data-date="2026-09-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-02"></div></td><td class="dc" data-date="2026-09-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-03"></div></td><td class="dc wk" data-date="2026-09-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-04"></div></td><td class="dc wk" data-date="2026-09-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-05"></div></td></tr><tr><td class="dc" data-date="2026-09-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-06"></div></td><td class="dc" data-date="2026-09-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-07"></div></td><td class="dc" data-date="2026-09-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-08"></div></td><td class="dc" data-date="2026-09-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-09"></div></td><td class="dc" data-date="2026-09-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لمنع الانتحار</span></div><div class="nw-wrap" id="nw-2026-09-10"></div></td><td class="dc wk" data-date="2026-09-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-11"></div></td><td class="dc wk" data-date="2026-09-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-12"></div></td></tr><tr><td class="dc" data-date="2026-09-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-13"></div></td><td class="dc" data-date="2026-09-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">22هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للإسعافات</span></div><div class="nw-wrap" id="nw-2026-09-14"></div></td><td class="dc" data-date="2026-09-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-15"></div></td><td class="dc" data-date="2026-09-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-16"></div></td><td class="dc" data-date="2026-09-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">25هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لسلامة المرضى</span></div><div class="nw-wrap" id="nw-2026-09-17"></div></td><td class="dc wk" data-date="2026-09-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-18"></div></td><td class="dc wk" data-date="2026-09-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-19"></div></td></tr><tr><td class="dc" data-date="2026-09-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-20"></div></td><td class="dc" data-date="2026-09-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">29هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للزهايمر</span></div><div class="nw-wrap" id="nw-2026-09-21"></div></td><td class="dc" data-date="2026-09-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-22"></div></td><td class="dc hl" data-date="2026-09-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">1هـ</span></div><div class="pills"><span class="pill pn">اليوم الوطني السعودي</span><span class="pill pe">إجازة اليوم الوطني</span></div><div class="nw-wrap" id="nw-2026-09-23"></div></td><td class="dc hl" data-date="2026-09-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">2هـ</span></div><div class="pills"><span class="pill pn">إجازة اليوم الوطني</span></div><div class="nw-wrap" id="nw-2026-09-24"></div></td><td class="dc wk" data-date="2026-09-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-25"></div></td><td class="dc wk" data-date="2026-09-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-26"></div></td></tr><tr><td class="dc" data-date="2026-09-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-27"></div></td><td class="dc" data-date="2026-09-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-28"></div></td><td class="dc" data-date="2026-09-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">7هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للقلب</span></div><div class="nw-wrap" id="nw-2026-09-29"></div></td><td class="dc" data-date="2026-09-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-09-30"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m10">
+<div class="mh" style="background:linear-gradient(135deg,#4A4A9A,#3DBDAD)">
+<div><div class="mh-ar">أكتوبر 2026م</div><div class="mh-hij">ربيع الأول - ربيع الآخر</div></div>
+<div class="mh-num">10</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-10-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">9هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للمسنين</span></div><div class="nw-wrap" id="nw-2026-10-01"></div></td><td class="dc wk" data-date="2026-10-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-02"></div></td><td class="dc wk" data-date="2026-10-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-03"></div></td></tr><tr><td class="dc" data-date="2026-10-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-04"></div></td><td class="dc" data-date="2026-10-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-05"></div></td><td class="dc" data-date="2026-10-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-06"></div></td><td class="dc" data-date="2026-10-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-07"></div></td><td class="dc" data-date="2026-10-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-08"></div></td><td class="dc wk" data-date="2026-10-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-09"></div></td><td class="dc wk" data-date="2026-10-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill ph">يوم الصحة النفسية</span></div><div class="nw-wrap" id="nw-2026-10-10"></div></td></tr><tr><td class="dc" data-date="2026-10-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-11"></div></td><td class="dc" data-date="2026-10-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-12"></div></td><td class="dc" data-date="2026-10-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-13"></div></td><td class="dc" data-date="2026-10-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-14"></div></td><td class="dc" data-date="2026-10-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-15"></div></td><td class="dc wk" data-date="2026-10-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">24هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للأغذية</span></div><div class="nw-wrap" id="nw-2026-10-16"></div></td><td class="dc wk" data-date="2026-10-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-17"></div></td></tr><tr><td class="dc" data-date="2026-10-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-18"></div></td><td class="dc" data-date="2026-10-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-19"></div></td><td class="dc" data-date="2026-10-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-20"></div></td><td class="dc" data-date="2026-10-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-21"></div></td><td class="dc" data-date="2026-10-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-22"></div></td><td class="dc wk" data-date="2026-10-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-23"></div></td><td class="dc wk" data-date="2026-10-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-24"></div></td></tr><tr><td class="dc" data-date="2026-10-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-25"></div></td><td class="dc" data-date="2026-10-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-26"></div></td><td class="dc" data-date="2026-10-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-27"></div></td><td class="dc" data-date="2026-10-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-28"></div></td><td class="dc" data-date="2026-10-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-29"></div></td><td class="dc wk" data-date="2026-10-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-30"></div></td><td class="dc wk" data-date="2026-10-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-10-31"></div></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m11">
+<div class="mh" style="background:linear-gradient(135deg,#3DBDAD,#7B52AB)">
+<div><div class="mh-ar">نوفمبر 2026م</div><div class="mh-hij">ربيع الآخر - جمادى الأول</div></div>
+<div class="mh-num">11</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="dc" data-date="2026-11-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-01"></div></td><td class="dc" data-date="2026-11-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">9هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-02"></div></td><td class="dc" data-date="2026-11-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-03"></div></td><td class="dc" data-date="2026-11-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-04"></div></td><td class="dc" data-date="2026-11-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-05"></div></td><td class="dc wk" data-date="2026-11-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-06"></div></td><td class="dc wk" data-date="2026-11-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-07"></div></td></tr><tr><td class="dc" data-date="2026-11-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-08"></div></td><td class="dc" data-date="2026-11-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">16هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-09"></div></td><td class="dc" data-date="2026-11-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-10"></div></td><td class="dc" data-date="2026-11-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">18هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-11"></div></td><td class="dc" data-date="2026-11-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">19هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للالتهاب الرئوي</span></div><div class="nw-wrap" id="nw-2026-11-12"></div></td><td class="dc wk" data-date="2026-11-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-13"></div></td><td class="dc wk" data-date="2026-11-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">21هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للسكري</span></div><div class="nw-wrap" id="nw-2026-11-14"></div></td></tr><tr><td class="dc" data-date="2026-11-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-15"></div></td><td class="dc" data-date="2026-11-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-16"></div></td><td class="dc" data-date="2026-11-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">24هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-17"></div></td><td class="dc" data-date="2026-11-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-18"></div></td><td class="dc" data-date="2026-11-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-19"></div></td><td class="dc wk" data-date="2026-11-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">27هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للطفل</span><span class="pill pe">إجازة الخريف</span></div><div class="nw-wrap" id="nw-2026-11-20"></div></td><td class="dc wk" data-date="2026-11-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-21"></div></td></tr><tr><td class="dc" data-date="2026-11-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-22"></div></td><td class="dc" data-date="2026-11-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-23"></div></td><td class="dc" data-date="2026-11-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-24"></div></td><td class="dc" data-date="2026-11-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-25"></div></td><td class="dc" data-date="2026-11-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-26"></div></td><td class="dc wk" data-date="2026-11-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-27"></div></td><td class="dc wk" data-date="2026-11-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">5هـ</span></div><div class="pills"><span class="pill pe">نهاية إجازة الخريف</span></div><div class="nw-wrap" id="nw-2026-11-28"></div></td></tr><tr><td class="dc" data-date="2026-11-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-29"></div></td><td class="dc" data-date="2026-11-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-11-30"></div></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section>
+<section class="mc" id="m12">
+<div class="mh" style="background:linear-gradient(135deg,#4A4A9A,#3DBDAD)">
+<div><div class="mh-ar">ديسمبر 2026م</div><div class="mh-hij">جمادى الأول - جمادى الآخرة</div></div>
+<div class="mh-num">12</div></div>
+<div class="tw"><table class="ctbl"><thead><tr><th style="background:rgba(0,0,0,.28)">الأحد</th><th style="background:rgba(0,0,0,.28)">الاثنين</th><th style="background:rgba(0,0,0,.28)">الثلاثاء</th><th style="background:rgba(0,0,0,.28)">الأربعاء</th><th style="background:rgba(0,0,0,.28)">الخميس</th><th style="background:rgba(0,0,0,.42)">الجمعة</th><th style="background:rgba(0,0,0,.42)">السبت</th></tr></thead><tbody><tr><td class="emp"></td><td class="emp"></td><td class="dc" data-date="2026-12-01" onclick="cellTap(this)"><div class="dt"><span class="dn">1</span><span class="dh">7هـ</span></div><div class="pills"><span class="pill ph">يوم الإيدز</span></div><div class="nw-wrap" id="nw-2026-12-01"></div></td><td class="dc" data-date="2026-12-02" onclick="cellTap(this)"><div class="dt"><span class="dn">2</span><span class="dh">8هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-02"></div></td><td class="dc" data-date="2026-12-03" onclick="cellTap(this)"><div class="dt"><span class="dn">3</span><span class="dh">9هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لذوي الإعاقة</span></div><div class="nw-wrap" id="nw-2026-12-03"></div></td><td class="dc wk" data-date="2026-12-04" onclick="cellTap(this)"><div class="dt"><span class="dn">4</span><span class="dh">10هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-04"></div></td><td class="dc wk" data-date="2026-12-05" onclick="cellTap(this)"><div class="dt"><span class="dn">5</span><span class="dh">11هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-05"></div></td></tr><tr><td class="dc" data-date="2026-12-06" onclick="cellTap(this)"><div class="dt"><span class="dn">6</span><span class="dh">12هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-06"></div></td><td class="dc" data-date="2026-12-07" onclick="cellTap(this)"><div class="dt"><span class="dn">7</span><span class="dh">13هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-07"></div></td><td class="dc" data-date="2026-12-08" onclick="cellTap(this)"><div class="dt"><span class="dn">8</span><span class="dh">14هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-08"></div></td><td class="dc" data-date="2026-12-09" onclick="cellTap(this)"><div class="dt"><span class="dn">9</span><span class="dh">15هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-09"></div></td><td class="dc" data-date="2026-12-10" onclick="cellTap(this)"><div class="dt"><span class="dn">10</span><span class="dh">16هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي لحقوق الإنسان</span></div><div class="nw-wrap" id="nw-2026-12-10"></div></td><td class="dc wk" data-date="2026-12-11" onclick="cellTap(this)"><div class="dt"><span class="dn">11</span><span class="dh">17هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-11"></div></td><td class="dc wk" data-date="2026-12-12" onclick="cellTap(this)"><div class="dt"><span class="dn">12</span><span class="dh">18هـ</span></div><div class="pills"><span class="pill ph">التغطية الصحية الشاملة</span></div><div class="nw-wrap" id="nw-2026-12-12"></div></td></tr><tr><td class="dc" data-date="2026-12-13" onclick="cellTap(this)"><div class="dt"><span class="dn">13</span><span class="dh">19هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-13"></div></td><td class="dc" data-date="2026-12-14" onclick="cellTap(this)"><div class="dt"><span class="dn">14</span><span class="dh">20هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-14"></div></td><td class="dc" data-date="2026-12-15" onclick="cellTap(this)"><div class="dt"><span class="dn">15</span><span class="dh">21هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-15"></div></td><td class="dc" data-date="2026-12-16" onclick="cellTap(this)"><div class="dt"><span class="dn">16</span><span class="dh">22هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-16"></div></td><td class="dc" data-date="2026-12-17" onclick="cellTap(this)"><div class="dt"><span class="dn">17</span><span class="dh">23هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-17"></div></td><td class="dc wk" data-date="2026-12-18" onclick="cellTap(this)"><div class="dt"><span class="dn">18</span><span class="dh">24هـ</span></div><div class="pills"><span class="pill ph">اليوم العالمي للغة العربية</span></div><div class="nw-wrap" id="nw-2026-12-18"></div></td><td class="dc wk" data-date="2026-12-19" onclick="cellTap(this)"><div class="dt"><span class="dn">19</span><span class="dh">25هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-19"></div></td></tr><tr><td class="dc" data-date="2026-12-20" onclick="cellTap(this)"><div class="dt"><span class="dn">20</span><span class="dh">26هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-20"></div></td><td class="dc" data-date="2026-12-21" onclick="cellTap(this)"><div class="dt"><span class="dn">21</span><span class="dh">27هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-21"></div></td><td class="dc" data-date="2026-12-22" onclick="cellTap(this)"><div class="dt"><span class="dn">22</span><span class="dh">28هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-22"></div></td><td class="dc" data-date="2026-12-23" onclick="cellTap(this)"><div class="dt"><span class="dn">23</span><span class="dh">29هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-23"></div></td><td class="dc" data-date="2026-12-24" onclick="cellTap(this)"><div class="dt"><span class="dn">24</span><span class="dh">30هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-24"></div></td><td class="dc wk" data-date="2026-12-25" onclick="cellTap(this)"><div class="dt"><span class="dn">25</span><span class="dh">1هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-25"></div></td><td class="dc wk" data-date="2026-12-26" onclick="cellTap(this)"><div class="dt"><span class="dn">26</span><span class="dh">2هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-26"></div></td></tr><tr><td class="dc" data-date="2026-12-27" onclick="cellTap(this)"><div class="dt"><span class="dn">27</span><span class="dh">3هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-27"></div></td><td class="dc" data-date="2026-12-28" onclick="cellTap(this)"><div class="dt"><span class="dn">28</span><span class="dh">4هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-28"></div></td><td class="dc" data-date="2026-12-29" onclick="cellTap(this)"><div class="dt"><span class="dn">29</span><span class="dh">5هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-29"></div></td><td class="dc" data-date="2026-12-30" onclick="cellTap(this)"><div class="dt"><span class="dn">30</span><span class="dh">6هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-30"></div></td><td class="dc" data-date="2026-12-31" onclick="cellTap(this)"><div class="dt"><span class="dn">31</span><span class="dh">7هـ</span></div><div class="pills"></div><div class="nw-wrap" id="nw-2026-12-31"></div></td><td class="emp"></td><td class="emp"></td></tr></tbody></table></div>
+</section></div>
+
+</div><!-- end appShell -->
+
+<script>
+/* ══ SAFE DOM HELPERS ════════════════════════════ */
+
+/* ══ JSONP WRITE — يرسل للشيت بدون مشاكل CORS ══ */
+function gasWrite(params, onDone) {
+ if (!GAS_URL) return;
+ const cb = '__w_' + Date.now();
+ const sc = document.createElement('script');
+ const timer = setTimeout(() => {
+  delete window[cb]; sc.remove();
+  console.warn('[GAS] timeout:', params.action);
+  if (onDone) onDone(false);
+ }, 15000);
+ window[cb] = (r) => {
+  clearTimeout(timer); delete window[cb]; sc.remove();
+  console.log('[GAS] write ok:', params.action, r);
+  if (onDone) onDone(r && r.ok);
+ };
+ const p = {};
+ Object.keys(params).forEach(k => { if (k !== 'ts') p[k] = params[k]; });
+ if (p.text && p.text.length > 500) p.text = p.text.slice(0, 500);
+ p.callback = cb;
+ const url = GAS_URL + '?' + new URLSearchParams(p).toString();
+ console.log('[GAS] sending:', params.action, url.slice(0,100)+'...');
+ sc.src = url;
+ document.head.appendChild(sc);
+}
+
+function gasRead(params, onDone) {
+ if (!GAS_URL) { onDone(null); return; }
+ const cb = '__r_' + Date.now();
+ const sc = document.createElement('script');
+ const timer = setTimeout(() => {
+  delete window[cb]; sc.remove();
+  console.warn('[GAS] read timeout');
+  onDone(null);
+ }, 12000);
+ window[cb] = d => {
+  clearTimeout(timer); delete window[cb]; sc.remove();
+  console.log('[GAS] read ok, notes:', d && d.notes && d.notes.length);
+  onDone(d);
+ };
+ const p = Object.assign({}, params, { callback: cb, t: Date.now() });
+ sc.src = GAS_URL + '?' + new URLSearchParams(p).toString();
+ document.head.appendChild(sc);
+}
+
+
+const $e = id => document.getElementById(id);
+const $t = (id,v) => { const e=$e(id); if(e) e.textContent=v; };
+const $h = (id,v) => { const e=$e(id); if(e) e.innerHTML=v; };
+const $s = (id,p,v) => { const e=$e(id); if(e) e.style[p]=v; };
+const $c = (id,cls,add) => { const e=$e(id); if(e) e.classList[add?'add':'remove'](cls); };
+
+/* ══ LOCAL STORAGE — الحفظ الدائم بين الجلسات ════════════════ */
+var LS_KEY = 'apx_notes_2026';
+
+function lsSave() {
+ try {
+  // احفظ كل localNotes (ليس فقط ما يراه الدور الحالي)
+  var toSave = {};
+  Object.keys(localNotes).forEach(function(id) {
+   toSave[id] = localNotes[id];
+  });
+  localStorage.setItem(LS_KEY, JSON.stringify(toSave));
+  console.log('[LS] saved', Object.keys(toSave).length, 'notes');
+ } catch(e) { console.warn('[LS] save failed:', e); }
+}
+
+function lsLoad() {
+ try {
+  var raw = localStorage.getItem(LS_KEY);
+  if (raw) {
+   var parsed = JSON.parse(raw);
+   var count = 0;
+   Object.keys(parsed).forEach(function(id) {
+    if (parsed[id] && parsed[id].id && parsed[id].date && parsed[id].text) {
+     localNotes[id] = parsed[id];
+     count++;
+    }
+   });
+   console.log('[LS] loaded', count, 'notes. role:', currentRole);
+  } else {
+   console.log('[LS] empty — no saved notes');
+  }
+ } catch(e) { console.warn('[LS] load failed:', e); }
+}
+
+function lsDelete(id) {
+ try {
+  delete localNotes[id];
+  lsSave();
+ } catch(e) {}
+}
+
+/* ══ CONFIG - ضع رابط Apps Script في GAS_URL أدناه ══ */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxGAACZtuxGY36Zxr8ANbi52dpmMrdIy9Xq6dVyKAEOTkjQJC0STSKeJpeu_2sN7CoR/exec';
+
+/* رقم سري لكل دور — غيّرها قبل الرفع */
+const PINS = {
+ ceo: '1111',
+ marketing: '2222',
+ hr: '3333',
+ ops: '4444',
+ quality: '5555',
+ general: '0000', // عرض فقط بدون إضافة
+};
+
+const ROLE_META = {
+  ceo:       {n:'المدير التنفيذي', abbr:'CEO', bg:'#c0152a', canWrite:true,  seesAll:true},
+  marketing: {n:'التسويق',         abbr:'MKT', bg:'#8b5cf6', canWrite:true,  seesAll:false},
+  hr:        {n:'الموارد البشرية', abbr:'HR',  bg:'#10b981', canWrite:true,  seesAll:false},
+  ops:       {n:'العمليات',        abbr:'OPS', bg:'#f97316', canWrite:true,  seesAll:false},
+  quality:   {n:'الجودة',          abbr:'QA',  bg:'#06b6d4', canWrite:true,  seesAll:false},
+  general:   {n:'عام',             abbr:'GEN', bg:'#6b7280', canWrite:false, seesAll:false},
+};
+
+const MONTHS_AR=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const DAYS_AR=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+/* ══ STATE ═══════════════════════════════════════════ */
+let currentRole = null;
+let notesMap  = {}; // {date: [note]}
+let allNotes   = [];
+let localNotes = {}; // {id: note} — ملاحظات محلية مؤكدة أو معلقة
+let pendingIds = new Set(); // IDs لم تُؤكَّد في الشيت بعد
+let curDay = null;
+let selTo_val = 'all';
+let selColor_val= '#f59e0b';
+let readIds = new Set(JSON.parse(localStorage.getItem('apex_read')||'[]'));
+let inboxFilter = 'all';
+
+/* ══ LOGIN ═══════════════════════════════════════════ */
+let selectedRoleEl = null;
+function selectRole(el) {
+ document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+ el.classList.add('selected');
+ selectedRoleEl = el;
+ $t('pinLabel', 'أدخل رقم السري لـ ' + (ROLE_META[el.dataset.role]?.n||''));
+ $e('pinField').value='';
+ $e('pinField').focus();
+ $s('pinErr','display','none');
+}
+
+function doLogin() {
+ if (!selectedRoleEl) { showToast('اختر حسابك أولاً','#f59e0b'); return; }
+ const role = selectedRoleEl.dataset.role;
+ const pin = document.getElementById('pinField').value;
+ if (pin !== PINS[role]) {
+ $s('pinErr','display','block');
+ $e('pinField').value='';
+ $e('pinField').focus();
+ setTimeout(()=>$s('pinErr','display','none'),2000);
+ return;
+ }
+ currentRole = role;
+ const rm = ROLE_META[role];
+ // Hide login, show app
+ $c('loginScreen','gone',true);
+ $c('appShell','visible',true);
+ // Set user label
+ $t('tbUser', '['+rm.abbr+'] '+rm.n);
+ // Adjust add button visibility
+ if (!rm.canWrite) $s('btnAddNote','display','none');
+ // 1. حمّل من localStorage فوراً (بدون انتظار)
+ lsLoad();
+ rebuildFromLocal();
+ hideLoad(''); // أخفِ شاشة التحميل دائماً بعد lsLoad
+ // 2. انتقل للشهر الحالي
+ setTimeout(scrollToCurrentMonth, 300);
+ // 3. مزامنة مع الشيت في الخلفية (بدون شاشة تحميل)
+ setTimeout(function() { syncFromSheet(); }, 800);
+}
+
+function rebuildFromLocal() {
+ notesMap = {};
+ var all     = Object.values(localNotes);
+ var roleObj = ROLE_META[currentRole];
+ var seesAll = roleObj && roleObj.seesAll === true;
+
+ var visible = all.filter(function(n) {
+  if (!n || !n.date || !n.text) return false;
+  if (!currentRole) return false;
+  if (seesAll)                         return true;  // المدير يرى الكل
+  if (n.from_role === currentRole)     return true;  // ما أرسلته
+  if (n.to_role   === currentRole)     return true;  // ما وُجِّه إليّ
+  if (n.to_role   === 'all')           return true;  // عام
+  if (n.shared    === 'yes')           return true;  // مشترك
+  return false;
+ });
+
+ console.log('[REBUILD] role:', currentRole, '| seesAll:', seesAll,
+   '| total in local:', all.length, '| visible:', visible.length);
+
+ allNotes = visible;
+ visible.forEach(function(n) {
+  if (!notesMap[n.date]) notesMap[n.date] = [];
+  var exists = notesMap[n.date].some(function(x) { return x.id === n.id; });
+  if (!exists) notesMap[n.date].push(n);
+ });
+ renderAllCells();
+ updateInboxBadge();
+}
+
+function scrollToCurrentMonth() {
+ const now   = new Date();
+ const month = now.getMonth() + 1; // 1-12
+ const year  = now.getFullYear();
+ // If 2026, scroll to that month; otherwise scroll to first/last
+ let target = 1;
+ if (year === 2026) target = month;
+ else if (year > 2026) target = 12;
+ const el = document.getElementById('m' + target);
+ if (el) {
+  const offset = 56 + 40 + 8; // header + nav + gap
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+  // Highlight current day if in this month
+  const today = year + '-' + String(month).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+  const todayCell = document.querySelector('[data-date="' + today + '"]');
+  if (todayCell) {
+   todayCell.style.outline = '2px solid var(--teal)';
+   todayCell.style.outlineOffset = '-2px';
+   todayCell.style.borderRadius = '2px';
+  }
+ }
+}
+
+function logout() {
+ currentRole = null;
+ $c('loginScreen','gone',false);
+ $c('appShell','visible',false);
+ $e('pinField').value='';
+ document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+ selectedRoleEl=null;
+ // امسح RAM فقط — localStorage يبقى للجلسة القادمة
+ notesMap={};allNotes=[];localNotes={};pendingIds.clear();
+ // لا نمسح localStorage حتى تظهر الملاحظات فور الدخول مرة أخرى
+}
+
+/* ══ FETCH NOTES ═════════════════════════════════════ */
+function syncFromSheet() {
+ if (!GAS_URL) return;
+ console.log('[SYNC] fetching from sheet as:', currentRole);
+ gasRead({action:'getAll', viewer: currentRole}, function(d) {
+  if (d && d.ok) {
+   var count = d.notes ? d.notes.length : 0;
+   console.log('[SYNC] sheet returned', count, 'notes for role:', currentRole);
+   if (count > 0) {
+    processNotes(d.notes);
+   } else {
+    console.warn('[SYNC] sheet empty — check sheet name matches GAS code');
+   }
+  } else {
+   console.error('[SYNC] failed:', d);
+  }
+ });
+}
+
+function loadNotes(silent) {
+ // لا تُظهر شاشة تحميل إذا عندنا بيانات محلية
+ var hasLocal = Object.keys(localNotes).length > 0;
+ if (!hasLocal && !silent) {
+  $c('loadScreen','gone',false);
+ }
+ if (!GAS_URL) { hideLoad(''); return; }
+ gasRead({action:'getAll', viewer: currentRole}, function(d) {
+  hideLoad('');
+  if (d && d.ok && d.notes && d.notes.length > 0) {
+   processNotes(d.notes);
+   if (!silent && !hasLocal) showToast('تم التحميل','#10b981');
+  }
+ });
+}
+
+function processNotes(remoteNotes) {
+ if (!remoteNotes || !Array.isArray(remoteNotes)) return;
+ console.log('[PROCESS] received from sheet:', remoteNotes.length, 'notes, local has:', Object.keys(localNotes).length);
+
+ // أضف كل ملاحظة من الشيت إلى localNotes (دمج فقط، لا حذف أبداً)
+ remoteNotes.forEach(function(n) {
+  if (n && n.id && n.date && n.text) {
+   // فلتر الصلاحية
+   var show = false;
+   if (ROLE_META[currentRole] && ROLE_META[currentRole].seesAll) { show = true; }
+   else if (n.from_role === currentRole) { show = true; }
+   else if (n.to_role   === currentRole) { show = true; }
+   else if (n.to_role   === 'all')       { show = true; }
+   else if (n.shared    === 'yes')       { show = true; }
+   if (show) {
+    localNotes[n.id] = n;
+    pendingIds.delete(n.id);
+   }
+  }
+ });
+
+ // احفظ في localStorage وأعد العرض
+ lsSave();
+ rebuildFromLocal();
+ console.log('[SYNC] total notes after merge:', Object.keys(localNotes).length);
+}
+
+function hideLoad(msg) {
+ const ls=$e('loadScreen');
+ const lt=$e('loadTxt');
+ if(lt&&msg) lt.textContent=msg;
+ setTimeout(()=>ls&&ls.classList.add('gone'), msg?700:0);
+}
+
+function doImport() {
+ if(!GAS_URL){ showToast(' اضبط GAS_URL في الكود','#f59e0b'); return; }
+ loadNotes(false);
+}
+
+/* ══ RENDER CELLS ════════════════════════════════════ */
+function renderAllCells() {
+ Object.keys(notesMap).forEach(renderCell);
+ // Clear cells that had notes but now don't
+ document.querySelectorAll('.nw-wrap').forEach(el=>{
+ const date=el.id.replace('nw-','');
+ if(!notesMap[date]) el.innerHTML='';
+ });
+}
+
+function renderCell(date) {
+ const el=document.getElementById('nw-'+date);
+ if(!el)return;
+ const notes=notesMap[date]||[];
+ const rm2 = ROLE_META[notes[0]?.from_role] || ROLE_META.general;
+ el.innerHTML=notes.map(n=>{
+  const isUnread = !readIds.has(n.id) && n.from_role !== currentRole;
+  const rm = ROLE_META[n.from_role] || ROLE_META.general;
+  const label = n.text.slice(0,16) + (n.text.length>16?'…':'');
+  return `<div class="note-chip"
+   style="background:${n.color}18;color:${n.color};border-right-color:${n.color}"
+   onclick="event.stopPropagation();viewNote('${date}','${n.id}')"
+   title="${n.text} — ${rm.n}">
+   ${isUnread?'<span style="width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0"></span>':''}
+   <span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:7.5px">${label}</span>
+   <span style="font-size:6px;opacity:.6;flex-shrink:0;background:${n.color}25;padding:0 3px;border-radius:2px">${rm.abbr}</span>
+  </div>`;
+ }).join('');
+}
+
+/* ══ CELL TAP ════════════════════════════════════════ */
+function cellTap(td) {
+ if(td.classList.contains('emp'))return;
+ curDay=td.dataset.date;
+ const notes=notesMap[curDay]||[];
+ if(notes.length){
+ openDayModal(curDay);
+ } else if(ROLE_META[currentRole]?.canWrite){
+ showAddNote(curDay);
+ } else {
+ showToast('لا توجد ملاحظات لهذا اليوم','#6b7280');
+ }
+}
+
+/* ══ DAY NOTES MODAL ═════════════════════════════════ */
+function openDayModal(date) {
+ curDay=date;
+ const [y,m,d]=date.split('-').map(Number);
+ const dow=new Date(y,m-1,d).getDay();
+ $t('dayTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' 2026م');
+ $t('daySub', date);
+ renderDayNotes();
+ showOv('ovDay');
+ // Mark notes as read
+ (notesMap[date]||[]).forEach(n=>{readIds.add(n.id);});
+ localStorage.setItem('apex_read',JSON.stringify([...readIds]));
+ updateInboxBadge();
+ renderCell(date);
+}
+
+function renderDayNotes() {
+ const notes=notesMap[curDay]||[];
+ const el=$e('dayNoteList');
+ if(!notes.length){
+ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:8px;font-size:13px">لا توجد ملاحظات لهذا اليوم</div>';
+ return;
+ }
+ el.innerHTML=notes.map(n=>buildNoteItem(n,true)).join('');
+}
+
+function viewNote(date,id) {
+ curDay=date;
+ const n=(notesMap[date]||[]).find(x=>x.id===id);
+ if(!n)return;
+ readIds.add(id);
+ localStorage.setItem('apex_read',JSON.stringify([...readIds]));
+ updateInboxBadge();
+ renderCell(date);
+ openDayModal(date);
+}
+
+function openAddForDay(){closeOv('ovDay');showAddNote(curDay);}
+
+/* ══ BUILD NOTE ITEM ═════════════════════════════════ */
+function buildNoteItem(n, showDel) {
+ const fromMeta=ROLE_META[n.from_role]||{n:'غير محدد',bg:'#888',abbr:'?'};
+ const toMeta =ROLE_META[n.to_role]  ||{n:'الكل',bg:'#6b7280',abbr:'ALL'};
+ const canDel = showDel && (n.from_role===currentRole || ROLE_META[currentRole]?.seesAll);
+ const [y,m,d]=n.date.split('-').map(Number);
+ const dateStr=d+' '+MONTHS_AR[m-1];
+ return `<div class="note-item">
+ <div class="ni-dot" style="background:${n.color}"></div>
+ <div class="ni-body">
+ <div class="ni-text">${n.text}</div>
+ <div class="ni-meta">
+ <span class="ni-tag" style="background:${fromMeta.bg}22;color:${fromMeta.bg}">${fromMeta.abbr} ${fromMeta.n}</span>
+ <span style="color:#94a3b8">&larr;</span>
+ <span class="ni-tag" style="background:${toMeta.bg}22;color:${toMeta.bg}">${n.to_role==='all'?'الكل':toMeta.abbr+' '+toMeta.n}</span>
+ <span style="color:#94a3b8">·</span>
+ <span>${dateStr}</span>
+ </div>
+ </div>
+ <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0">
+   ${canDel ? '<button class="ni-del" onclick="deleteNote(\'' + n.date + '\',\''+n.id+'\')">&times;</button>' : ''}
+   ${(ROLE_META[currentRole]?.seesAll && n.shared!=='yes') ? '<button class="ni-share" onclick="shareNote(\'' + n.date + '\',\''+n.id+'\')">مشاركة</button>' : ''}
+   ${n.shared==='yes' ? '<span class="ni-shared-badge">مشترك</span>' : ''}
+ </div>
+ </div>`;
+}
+
+/* ══ INBOX ═══════════════════════════════════════════ */
+function showInbox() {
+ inboxFilter='all';
+ $t('inboxTitle', ROLE_META[currentRole]?.seesAll ? 'جميع الملاحظات' : 'الوارد والصادر');
+ document.querySelectorAll('[data-if]').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
+ const allIfBtn=document.querySelector('[data-if="all"]');
+ if(allIfBtn){allIfBtn.style.background='var(--ind)';allIfBtn.style.color='#fff';allIfBtn.style.borderColor='var(--ind)';}
+ renderInbox();
+ showOv('ovInbox');
+}
+
+function filterInbox(btn) {
+ inboxFilter=btn.dataset.if;
+ document.querySelectorAll('[data-if]').forEach(b=>{b.style.background='';b.style.color='';});
+ btn.style.background=btn.style.borderColor='var(--ind)';btn.style.color='#fff';
+ renderInbox();
+}
+
+function renderInbox() {
+ let notes=[...allNotes];
+ if(inboxFilter==='unread') notes=notes.filter(n=>!readIds.has(n.id)&&n.from_role!==currentRole);
+ if(inboxFilter==='sent') notes=notes.filter(n=>n.from_role===currentRole);
+ notes.sort((a,b)=>b.date.localeCompare(a.date)||b.ts.localeCompare(a.ts));
+ const el=$e('inboxList');
+ if(!notes.length){
+ el.innerHTML='<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px">لا توجد ملاحظات</div>';
+ return;
+ }
+ el.innerHTML=notes.map(n=>buildNoteItem(n,false)).join('');
+}
+
+function updateInboxBadge() {
+ const unread=allNotes.filter(n=>!readIds.has(n.id)&&n.from_role!==currentRole).length;
+ const badge=$e('inboxBadge');
+ if(badge){badge.style.display=unread?'flex':'none';badge.textContent=unread;}
+}
+
+/* ══ ADD NOTE ════════════════════════════════════════ */
+function showAddNote(date) {
+ if(!ROLE_META[currentRole]?.canWrite){ showToast('حسابك للعرض فقط','#f59e0b'); return; }
+ $e('nDate').value=date||'';
+ $e('nText').value='';
+ selTo_val='all';
+ document.querySelectorAll('.ttab').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
+ const allBtn=document.querySelector('.ttab[data-to="all"]');
+ if(allBtn){allBtn.style.background='var(--ind)';allBtn.style.color='#fff';allBtn.style.borderColor='var(--ind)';}
+ // Hide self from recipients — you can't send to yourself
+ document.querySelectorAll('[data-to]').forEach(btn=>{
+   btn.style.display = (btn.dataset.to === currentRole) ? 'none' : '';
+ });
+ selColor_val='#f59e0b';
+ document.querySelectorAll('.co').forEach(c=>c.classList.remove('sel'));
+ document.querySelector('.co[data-c="#f59e0b"]')?.classList.add('sel');
+ showOv('ovAdd');
+}
+
+function selTo(el) {
+ document.querySelectorAll('[data-to]').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
+ el.style.background='var(--ind)';el.style.color='#fff';el.style.borderColor='var(--ind)';
+ selTo_val=el.dataset.to;
+}
+
+function selColor(el) {
+ document.querySelectorAll('.co').forEach(c=>c.classList.remove('sel'));
+ el.classList.add('sel'); selColor_val=el.dataset.c;
+}
+
+function submitNote() {
+ var date = $e('nDate') ? $e('nDate').value : '';
+ var text = $e('nText') ? $e('nText').value.trim() : '';
+ if (!date) { showToast('اختر تاريخاً','#f59e0b'); return; }
+ if (!text) { showToast('اكتب ملاحظتك','#f59e0b'); return; }
+
+ var id   = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+ var note = {
+  id:        id,
+  date:      date,
+  text:      text,
+  from_role: currentRole,
+  to_role:   selTo_val,
+  color:     selColor_val,
+  shared:    'no',
+  ts:        new Date().toISOString()
+ };
+
+ // ① احفظ في localStorage فوراً — هذا هو الأهم
+ localNotes[id] = note;
+ lsSave();
+
+ // ② أضف للـ pending
+ pendingIds.add(id);
+
+ // ③ أعد البناء وأعرض فوراً
+ rebuildFromLocal();
+ closeOv('ovAdd');
+ showToast('تم الحفظ محلياً','#10b981');
+
+ // ④ أرسل للشيت في الخلفية (اختياري)
+ if (GAS_URL) {
+  var sp = {
+   action:    'save',
+   id:        note.id,
+   date:      note.date,
+   text:      note.text,
+   from_role: note.from_role,
+   to_role:   note.to_role,
+   color:     note.color,
+   shared:    'no'
+  };
+  console.log('[SUBMIT]', note.text.slice(0,25), 'to:', note.to_role, 'from:', note.from_role);
+  function trySave(n) {
+   gasWrite(sp, function(ok) {
+    if (ok) {
+     pendingIds.delete(id);
+     console.log('[SAVE] OK → sheet, to:', sp.to_role);
+    } else if (n < 3) {
+     console.warn('[SAVE] retry', n+1, 'of 3');
+     setTimeout(function() { trySave(n+1); }, (n+1) * 4000);
+    } else {
+     console.error('[SAVE] FAILED after 3 retries — local only');
+     showToast('تعذر الحفظ في الشيت — محفوظة محلياً','#ef4444');
+    }
+   });
+  }
+  trySave(0);
+ }
+}
+
+/* ══ SHARE NOTE (CEO only) ═══════════════════════════ */
+function shareNote(date, id) {
+ if (!confirm('مشاركة هذه الملاحظة مع الجميع؟\nسيتمكن جميع الأقسام من رؤيتها.')) return;
+ // Update locally
+ const note = (notesMap[date]||[]).find(n=>n.id===id);
+ if(note) note.shared='yes';
+ const anote = allNotes.find(n=>n.id===id);
+ if(anote) anote.shared='yes';
+ renderCell(date);
+ renderDayNotes();
+ showToast('تمت المشاركة مع الجميع','#10b981');
+ // Update in Sheets
+ if(GAS_URL){ gasWrite({action:'share', id}); }
+}
+
+/* ══ DELETE ══════════════════════════════════════════ */
+function deleteNote(date,id) {
+ if(!confirm('حذف هذه الملاحظة؟'))return;
+ if(notesMap[date]){
+ notesMap[date]=notesMap[date].filter(n=>n.id!==id);
+ if(!notesMap[date].length)delete notesMap[date];
+ }
+ allNotes=allNotes.filter(n=>n.id!==id);
+ lsDelete(id); // أزل من localStorage
+ renderCell(date);
+ renderDayNotes();
+ renderInbox();
+ updateInboxBadge();
+ if(GAS_URL) gasWrite({action:'delete', id});
+ showToast('تم الحذف','#6b7280');
+}
+
+/* ══ TOAST ═══════════════════════════════════════════ */
+let _toastTimer;
+function showToast(msg,color){
+ const t=$e('toast');
+ if(!t)return;
+ t.textContent=msg;
+ t.style.background=color==='#10b981'?'#ecfdf5':color==='#ef4444'?'#fef2f2':color==='#f59e0b'?'#fffbeb':'#1e293b';
+ t.style.color=color;t.style.opacity='1';
+ clearTimeout(_toastTimer);
+ _toastTimer=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+/* ══ OVERLAY HELPERS ═════════════════════════════════ */
+function showOv(id){$c(id,'show',true);}
+function closeOv(id){$c(id,'show',false);}
+
+/* ══ NAV HIGHLIGHT ═══════════════════════════════════ */
+const $cards=document.querySelectorAll('.mc');
+const $links=document.querySelectorAll('#mnav .nv');
+$cards.forEach(c=>new IntersectionObserver(entries=>{
+ entries.forEach(en=>{
+ if(en.isIntersecting){
+ $links.forEach(a=>{
+ const on=a.getAttribute('href')==='#'+c.id;
+ a.classList.toggle('active',on);
+ if(on)a.scrollIntoView({behavior:'smooth',inline:'nearest',block:'nearest'});
+ });
+ }
+ });
+},{rootMargin:`-96px 0px -55% 0px`,threshold:0}).observe(c));
+
+/* ══ AUTO REFRESH every 60s ══════════════════════════ */
+setInterval(()=>{ if(currentRole&&GAS_URL) loadNotes(true); },60000);
+document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden&&currentRole&&GAS_URL) loadNotes(true);
+});
+</script>
+</body>
+</html>
