@@ -905,31 +905,30 @@ function selectRole(el) {
 function doLogin() {
  if (!selectedRoleEl) { showToast('اختر حسابك أولاً','#f59e0b'); return; }
  const role = selectedRoleEl.dataset.role;
- const pin = document.getElementById('pinField').value;
+ const pin  = document.getElementById('pinField').value;
  if (pin !== PINS[role]) {
- $s('pinErr','display','block');
- $e('pinField').value='';
- $e('pinField').focus();
- setTimeout(()=>$s('pinErr','display','none'),2000);
- return;
+  $s('pinErr','display','block');
+  $e('pinField').value='';
+  $e('pinField').focus();
+  setTimeout(()=>$s('pinErr','display','none'),2000);
+  return;
  }
  currentRole = role;
  const rm = ROLE_META[role];
- // Hide login, show app
  $c('loginScreen','gone',true);
  $c('appShell','visible',true);
- // Set user label
  $t('tbUser', '['+rm.abbr+'] '+rm.n);
- // Adjust add button visibility
  if (!rm.canWrite) $s('btnAddNote','display','none');
- // 1. حمّل من localStorage فوراً (بدون انتظار)
+
+ // 1. اعرض من localStorage فوراً (cache سريع)
  lsLoad();
  rebuildFromLocal();
- hideLoad(''); // أخفِ شاشة التحميل دائماً بعد lsLoad
- // 2. انتقل للشهر الحالي
- setTimeout(scrollToCurrentMonth, 300);
- // 3. مزامنة مع الشيت في الخلفية (بدون شاشة تحميل)
- setTimeout(function() { syncFromSheet(); }, 800);
+
+ // 2. اجلب من الشيت فوراً (المصدر الحقيقي)
+ fetchFromSheet();
+
+ // 3. انتقل للشهر الحالي
+ setTimeout(scrollToCurrentMonth, 500);
 }
 
 function rebuildFromLocal() {
@@ -999,23 +998,58 @@ function logout() {
 }
 
 /* ══ FETCH NOTES ═════════════════════════════════════ */
-function syncFromSheet() {
- if (!GAS_URL) return;
- console.log('[SYNC] fetching from sheet as:', currentRole);
+function syncFromSheet() { fetchFromSheet(); }
+
+function fetchFromSheet() {
+ if (!GAS_URL) { hideLoad(''); return; }
+ // أظهر مؤشر تحميل خفيف في العنوان
+ $t('tbUser', '[' + (ROLE_META[currentRole]?.abbr||'') + '] جاري التحميل...');
+
  gasRead({action:'getAll', viewer: currentRole}, function(d) {
-  if (d && d.ok) {
-   var count = d.notes ? d.notes.length : 0;
-   var sheetName = d.sheet || '?';
-   console.log('[SYNC] sheet:', sheetName, '| notes:', count, '| role:', currentRole);
-   if (count > 0) {
-    processNotes(d.notes);
-    showToast('الشيت: ' + sheetName + ' — ' + count + ' ملاحظة', '#10b981');
-   } else {
-    console.warn('[SYNC] sheet empty:', sheetName);
-    showToast('الشيت ' + sheetName + ' فارغ', '#f59e0b');
+  // أعد اسم المستخدم
+  var rm = ROLE_META[currentRole];
+  if(rm) $t('tbUser', '['+rm.abbr+'] '+rm.n);
+  hideLoad('');
+
+  if (!d || !d.ok) {
+   console.error('[FETCH] failed:', d);
+   showToast('تعذر الاتصال بالشيت', '#ef4444');
+   return;
+  }
+
+  var notes  = d.notes  || [];
+  var shName = d.sheet  || 'Sheet';
+  console.log('[FETCH] sheet:', shName, '| count:', notes.length, '| role:', currentRole);
+
+  // ══ استبدل المحلي بما في الشيت (الشيت = الحقيقة) ══
+  // احتفظ فقط بالملاحظات المعلقة (أُرسلت ولم يؤكدها الشيت بعد)
+  var newLocal = {};
+
+  // أضف ملاحظات الشيت
+  notes.forEach(function(n) {
+   if (n && n.id && n.date && n.text) {
+    newLocal[n.id] = n;
    }
+  });
+
+  // أضف الملاحظات المعلقة فقط (pending) التي لم تصل للشيت بعد
+  pendingIds.forEach(function(id) {
+   if (localNotes[id] && !newLocal[id]) {
+    newLocal[id] = localNotes[id];
+    console.log('[FETCH] keeping pending:', id);
+   }
+  });
+
+  // حدّث الذاكرة والـ cache
+  localNotes = newLocal;
+  lsSave();
+  rebuildFromLocal();
+
+  var total = Object.keys(newLocal).length;
+  if (total > 0) {
+   showToast('✓ ' + notes.length + ' ملاحظة من الشيت', '#10b981');
   } else {
-   console.error('[SYNC] failed:', d);
+   showToast('الشيت فارغ — ' + shName, '#f59e0b');
   }
  });
 }
@@ -1037,30 +1071,11 @@ function loadNotes(silent) {
 }
 
 function processNotes(remoteNotes) {
+ // تُستخدم فقط بعد حفظ ملاحظة للتأكيد
  if (!remoteNotes || !Array.isArray(remoteNotes)) return;
- console.log('[PROCESS] received from sheet:', remoteNotes.length, 'notes, local has:', Object.keys(localNotes).length);
-
- // أضف كل ملاحظة من الشيت إلى localNotes (دمج فقط، لا حذف أبداً)
  remoteNotes.forEach(function(n) {
-  if (n && n.id && n.date && n.text) {
-   // فلتر الصلاحية
-   var show = false;
-   if (ROLE_META[currentRole] && ROLE_META[currentRole].seesAll) { show = true; }
-   else if (n.from_role === currentRole) { show = true; }
-   else if (n.to_role   === currentRole) { show = true; }
-   else if (n.to_role   === 'all')       { show = true; }
-   else if (n.shared    === 'yes')       { show = true; }
-   if (show) {
-    localNotes[n.id] = n;
-    pendingIds.delete(n.id);
-   }
-  }
+  if (n && n.id) pendingIds.delete(n.id);
  });
-
- // احفظ في localStorage وأعد العرض
- lsSave();
- rebuildFromLocal();
- console.log('[SYNC] total notes after merge:', Object.keys(localNotes).length);
 }
 
 function hideLoad(msg) {
@@ -1310,8 +1325,9 @@ function submitNote() {
     if (ok) {
      pendingIds.delete(id);
      console.log('[SAVE] OK → sheet, to:', sp.to_role);
-     showToast('تم الحفظ في الشيت', '#10b981');
-     syncFromSheet(); // حدّث الكالندر فوراً
+     pendingIds.delete(id);
+     // اجلب من الشيت بعد ثانيتين للتأكد من الظهور
+     setTimeout(function() { fetchFromSheet(); }, 2000);
     } else if (n < 3) {
      console.warn('[SAVE] retry', n+1, 'of 3');
      setTimeout(function() { trySave(n+1); }, (n+1) * 4000);
@@ -1389,9 +1405,9 @@ $cards.forEach(c=>new IntersectionObserver(entries=>{
 },{rootMargin:`-96px 0px -55% 0px`,threshold:0}).observe(c));
 
 /* ══ AUTO REFRESH every 60s ══════════════════════════ */
-setInterval(()=>{ if(currentRole&&GAS_URL) loadNotes(true); },60000);
+setInterval(function(){ if(currentRole&&GAS_URL) fetchFromSheet(); }, 30000);
 document.addEventListener('visibilitychange',()=>{
- if(!document.hidden&&currentRole&&GAS_URL) loadNotes(true);
+ if(!document.hidden&&currentRole&&GAS_URL) fetchFromSheet();
 });
 /* ══ Link Popup ══════════════════════════════════════════ */
 var _curLink = '';
