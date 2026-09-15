@@ -1005,11 +1005,14 @@ function syncFromSheet() {
  gasRead({action:'getAll', viewer: currentRole}, function(d) {
   if (d && d.ok) {
    var count = d.notes ? d.notes.length : 0;
-   console.log('[SYNC] sheet returned', count, 'notes for role:', currentRole);
+   var sheetName = d.sheet || '?';
+   console.log('[SYNC] sheet:', sheetName, '| notes:', count, '| role:', currentRole);
    if (count > 0) {
     processNotes(d.notes);
+    showToast('الشيت: ' + sheetName + ' — ' + count + ' ملاحظة', '#10b981');
    } else {
-    console.warn('[SYNC] sheet empty — check sheet name matches GAS code');
+    console.warn('[SYNC] sheet empty:', sheetName);
+    showToast('الشيت ' + sheetName + ' فارغ', '#f59e0b');
    }
   } else {
    console.error('[SYNC] failed:', d);
@@ -1301,12 +1304,14 @@ function submitNote() {
    color:     note.color,
    shared:    'no'
   };
-  console.log('[SUBMIT]', note.text.slice(0,25), 'to:', note.to_role, 'from:', note.from_role);
+  console.log('[SUBMIT] date:', note.date, '| text:', note.text.slice(0,25), '| to:', note.to_role, '| from:', note.from_role);
   function trySave(n) {
    gasWrite(sp, function(ok) {
     if (ok) {
      pendingIds.delete(id);
      console.log('[SAVE] OK → sheet, to:', sp.to_role);
+     showToast('تم الحفظ في الشيت', '#10b981');
+     syncFromSheet(); // حدّث الكالندر فوراً
     } else if (n < 3) {
      console.warn('[SAVE] retry', n+1, 'of 3');
      setTimeout(function() { trySave(n+1); }, (n+1) * 4000);
