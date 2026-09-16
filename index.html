@@ -1373,7 +1373,8 @@ function renderCell(date) {
  el.innerHTML=notes.map(n=>{
   const isUnread = !readIds.has(n.id) && n.from_role !== currentRole;
   const rm = ROLE_META[n.from_role] || ROLE_META.general;
-  const label = n.text.slice(0,16) + (n.text.length>16?'…':'');
+  const labelSrc = n.title || n.text;
+  const label = labelSrc.slice(0,16) + (labelSrc.length>16?'…':'');
   return `<div class="note-chip"
    style="background:${n.color}18;color:${n.color};border-right-color:${n.color}"
    onclick="event.stopPropagation();viewNote('${date}','${n.id}')"
@@ -1489,7 +1490,7 @@ function openNoteDetail(date,id) {
 
  const fromMeta=ROLE_META[n.from_role]||{n:'غير محدد',bg:'#888',abbr:'?'};
  const toMeta =ROLE_META[n.to_role]  ||{n:'الكل',bg:'#6b7280',abbr:'ALL'};
- $t('detailTitle', n.title || 'ملاحظة');
+ $t('detailTitle', n.title ? n.title : (n.text.length>30 ? n.text.slice(0,30)+'…' : n.text));
  $h('detailBody', `
   <div style="font-size:13px;line-height:1.6;white-space:pre-wrap">${escapeHtml(n.text)}</div>
   ${n.link?`<a class="ni-link-btn" href="${n.link}" target="_blank" rel="noopener">&#128279; فتح الرابط</a>`:''}
@@ -1508,15 +1509,23 @@ function openNoteDetail(date,id) {
  ).join(''));
 
  $h('detailThread', renderThread(n));
- $s('replyRow','display', ROLE_META[currentRole]?.canWrite ? 'flex':'none');
+
+ // الرد مسموح فقط للمستقبِل (وليس المرسِل) — أو أي دور لو كانت موجّهة "للكل"
+ const isRecipient = currentRole !== n.from_role && (n.to_role===currentRole || n.to_role==='all');
+ $s('replyRow','display', (ROLE_META[currentRole]?.canWrite && isRecipient) ? 'flex':'none');
  window.__detailNoteRef = {date,id};
  showOv('ovDetail');
 }
 
 function renderThread(n) {
+ const fromMeta=ROLE_META[n.from_role]||{n:'غير محدد',bg:'#888',abbr:'?'};
+ const toMeta =ROLE_META[n.to_role]  ||{n:'الكل',bg:'#6b7280',abbr:'ALL'};
+ const participants = `<div style="font-size:11px;color:var(--muted);margin-bottom:4px">المحادثة بين:
+  <span style="font-weight:700;color:${fromMeta.bg}">${fromMeta.n}</span> و
+  <span style="font-weight:700;color:${toMeta.bg}">${n.to_role==='all'?'الكل':toMeta.n}</span></div>`;
  const replies=n.replies||[];
- if(!replies.length) return '<div style="text-align:center;color:var(--muted);font-size:12px;padding:6px">لا توجد ردود بعد</div>';
- return replies.map(r=>{
+ if(!replies.length) return participants+'<div style="text-align:center;color:var(--muted);font-size:12px;padding:6px">لا توجد ردود بعد</div>';
+ return participants+replies.map(r=>{
   const rm=ROLE_META[r.from_role]||{n:'غير محدد',bg:'#888',abbr:'?'};
   const ts=(r.ts||'').replace('T',' ').slice(0,16);
   return `<div style="background:var(--bg);border-radius:8px;padding:7px 10px;font-size:12px">
