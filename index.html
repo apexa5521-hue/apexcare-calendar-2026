@@ -759,6 +759,24 @@ function shareNote(p) {
 </div><!-- end appShell -->
 
 <script>
+/* ══ DATE NORMALIZER ════════════════════════════ */
+function normalizeDate(raw) {
+ if (!raw) return '';
+ var s = String(raw).trim();
+ // صيغة صحيحة مسبقاً: YYYY-MM-DD
+ if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+ // صيغة الشيت: "Thu Jan 08 2026 00:00:00 GMT+0300..."
+ // أو أي صيغة يمكن لـ Date() قراءتها
+ try {
+  var d = new Date(s);
+  if (isNaN(d.getTime())) return '';
+  var y = d.getFullYear();
+  var mo = String(d.getMonth()+1).padStart(2,'0');
+  var dy = String(d.getDate()).padStart(2,'0');
+  return y + '-' + mo + '-' + dy;
+ } catch(e) { return ''; }
+}
+
 /* ══ SAFE DOM HELPERS ════════════════════════════ */
 
 /* ══ JSONP WRITE — يرسل للشيت بدون مشاكل CORS ══ */
@@ -1025,10 +1043,12 @@ function fetchFromSheet() {
   // احتفظ فقط بالملاحظات المعلقة (أُرسلت ولم يؤكدها الشيت بعد)
   var newLocal = {};
 
-  // أضف ملاحظات الشيت
+  // أضف ملاحظات الشيت مع تحويل التاريخ للصيغة الصحيحة
   notes.forEach(function(n) {
    if (n && n.id && n.date && n.text) {
-    newLocal[n.id] = n;
+    // حوّل أي صيغة تاريخ إلى YYYY-MM-DD
+    n.date = normalizeDate(n.date);
+    if (n.date) newLocal[n.id] = n;
    }
   });
 
