@@ -15,6 +15,7 @@ function doGet(e) {
     else if (action === 'share')    { result = shareNote(p);   }
     else if (action === 'setStatus'){ result = setStatus(p);   }
     else if (action === 'addReply') { result = addReply(p);    }
+    else if (action === 'update')   { result = updateNote(p);  }
     else if (action === 'ping')   { result = { ok:true, msg:'متصل', t:new Date().toISOString() }; }
     else { result = { ok:false, error:'action غير معروف: '+action }; }
   } catch(err) {
@@ -36,7 +37,7 @@ function getWriteSheet() {
   var s = ss.getSheetByName('الملاحظات') || ss.getSheetByName('Notes');
   if (!s) {
     s = ss.insertSheet('الملاحظات');
-    s.appendRow(['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','ts']);
+    s.appendRow(['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','editLog','ts']);
     s.setFrozenRows(1);
     var h = s.getRange(1,1,1,13);
     h.setBackground('#1e293b'); h.setFontColor('#fff');
@@ -98,7 +99,7 @@ function g(row, col) {
 
 // ── تحديد أرقام الأعمدة ─────────────────────────────────────────────────
 function getColMap(headers) {
-  var map = {id:-1,date:-1,title:-1,text:-1,link:-1,from_role:-1,to_role:-1,color:-1,shared:-1,status:-1,statusTs:-1,replies:-1,ts:-1};
+  var map = {id:-1,date:-1,title:-1,text:-1,link:-1,from_role:-1,to_role:-1,color:-1,shared:-1,status:-1,statusTs:-1,replies:-1,editLog:-1,ts:-1};
   for (var i=0; i<headers.length; i++) {
     var h = String(headers[i]).toLowerCase().trim();
     if (h==='id'   || h==='المعرف')                          map.id        = i;
@@ -113,6 +114,7 @@ function getColMap(headers) {
     if (h==='status'||h==='الحالة')                          map.status    = i;
     if (h==='statusts'||h==='وقت الحالة')                   map.statusTs  = i;
     if (h==='replies'||h==='الردود')                         map.replies   = i;
+    if (h==='editlog'||h==='سجل التعديلات')                  map.editLog   = i;
     if (h==='ts'||h==='وقت الإنشاء'||h==='timestamp')       map.ts        = i;
   }
   return map;
@@ -166,6 +168,11 @@ function getAllNotes(p) {
       if (repliesRaw) {
         try { repliesArr = JSON.parse(repliesRaw); } catch(pe) { repliesArr = []; }
       }
+      var editLogRaw = g(row, cm.editLog);
+      var editLogArr = [];
+      if (editLogRaw) {
+        try { editLogArr = JSON.parse(editLogRaw); } catch(pe2) { editLogArr = []; }
+      }
       var n = {
         id:        id,
         date:      fmtDate,
@@ -179,6 +186,7 @@ function getAllNotes(p) {
         status:    g(row, cm.status)    || 'new',
         statusTs:  g(row, cm.statusTs)  || g(row, cm.ts),
         replies:   repliesArr,
+        editLog:   editLogArr,
         ts:        g(row, cm.ts)
       };
 
@@ -258,7 +266,8 @@ function ensureStatusReplyCols(sheet) {
   var need = [
     {key:'status',   label:'status',   color:'#1e293b', width:80},
     {key:'statusTs', label:'statusTs', color:'#1e293b', width:160},
-    {key:'replies',  label:'replies',  color:'#0f766e', width:220}
+    {key:'replies',  label:'replies',  color:'#0f766e', width:220},
+    {key:'editLog',  label:'editLog',  color:'#0f766e', width:220}
   ];
   for (var n=0; n<need.length; n++) {
     var lc = sheet.getLastColumn();
@@ -315,6 +324,7 @@ function saveNote(p) {
   if (cm.status    >= 0) row[cm.status]    = p.status    || 'new';
   if (cm.statusTs  >= 0) row[cm.statusTs]  = ts;
   if (cm.replies   >= 0) row[cm.replies]   = '[]';
+  if (cm.editLog   >= 0) row[cm.editLog]   = '[]';
   if (cm.ts        >= 0) row[cm.ts]        = ts;
 
   sheet.appendRow(row);
@@ -389,6 +399,38 @@ function setStatus(p) {
   return { ok:false, error:'ملاحظة غير موجودة: '+p.id };
 }
 
+// ── تعديل ملاحظة موجودة (مع تسجيل التعديل بسجل editLog) ──────────────────
+function updateNote(p) {
+  if (!p || !p.id) return { ok:false, error:'id مطلوب' };
+  var sheets = getAllSheets();
+  var ts = new Date().toLocaleString('ar-SA', {timeZone:'Asia/Riyadh'});
+  for (var s=0; s<sheets.length; s++) {
+    var data = sheets[s].getDataRange().getValues();
+    var cm   = getColMap(data[0]);
+    if (cm.editLog < 0) { ensureStatusReplyCols(sheets[s]); data = sheets[s].getDataRange().getValues(); cm = getColMap(data[0]); }
+    for (var i=data.length-1; i>=1; i--) {
+      if (g(data[i],cm.id) === String(p.id)) {
+        var row = i+1;
+        if (cm.date     >= 0 && p.date     !== undefined) sheets[s].getRange(row, cm.date+1).setValue(p.date);
+        if (cm.title    >= 0 && p.title    !== undefined) sheets[s].getRange(row, cm.title+1).setValue(p.title);
+        if (cm.text     >= 0 && p.text     !== undefined) sheets[s].getRange(row, cm.text+1).setValue(p.text);
+        if (cm.link     >= 0 && p.link     !== undefined) sheets[s].getRange(row, cm.link+1).setValue(p.link);
+        if (cm.to_role  >= 0 && p.to_role  !== undefined) sheets[s].getRange(row, cm.to_role+1).setValue(p.to_role);
+        if (cm.color    >= 0 && p.color    !== undefined) sheets[s].getRange(row, cm.color+1).setValue(p.color);
+
+        var existing = [];
+        var raw = g(data[i], cm.editLog);
+        if (raw) { try { existing = JSON.parse(raw); } catch(pe) { existing = []; } }
+        existing.push({by:p.edited_by||'general', ts:new Date().toISOString(), summary:p.summary||'تعديل'});
+        if (cm.editLog >= 0) sheets[s].getRange(row, cm.editLog+1).setValue(JSON.stringify(existing));
+
+        return { ok:true, editLog: existing };
+      }
+    }
+  }
+  return { ok:false, error:'ملاحظة غير موجودة: '+p.id };
+}
+
 // ── إضافة رد على ملاحظة (Thread) ─────────────────────────────────────────
 function addReply(p) {
   if (!p || !p.id || !p.reply) return { ok:false, error:'id, reply مطلوبة' };
@@ -441,7 +483,7 @@ function setupAllColumns() {
     var lc    = sheet.getLastColumn();
     
     // الأعمدة المطلوبة بالترتيب
-    var required = ['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','ts'];
+    var required = ['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','editLog','ts'];
     
     // اقرأ الرأس الحالي
     var currentHeaders = [];
@@ -451,7 +493,7 @@ function setupAllColumns() {
       });
     } else {
       // شيت فارغ — أنشئ رأس كامل
-      sheet.appendRow(['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','ts']);
+      sheet.appendRow(['id','date','title','text','link','from_role','to_role','color','shared','status','statusTs','replies','editLog','ts']);
       sheet.setFrozenRows(1);
       var hdr = sheet.getRange(1,1,1,13);
       hdr.setBackground('#1e293b');
@@ -510,7 +552,7 @@ function colArabic(col) {
     'text':'نص الملاحظة', 'link':'رابط',
     'from_role':'المرسل', 'to_role':'المستقبل',
     'color':'اللون', 'shared':'مشترك',
-    'status':'الحالة', 'statusTs':'وقت الحالة', 'replies':'الردود',
+    'status':'الحالة', 'statusTs':'وقت الحالة', 'replies':'الردود', 'editLog':'سجل التعديلات',
     'ts':'وقت الإنشاء'
   };
   return map[col] || col;
@@ -523,7 +565,7 @@ function colColor(col) {
     'text':'#1e293b', 'link':'#0f766e',
     'from_role':'#1e293b', 'to_role':'#1e293b',
     'color':'#1e293b', 'shared':'#1e293b',
-    'status':'#1e293b', 'statusTs':'#1e293b', 'replies':'#0f766e',
+    'status':'#1e293b', 'statusTs':'#1e293b', 'replies':'#0f766e', 'editLog':'#0f766e',
     'ts':'#334155'
   };
   return map[col] || '#1e293b';
@@ -535,7 +577,7 @@ function colWidth(col) {
     'id':150, 'date':100, 'title':180, 'text':280,
     'link':200, 'from_role':120, 'to_role':120,
     'color':80, 'shared':80,
-    'status':80, 'statusTs':160, 'replies':220,
+    'status':80, 'statusTs':160, 'replies':220, 'editLog':220,
     'ts':160
   };
   return map[col] || 120;

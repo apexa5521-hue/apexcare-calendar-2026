@@ -373,6 +373,7 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
     </button>
     <button class="btn btn-inbox" id="btnArchive" onclick="showArchive()">الأرشيف</button>
     <button class="btn btn-imp" id="btnReport" onclick="showReport()" style="display:none">تقرير</button>
+    <button class="btn btn-imp" id="btnEditLog" onclick="showEditLog()" style="display:none">سجل التعديلات</button>
     <button class="btn btn-imp" onclick="doImport()">استيراد</button>
     <button class="btn btn-pdf" onclick="window.print()">PDF</button>
     <button class="btn btn-logout" onclick="logout()">خروج</button>
@@ -386,7 +387,7 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  <!-- Add Note Modal -->
  <div class="ov" id="ovAdd" onclick="closeOv('ovAdd')">
  <div class="modal" onclick="event.stopPropagation()">
- <div class="modal-title"> إضافة ملاحظة</div>
+ <div class="modal-title" id="addModalTitle"> إضافة ملاحظة</div>
  <div class="frow">
  <label class="flabel"> التاريخ</label>
  <input class="finput" type="date" id="nDate" min="2026-01-01" max="2026-12-31">
@@ -429,7 +430,7 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  </div>
  </div>
  <div class="ma">
- <button class="mbtn mbtn-p" onclick="submitNote()"> إرسال</button>
+ <button class="mbtn mbtn-p" id="addSubmitBtn" onclick="submitNote()"> إرسال</button>
  <button class="mbtn mbtn-c" onclick="closeOv('ovAdd')">إلغاء</button>
  </div>
  </div>
@@ -476,7 +477,10 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  <input class="finput" type="text" id="replyInput" placeholder="اكتب رداً...">
  <button class="mbtn mbtn-p" style="flex:0 0 auto;padding:9px 14px" onclick="sendReply(window.__detailNoteRef.date, window.__detailNoteRef.id)">إرسال</button>
  </div>
+ <div class="ma" style="margin-top:2px">
+ <button class="mbtn mbtn-c" id="detailEditBtn" style="display:none" onclick="openEditNote(window.__detailNoteRef.date, window.__detailNoteRef.id)">✏️ تعديل</button>
  <button class="mbtn mbtn-c" onclick="closeOv('ovDetail')">إغلاق</button>
+ </div>
  </div>
  </div>
 
@@ -504,6 +508,16 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  <div class="modal-title">تنبيهات اليوم وغداً</div>
  <div id="alertsList" style="display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow-y:auto"></div>
  <button class="mbtn mbtn-c" onclick="closeOv('ovAlerts')" style="margin-top:4px">إغلاق</button>
+ </div>
+ </div>
+
+ <!-- Edit Log Modal (CEO only) -->
+ <div class="ov" id="ovEditLog" onclick="closeOv('ovEditLog')">
+ <div class="modal" onclick="event.stopPropagation()" style="max-width:520px">
+ <div class="modal-title">سجل التعديلات</div>
+ <div class="modal-sub">كل تعديل على أي ملاحظة، من الأحدث للأقدم</div>
+ <div id="editLogList" style="display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow-y:auto"></div>
+ <button class="mbtn mbtn-c" onclick="closeOv('ovEditLog')" style="margin-top:4px">إغلاق</button>
  </div>
  </div>
 
@@ -1052,7 +1066,7 @@ function doLogin() {
  $t('tbUser', '['+rm.abbr+'] '+rm.n);
  // Adjust add button visibility
  if (!rm.canWrite) $s('btnAddNote','display','none');
- if (rm.seesAll) $s('btnReport','display','');
+ if (rm.seesAll) { $s('btnReport','display',''); $s('btnEditLog','display',''); }
  // 1. حمّل من localStorage فوراً (بدون انتظار)
  lsLoad();
  rebuildFromLocal();
@@ -1513,6 +1527,10 @@ function openNoteDetail(date,id) {
  // الرد مسموح فقط للمستقبِل (وليس المرسِل) — أو أي دور لو كانت موجّهة "للكل"
  const isRecipient = currentRole !== n.from_role && (n.to_role===currentRole || n.to_role==='all');
  $s('replyRow','display', (ROLE_META[currentRole]?.canWrite && isRecipient) ? 'flex':'none');
+
+ // التعديل مسموح فقط لمن كتب الملاحظة، أو للمدير التنفيذي
+ const canEdit = ROLE_META[currentRole]?.canWrite && (n.from_role===currentRole || ROLE_META[currentRole]?.seesAll);
+ $s('detailEditBtn','display', canEdit ? '' : 'none');
  window.__detailNoteRef = {date,id};
  showOv('ovDetail');
 }
@@ -1653,25 +1671,37 @@ function updateInboxBadge() {
 }
 
 /* ══ ADD NOTE ════════════════════════════════════════ */
-function showAddNote(date) {
- if(!ROLE_META[currentRole]?.canWrite){ showToast('حسابك للعرض فقط','#f59e0b'); return; }
- $e('nDate').value=date||'';
- $e('nText').value='';
- if($e('nTitle')) $e('nTitle').value='';
- if($e('nLink')) $e('nLink').value='';
+let editingNote = null;
 
- selTo_val='all';
+function showAddNote(date, editNote) {
+ if(!ROLE_META[currentRole]?.canWrite){ showToast('حسابك للعرض فقط','#f59e0b'); return; }
+ editingNote = editNote || null;
+ $t('addModalTitle', editingNote ? 'تعديل الملاحظة' : 'إضافة ملاحظة');
+ $t('addSubmitBtn', editingNote ? 'حفظ التعديل' : 'إرسال');
+ $e('nDate').value = editingNote ? editingNote.date : (date||'');
+ $e('nText').value = editingNote ? editingNote.text : '';
+ if($e('nTitle')) $e('nTitle').value = editingNote ? (editingNote.title||'') : '';
+ if($e('nLink')) $e('nLink').value = editingNote ? (editingNote.link||'') : '';
+
+ selTo_val = editingNote ? editingNote.to_role : 'all';
  document.querySelectorAll('.ttab').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
- const allBtn=document.querySelector('.ttab[data-to="all"]');
- if(allBtn){allBtn.style.background='var(--ind)';allBtn.style.color='#fff';allBtn.style.borderColor='var(--ind)';}
+ const activeToBtn = document.querySelector('.ttab[data-to="'+selTo_val+'"]') || document.querySelector('.ttab[data-to="all"]');
+ if(activeToBtn){activeToBtn.style.background='var(--ind)';activeToBtn.style.color='#fff';activeToBtn.style.borderColor='var(--ind)';}
  // Hide self from recipients — you can't send to yourself
  document.querySelectorAll('[data-to]').forEach(btn=>{
    btn.style.display = (btn.dataset.to === currentRole) ? 'none' : '';
  });
- selColor_val='#f59e0b';
+ selColor_val = editingNote ? editingNote.color : '#f59e0b';
  document.querySelectorAll('.co').forEach(c=>c.classList.remove('sel'));
- document.querySelector('.co[data-c="#f59e0b"]')?.classList.add('sel');
+ (document.querySelector('.co[data-c="'+selColor_val+'"]') || document.querySelector('.co[data-c="#f59e0b"]'))?.classList.add('sel');
  showOv('ovAdd');
+}
+
+function openEditNote(date, id) {
+ const n = findNote(date, id);
+ if(!n) return;
+ closeOv('ovDetail');
+ showAddNote(n.date, n);
 }
 
 function selTo(el) {
@@ -1691,7 +1721,6 @@ function submitNote() {
  if (!date) { showToast('اختر تاريخاً','#f59e0b'); return; }
  if (!text) { showToast('اكتب ملاحظتك','#f59e0b'); return; }
 
- var id   = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
  var title = $e('nTitle') ? $e('nTitle').value.trim() : '';
  var rawLink = $e('nLink') ? $e('nLink').value.trim() : '';
  // تأكد أن الرابط صحيح
@@ -1699,6 +1728,13 @@ function submitNote() {
  if (rawLink) {
   noteLink = rawLink.startsWith('http') ? rawLink : 'https://' + rawLink;
  }
+
+ if (editingNote) {
+  updateNote(editingNote, {date:date, title:title, text:text, link:noteLink, to_role:selTo_val, color:selColor_val});
+  return;
+ }
+
+ var id   = Date.now().toString(36) + Math.random().toString(36).slice(2,5);
  var nowIso = new Date().toISOString();
  var note = {
   id:        id,
@@ -1760,6 +1796,72 @@ function submitNote() {
   }
   trySave(0);
  }
+}
+
+/* ══ EDIT NOTE (مع سجل تعديلات) ═══════════════════════ */
+function updateNote(old, changes) {
+ var n = findNote(old.date, old.id) || old;
+ var parts = [];
+ if((n.title||'') !== changes.title) parts.push((n.title?'':'أضاف ')+'العنوان');
+ if((n.text||'')  !== changes.text)  parts.push('النص');
+ if((n.link||'')  !== changes.link)  parts.push('الرابط');
+ if((n.to_role||'') !== changes.to_role) parts.push('المستقبِل');
+ if((n.date||'') !== changes.date) parts.push('التاريخ');
+ if((n.color||'') !== changes.color) parts.push('اللون');
+ var summary = parts.length ? ('عدّل: '+parts.join('، ')) : 'حفظ بدون تغييرات ظاهرة';
+
+ var oldDate = n.date;
+ n.title   = changes.title;
+ n.text    = changes.text;
+ n.link    = changes.link;
+ n.to_role = changes.to_role;
+ n.color   = changes.color;
+ n.date    = changes.date;
+ n.editLog = n.editLog || [];
+ n.editLog.push({by:currentRole, ts:new Date().toISOString(), summary:summary});
+
+ if(localNotes[n.id]) localNotes[n.id] = Object.assign({}, localNotes[n.id], n);
+ lsSave();
+ rebuildFromLocal();
+ closeOv('ovAdd');
+ editingNote = null;
+ showToast('تم حفظ التعديل','#10b981');
+
+ if(GAS_URL) {
+  gasWrite({
+   action: 'update', id: n.id, date: changes.date, title: changes.title||'',
+   text: changes.text, link: changes.link||'', to_role: changes.to_role, color: changes.color,
+   edited_by: currentRole, summary: summary
+  });
+ }
+}
+
+/* ══ EDIT LOG (CEO only) ══════════════════════════════ */
+function showEditLog() {
+ if (!ROLE_META[currentRole] || !ROLE_META[currentRole].seesAll) { showToast('السجل للمدير فقط','#f59e0b'); return; }
+ var entries = [];
+ archivedNotes.concat(allNotes).forEach(function(n) {
+  (n.editLog||[]).forEach(function(e) {
+   entries.push({note:n, edit:e});
+  });
+ });
+ entries.sort(function(a,b){ return (b.edit.ts||'').localeCompare(a.edit.ts||''); });
+ var el = $e('editLogList');
+ if(!entries.length) {
+  el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px">لا توجد تعديلات مسجّلة بعد</div>';
+ } else {
+  el.innerHTML = entries.map(function(x) {
+   var rm = ROLE_META[x.edit.by] || {n:'غير محدد',bg:'#888',abbr:'?'};
+   var ts = (x.edit.ts||'').replace('T',' ').slice(0,16);
+   var label = x.note.title || x.note.text.slice(0,30);
+   return '<div class="note-item" style="cursor:pointer" onclick="closeOv(\'ovEditLog\');openNoteDetail(\''+x.note.date+'\',\''+x.note.id+'\')">'
+    + '<div class="ni-dot" style="background:'+x.note.color+'"></div>'
+    + '<div class="ni-body"><div class="ni-text">'+escapeHtml(label)+'</div>'
+    + '<div class="ni-meta"><span class="ni-tag" style="background:'+rm.bg+'22;color:'+rm.bg+'">'+rm.abbr+' '+rm.n+'</span>'
+    + '<span>'+escapeHtml(x.edit.summary)+'</span><span>·</span><span>'+ts+'</span></div></div></div>';
+  }).join('');
+ }
+ showOv('ovEditLog');
 }
 
 /* ══ SHARE NOTE (CEO only) ═══════════════════════════ */
