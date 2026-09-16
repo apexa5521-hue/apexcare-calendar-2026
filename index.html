@@ -210,6 +210,48 @@ textarea.finput{resize:vertical;min-height:70px}
 .ni-share:active{background:#bae6fd}
 .ni-shared-badge{background:#dcfce7;color:#15803d;border-radius:5px;
   padding:2px 7px;font-size:9.5px;font-weight:700;white-space:nowrap}
+/* حالة الملاحظة */
+.status-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;
+  border-radius:12px;font-size:9.5px;font-weight:700;white-space:nowrap;cursor:pointer}
+.status-btn{border:none;border-radius:6px;padding:4px 10px;
+  font-family:'Tajawal',sans-serif;font-size:10px;font-weight:700;cursor:pointer;
+  transition:opacity .15s}
+.status-btn:active{opacity:.7}
+/* الرد */
+.reply-wrap{margin-top:8px;padding:8px 10px;background:#f8fafc;
+  border-radius:8px;border-right:3px solid #e2e8f0}
+.reply-item{font-size:11px;color:var(--txt);padding:4px 0;
+  border-bottom:1px solid var(--bdr);line-height:1.5}
+.reply-item:last-child{border-bottom:none}
+.reply-meta{font-size:9.5px;color:var(--muted);margin-top:2px}
+.reply-input{width:100%;border:1.5px solid var(--bdr);border-radius:8px;
+  padding:7px 10px;font-family:'Tajawal',sans-serif;font-size:12px;
+  background:var(--bg);outline:none;resize:none}
+.reply-input:focus{border-color:var(--teal)}
+.reply-send{border:none;border-radius:8px;padding:7px 14px;
+  background:var(--teal);color:#fff;font-family:'Tajawal',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer}
+/* تنبيه اليوم والغد */
+.today-alert{background:#fef3c7;border:1.5px solid #f59e0b;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:700;color:#92400e;
+  display:flex;align-items:center;gap:6px}
+.tomorrow-alert{background:#eff6ff;border:1.5px solid #3b82f6;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:700;color:#1e40af;
+  display:flex;align-items:center;gap:6px}
+/* chip متأخرة */
+.chip-overdue{background:#fef2f222;color:#ef4444;border-right-color:#ef4444}
+.chip-today{background:#fffbeb;color:#f59e0b;border-right-color:#f59e0b;
+  animation:pulse-chip 2s infinite}
+@keyframes pulse-chip{0%,100%{opacity:1}50%{opacity:.65}}
+/* تقرير */
+.report-card{background:var(--bg);border:1px solid var(--bdr);border-radius:12px;
+  padding:14px;display:flex;flex-direction:column;gap:4px}
+.report-num{font-size:28px;font-weight:800;color:var(--ind);line-height:1}
+.report-label{font-size:11px;color:var(--muted);font-weight:600}
+/* أرشيف */
+.archive-item{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;
+  border-radius:10px;border:1px solid var(--bdr);background:#f8fafc;opacity:.85}
+.archive-item:hover{opacity:1;background:var(--bg)}
 /* رابط الملاحظة */
 .ni-link-btn{
   display:inline-flex;align-items:center;gap:4px;
@@ -360,6 +402,14 @@ textarea.finput{resize:vertical;min-height:70px}
       الوارد
       <span class="inbox-badge" id="inboxBadge" style="display:none">0</span>
     </button>
+    <button class="btn" id="btnAlerts" onclick="showAlerts()"
+      style="background:#fef3c7;color:#92400e;border:1.5px solid #f59e0b;display:none;position:relative">
+      تنبيهات
+      <span class="inbox-badge" id="alertsBadge" style="display:none;background:#f59e0b">0</span>
+    </button>
+    <button class="btn" onclick="showArchive()" style="background:#f1f5f9;color:#475569">الأرشيف</button>
+    <button class="btn" id="btnReport" onclick="showReport()"
+      style="background:linear-gradient(135deg,#4A4A9A,#7B52AB);color:#fff;display:none">تقرير</button>
     <button class="btn btn-imp" onclick="doImport()">استيراد</button>
     <button class="btn btn-pdf" onclick="window.print()">PDF</button>
     <button class="btn btn-logout" onclick="logout()">خروج</button>
@@ -673,6 +723,55 @@ function shareNote(p) {
   </div>
  </div>
 
+  <!-- تنبيهات -->
+  <div class="ov" id="ovAlerts" onclick="closeOv('ovAlerts')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+   <div class="modal-title">تنبيهات اليوم والغد</div>
+   <div id="alertsList" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto"></div>
+   <button class="mbtn mbtn-c" onclick="closeOv('ovAlerts')" style="margin-top:8px">إغلاق</button>
+  </div></div>
+
+  <!-- أرشيف -->
+  <div class="ov" id="ovArchive" onclick="closeOv('ovArchive')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:520px">
+   <div class="modal-title">الأرشيف</div>
+   <div class="modal-sub">الملاحظات المنجزة والمرفوضة</div>
+   <div id="archiveList" style="display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow-y:auto"></div>
+   <button class="mbtn mbtn-c" onclick="closeOv('ovArchive')" style="margin-top:8px">إغلاق</button>
+  </div></div>
+
+  <!-- تقرير أسبوعي -->
+  <div class="ov" id="ovReport" onclick="closeOv('ovReport')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:500px">
+   <div class="modal-title">التقرير الأسبوعي</div>
+   <div id="reportContent" style="display:flex;flex-direction:column;gap:12px"></div>
+   <div class="ma" style="margin-top:8px">
+    <button class="mbtn mbtn-p" onclick="window.print()">تصدير PDF</button>
+    <button class="mbtn mbtn-c" onclick="closeOv('ovReport')">إغلاق</button>
+   </div>
+  </div></div>
+
+  <!-- تفاصيل ملاحظة مع ردود وحالة -->
+  <div class="ov" id="ovNoteDetail" onclick="closeOv('ovNoteDetail')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:500px">
+   <div class="modal-title" id="ndTitle"></div>
+   <div class="modal-sub" id="ndSub"></div>
+   <div id="ndStatusRow" style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0"></div>
+   <div id="ndText" style="font-size:13px;line-height:1.7;padding:10px;background:var(--bg);border-radius:10px;color:var(--txt)"></div>
+   <div id="ndLinkRow" style="display:none;margin-top:4px">
+    <button class="ni-link-btn" id="ndLinkBtn">رابط مرفق</button>
+   </div>
+   <div class="reply-wrap" id="ndReplies" style="display:none"></div>
+   <div style="display:flex;gap:8px;align-items:flex-end">
+    <textarea class="reply-input" id="ndReplyText" rows="2" placeholder="اكتب ردك..."></textarea>
+    <button class="reply-send" onclick="sendReply()">إرسال</button>
+   </div>
+   <div class="ma">
+    <button class="mbtn mbtn-r" id="ndDelBtn" style="display:none">حذف</button>
+    <button class="mbtn mbtn-c" onclick="closeOv('ovNoteDetail')">إغلاق</button>
+   </div>
+  </div></div>
+
  <div id="toast"></div>
 
  <div class="legend">
@@ -876,12 +975,12 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbyUibBlhhe-c7nUBwH2Oy_1
 
 /* رقم سري لكل دور — غيّرها قبل الرفع */
 const PINS = {
- ceo: '1111',
- marketing: '2222',
- hr: '3333',
- ops: '4444',
- quality: '5555',
- general: '0000', // عرض فقط بدون إضافة
+ ceo:       '1234',  // المدير التنفيذي
+ marketing: '2345',  // التسويق
+ hr:        '3456',  // الموارد البشرية
+ ops:       '4567',  // العمليات
+ quality:   '5678',  // الجودة
+ general:   '0000',  // عرض فقط
 };
 
 const ROLE_META = {
@@ -900,8 +999,17 @@ const DAYS_AR=['الأحد','الاثنين','الثلاثاء','الأربعا�
 let currentRole = null;
 let notesMap  = {}; // {date: [note]}
 let allNotes   = [];
-let localNotes = {}; // {id: note} — ملاحظات محلية مؤكدة أو معلقة
-let pendingIds = new Set(); // IDs لم تُؤكَّد في الشيت بعد
+let localNotes   = {};
+let pendingIds   = new Set();
+let archiveNotes = {};
+
+const NOTE_STATUS = { NEW:'new', READ:'read', DONE:'done', REJECT:'rejected' };
+const STATUS_META = {
+ new:      {n:'جديدة',       color:'#f59e0b', bg:'#fffbeb'},
+ read:     {n:'تمت القراءة', color:'#3b82f6', bg:'#eff6ff'},
+ done:     {n:'تم التنفيذ',  color:'#10b981', bg:'#ecfdf5'},
+ rejected: {n:'مرفوضة',      color:'#ef4444', bg:'#fef2f2'},
+};
 let curDay = null;
 let selTo_val = 'all';
 let selColor_val= '#f59e0b';
@@ -944,6 +1052,8 @@ function doLogin() {
 
  // 2. اجلب من الشيت فوراً (المصدر الحقيقي)
  fetchFromSheet();
+ // 3. ميزات جديدة
+ initNewFeatures();
 
  // 3. انتقل للشهر الحالي
  setTimeout(scrollToCurrentMonth, 500);
@@ -1129,9 +1239,10 @@ function renderCell(date) {
   const isUnread = !readIds.has(n.id) && n.from_role !== currentRole;
   const rm = ROLE_META[n.from_role] || ROLE_META.general;
   const label = n.text.slice(0,16) + (n.text.length>16?'…':'');
-  return `<div class="note-chip"
+  var chipCls = getChipClass(n);
+  return `<div class="note-chip ${chipCls}"
    style="background:${n.color}18;color:${n.color};border-right-color:${n.color}"
-   onclick="event.stopPropagation();viewNote('${date}','${n.id}')"
+   onclick="event.stopPropagation();openNoteDetail('${n.id}')"
    title="${n.text} — ${rm.n}">
    ${isUnread?'<span style="width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0"></span>':''}
    <span style="overflow:hidden;text-overflow:ellipsis;flex:1;font-size:7.5px">${label}</span>
@@ -1444,6 +1555,369 @@ function openLinkExternal() {
  if(_curLink) window.open(_curLink,'_blank','noopener,noreferrer');
  closeLinkPopup();
 }
+/* ══════════════════════════════════════════════════════════════════════
+   ميزات جديدة: الحالة + الرد + التنبيهات + الأرشيف + التقرير
+══════════════════════════════════════════════════════════════════════ */
+
+// ── حالة ملاحظة ─────────────────────────────────────────────────────────
+// تُخزَّن في localStorage منفصل
+var STATUS_LS = 'apx_status_2026';
+var noteStatus = {};  // {id: 'new'|'read'|'done'|'rejected'}
+var noteReplies = {}; // {id: [{text, from, ts}]}
+
+function loadStatus() {
+ try {
+  var raw = localStorage.getItem(STATUS_LS);
+  if (raw) { var p=JSON.parse(raw); noteStatus=p.status||{}; noteReplies=p.replies||{}; }
+ } catch(e) {}
+}
+function saveStatus() {
+ try { localStorage.setItem(STATUS_LS, JSON.stringify({status:noteStatus,replies:noteReplies})); } catch(e) {}
+}
+
+function getNoteStatus(id) {
+ return noteStatus[id] || NOTE_STATUS.NEW;
+}
+
+function setNoteStatus(id, status) {
+ noteStatus[id] = status;
+ saveStatus();
+ // إذا تم التنفيذ/الرفض — تحقق هل تُأرشف
+ if (status === NOTE_STATUS.DONE || status === NOTE_STATUS.REJECT) {
+  checkArchive(id);
+ }
+ // أعد رسم الخلية
+ var n = localNotes[id];
+ if (n) renderCell(n.date);
+ updateAlertsBadge();
+ // حدّث الشيت
+ if (GAS_URL) gasWrite({action:'setStatus', id:id, status:status}, null);
+}
+
+// ── أرشفة ───────────────────────────────────────────────────────────────
+var ARCHIVE_LS = 'apx_archive_2026';
+
+function loadArchive() {
+ try {
+  var raw = localStorage.getItem(ARCHIVE_LS);
+  if (raw) archiveNotes = JSON.parse(raw);
+ } catch(e) {}
+}
+function saveArchive() {
+ try { localStorage.setItem(ARCHIVE_LS, JSON.stringify(archiveNotes)); } catch(e) {}
+}
+
+function checkArchive(id) {
+ var n = localNotes[id];
+ if (!n) return;
+ var status = getNoteStatus(id);
+ var today  = new Date();
+ var noteDate = new Date(n.date);
+ var daysPast = (today - noteDate) / 86400000;
+
+ var shouldArchive =
+  (status === NOTE_STATUS.DONE && daysPast >= 7) ||
+  (status === NOTE_STATUS.REJECT);
+
+ if (shouldArchive) {
+  archiveNotes[id] = Object.assign({}, n, {archivedAt: today.toISOString(), status: status});
+  delete localNotes[id];
+  lsSave();
+  saveArchive();
+  rebuildFromLocal();
+  showToast('تمت الأرشفة', '#6b7280');
+ }
+}
+
+function checkAllArchives() {
+ Object.keys(localNotes).forEach(function(id) { checkArchive(id); });
+}
+
+function restoreFromArchive(id) {
+ if (!archiveNotes[id]) return;
+ localNotes[id] = archiveNotes[id];
+ delete archiveNotes[id];
+ delete noteStatus[id];
+ lsSave(); saveArchive(); saveStatus();
+ rebuildFromLocal();
+ renderArchive();
+ showToast('تم الاسترجاع', '#10b981');
+}
+
+// ── عرض الأرشيف ────────────────────────────────────────────────────────
+function showArchive() {
+ renderArchive();
+ showOv('ovArchive');
+}
+
+function renderArchive() {
+ var el = $e('archiveList');
+ if (!el) return;
+ var MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+ var items = Object.values(archiveNotes);
+ if (!items.length) {
+  el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">الأرشيف فارغ</div>';
+  return;
+ }
+ items.sort(function(a,b){ return b.date.localeCompare(a.date); });
+ el.innerHTML = items.map(function(n) {
+  var sm = STATUS_META[getNoteStatus(n.id)] || STATUS_META.done;
+  var rm = ROLE_META[n.from_role] || ROLE_META.general;
+  var dt = new Date(n.date);
+  var ds = isNaN(dt) ? n.date : (dt.getDate()+' '+MONTHS[dt.getMonth()]+' '+dt.getFullYear());
+  return '<div class="archive-item">'+
+   '<div style="width:8px;height:8px;border-radius:50%;background:'+n.color+';flex-shrink:0;margin-top:4px"></div>'+
+   '<div style="flex:1;min-width:0">'+
+    '<div style="font-size:12px;font-weight:700;color:var(--txt)">'+n.text.slice(0,50)+(n.text.length>50?'…':'')+'</div>'+
+    '<div style="font-size:10px;color:var(--muted);margin-top:2px">'+ds+' · '+rm.n+'</div>'+
+   '</div>'+
+   '<span class="status-badge" style="background:'+sm.bg+';color:'+sm.color+'">'+sm.n+'</span>'+
+   '<button class="status-btn" style="background:var(--il);color:var(--ind);font-size:10px" onclick="restoreFromArchive(''+n.id+'')">استرجاع</button>'+
+  '</div>';
+ }).join('');
+}
+
+// ── تنبيهات اليوم والغد ─────────────────────────────────────────────────
+function updateAlertsBadge() {
+ var today    = new Date(); today.setHours(0,0,0,0);
+ var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
+ var todayStr  = fmtDateJS(today);
+ var tmrwStr   = fmtDateJS(tomorrow);
+
+ var count = 0;
+ Object.values(localNotes).forEach(function(n) {
+  var s = getNoteStatus(n.id);
+  if (s === NOTE_STATUS.DONE || s === NOTE_STATUS.REJECT) return;
+  if (n.date === todayStr || n.date === tmrwStr) count++;
+ });
+
+ var badge = $e('alertsBadge');
+ var btn   = $e('btnAlerts');
+ if (badge) { badge.textContent = count; badge.style.display = count ? 'flex' : 'none'; }
+ if (btn)   btn.style.display = count ? '' : 'none';
+}
+
+function fmtDateJS(d) {
+ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function showAlerts() {
+ var el = $e('alertsList');
+ if (!el) return;
+ var today    = new Date(); today.setHours(0,0,0,0);
+ var tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+ var todayStr  = fmtDateJS(today);
+ var tmrwStr   = fmtDateJS(tomorrow);
+ var MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+ var todayItems=[], tmrwItems=[];
+ Object.values(localNotes).forEach(function(n) {
+  var s = getNoteStatus(n.id);
+  if (s === NOTE_STATUS.DONE || s === NOTE_STATUS.REJECT) return;
+  if (n.date === todayStr)  todayItems.push(n);
+  if (n.date === tmrwStr)   tmrwItems.push(n);
+ });
+
+ var html2 = '';
+ if (todayItems.length) {
+  html2 += '<div class="today-alert">اليوم — '+todayItems.length+' ملاحظة</div>';
+  html2 += todayItems.map(function(n){ return buildAlertItem(n,'today'); }).join('');
+ }
+ if (tmrwItems.length) {
+  html2 += '<div class="tomorrow-alert" style="margin-top:8px">الغد — '+tmrwItems.length+' ملاحظة</div>';
+  html2 += tmrwItems.map(function(n){ return buildAlertItem(n,'tomorrow'); }).join('');
+ }
+ if (!html2) html2 = '<div style="text-align:center;color:var(--muted);padding:16px">لا توجد تنبيهات</div>';
+ el.innerHTML = html2;
+ showOv('ovAlerts');
+}
+
+function buildAlertItem(n, type) {
+ var rm = ROLE_META[n.from_role] || ROLE_META.general;
+ return '<div class="note-item" style="cursor:pointer" onclick="closeOv('ovAlerts');openNoteDetail(''+n.id+'')">'+
+  '<div class="ni-dot" style="background:'+n.color+'"></div>'+
+  '<div class="ni-body"><div class="ni-text">'+n.text.slice(0,60)+'</div>'+
+  '<div class="ni-meta"><span class="ni-tag" style="background:'+rm.bg+'22;color:'+rm.bg+'">'+rm.n+'</span></div></div>'+
+ '</div>';
+}
+
+// ── تفاصيل ملاحظة (الرئيسية الجديدة) ────────────────────────────────────
+var _detailNoteId = null;
+
+function openNoteDetail(id) {
+ var n = localNotes[id] || archiveNotes[id];
+ if (!n) return;
+ _detailNoteId = id;
+
+ var MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+ var dt = new Date(n.date);
+ var ds = isNaN(dt)?n.date:(dt.getDate()+' '+MONTHS[dt.getMonth()]+' '+dt.getFullYear());
+ var fromMeta = ROLE_META[n.from_role]||ROLE_META.general;
+ var toMeta   = ROLE_META[n.to_role]  ||ROLE_META.general;
+
+ $t('ndTitle', ds);
+ $t('ndSub', fromMeta.n + ' → ' + (n.to_role==='all'?'الكل':toMeta.n));
+
+ var ndText = $e('ndText');
+ if (ndText) ndText.textContent = n.text;
+
+ // رابط
+ var lr = $e('ndLinkRow');
+ var lb = $e('ndLinkBtn');
+ if (lr && lb) {
+  if (n.link) {
+   lr.style.display='block';
+   lb.onclick = function(){ openLinkPopup(n.text, n.link); };
+  } else { lr.style.display='none'; }
+ }
+
+ // حالة
+ renderStatusRow(id, n);
+
+ // ردود
+ renderReplies(id);
+
+ // حذف — فقط إذا المرسِل أو المدير
+ var delBtn = $e('ndDelBtn');
+ if (delBtn) {
+  var canDel = n.from_role===currentRole || (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll);
+  delBtn.style.display = canDel ? '' : 'none';
+  delBtn.onclick = function(){ if(confirm('حذف؟')){ deleteNote(n.date,id); closeOv('ovNoteDetail'); } };
+ }
+
+ // علّم مقروءة
+ if (getNoteStatus(id) === NOTE_STATUS.NEW && n.from_role !== currentRole) {
+  setNoteStatus(id, NOTE_STATUS.READ);
+ }
+
+ showOv('ovNoteDetail');
+}
+
+function renderStatusRow(id, n) {
+ var row = $e('ndStatusRow');
+ if (!row) return;
+ var cur = getNoteStatus(id);
+ var sm  = STATUS_META[cur] || STATUS_META.new;
+
+ // الحالة الحالية
+ var html2 = '<span class="status-badge" style="background:'+sm.bg+';color:'+sm.color+'">'+sm.n+'</span>';
+
+ // أزرار تغيير الحالة — فقط للمعني أو المدير
+ var isRecipient = n.to_role===currentRole || n.from_role===currentRole ||
+                   (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll);
+ if (isRecipient && cur!==NOTE_STATUS.DONE) {
+  html2 += '<button class="status-btn" style="background:#ecfdf5;color:#10b981" '+
+   'onclick="setNoteStatus(''+id+'',''+NOTE_STATUS.DONE+'');renderStatusRow(''+id+'',localNotes[''+id+'']||{})">تم التنفيذ</button>';
+ }
+ if (isRecipient && cur!==NOTE_STATUS.REJECT && cur!==NOTE_STATUS.DONE) {
+  html2 += '<button class="status-btn" style="background:#fef2f2;color:#ef4444" '+
+   'onclick="setNoteStatus(''+id+'',''+NOTE_STATUS.REJECT+'');renderStatusRow(''+id+'',localNotes[''+id+'']||{})">مرفوضة</button>';
+ }
+ if (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll && n.shared!=='yes') {
+  html2 += '<button class="status-btn" style="background:#e0f2fe;color:#0369a1" '+
+   'onclick="shareNote(''+n.date+'',''+id+'')">مشاركة</button>';
+ }
+ row.innerHTML = html2;
+}
+
+// ── الردود ────────────────────────────────────────────────────────────────
+function renderReplies(id) {
+ var el = $e('ndReplies');
+ if (!el) return;
+ var replies = noteReplies[id] || [];
+ if (!replies.length) { el.style.display='none'; return; }
+ el.style.display='block';
+ var MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+ el.innerHTML = '<div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px">الردود</div>'+
+  replies.map(function(r) {
+   var rm = ROLE_META[r.from]||ROLE_META.general;
+   var dt = new Date(r.ts);
+   var ds = isNaN(dt)?'':dt.getDate()+' '+MONTHS[dt.getMonth()];
+   return '<div class="reply-item">'+r.text+
+    '<div class="reply-meta">'+rm.n+' · '+ds+'</div></div>';
+  }).join('');
+}
+
+function sendReply() {
+ var txt = $e('ndReplyText') ? $e('ndReplyText').value.trim() : '';
+ if (!txt || !_detailNoteId) return;
+ if (!noteReplies[_detailNoteId]) noteReplies[_detailNoteId]=[];
+ noteReplies[_detailNoteId].push({text:txt, from:currentRole, ts:new Date().toISOString()});
+ saveStatus();
+ $e('ndReplyText').value='';
+ renderReplies(_detailNoteId);
+ showToast('تم إرسال الرد','#10b981');
+ if (GAS_URL) gasWrite({action:'addReply',id:_detailNoteId,text:txt,from:currentRole},null);
+}
+
+// ── تقرير أسبوعي ────────────────────────────────────────────────────────
+function showReport() {
+ if (!(ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll)) {
+  showToast('التقرير للمدير التنفيذي فقط','#f59e0b'); return;
+ }
+ var all = Object.values(localNotes);
+ var today = new Date(); today.setHours(0,0,0,0);
+ var weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate()-7);
+
+ var stats = { total:0, new:0, read:0, done:0, rejected:0, overdue:0, thisWeek:0 };
+ all.forEach(function(n) {
+  stats.total++;
+  var s = getNoteStatus(n.id);
+  stats[s] = (stats[s]||0)+1;
+  var nd = new Date(n.date);
+  if (!isNaN(nd) && nd < today && s!==NOTE_STATUS.DONE && s!==NOTE_STATUS.REJECT) stats.overdue++;
+  if (!isNaN(nd) && nd >= weekAgo) stats.thisWeek++;
+ });
+
+ var el = $e('reportContent');
+ if (!el) return;
+ el.innerHTML =
+  '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">'+
+  mkCard(stats.total,     'إجمالي الملاحظات',   '#4A4A9A')+
+  mkCard(stats.thisWeek,  'هذا الأسبوع',         '#3DBDAD')+
+  mkCard(stats.overdue,   'متأخرة',               '#ef4444')+
+  mkCard(stats.done,      'منجزة',               '#10b981')+
+  mkCard(stats.new,       'جديدة / غير مقروءة', '#f59e0b')+
+  mkCard(stats.rejected,  'مرفوضة',              '#6b7280')+
+  '</div>'+
+  '<div style="font-size:11px;color:var(--muted);text-align:center">'+
+   'تقرير بتاريخ '+new Date().toLocaleDateString('ar-SA')+'</div>';
+
+ showOv('ovReport');
+}
+
+function mkCard(num, label, color) {
+ return '<div class="report-card">'+
+  '<div class="report-num" style="color:'+color+'">'+num+'</div>'+
+  '<div class="report-label">'+label+'</div>'+
+ '</div>';
+}
+
+// ── تلوين خلية التقويم حسب الحالة والموعد ────────────────────────────────
+// هذا يُستدعى داخل renderCell بعد بناء الـ chip
+function getChipClass(n) {
+ var today = new Date(); today.setHours(0,0,0,0);
+ var nd    = new Date(n.date);
+ if (isNaN(nd.getTime())) return '';
+ var s = getNoteStatus(n.id);
+ if (s===NOTE_STATUS.DONE || s===NOTE_STATUS.REJECT) return '';
+ if (nd < today) return 'chip-overdue';
+ if (nd.getTime()===today.getTime()) return 'chip-today';
+ return '';
+}
+
+// ── تهيئة عند الدخول ────────────────────────────────────────────────────
+function initNewFeatures() {
+ loadStatus();
+ loadArchive();
+ checkAllArchives();
+ updateAlertsBadge();
+ // أظهر زر التقرير للمدير فقط
+ if (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll) {
+  var rb = $e('btnReport'); if(rb) rb.style.display='';
+ }
+}
+
 </script>
 </body>
 </html>
