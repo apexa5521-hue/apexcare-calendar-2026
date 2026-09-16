@@ -1653,28 +1653,52 @@ function showArchive() {
 function renderArchive() {
  var el = $e('archiveList');
  if (!el) return;
- var MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+ var MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
  var items = Object.values(archiveNotes);
+ el.innerHTML = '';
  if (!items.length) {
-  el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">الأرشيف فارغ</div>';
+  el.textContent = 'الأرشيف فارغ';
+  el.style.textAlign='center'; el.style.color='var(--muted)'; el.style.padding='20px';
   return;
  }
  items.sort(function(a,b){ return b.date.localeCompare(a.date); });
- el.innerHTML = items.map(function(n) {
-  var sm = STATUS_META[getNoteStatus(n.id)] || STATUS_META.done;
-  var rm = ROLE_META[n.from_role] || ROLE_META.general;
-  var dt = new Date(n.date);
-  var ds = isNaN(dt) ? n.date : (dt.getDate()+' '+MONTHS[dt.getMonth()]+' '+dt.getFullYear());
-  return '<div class="archive-item">'+
-   '<div style="width:8px;height:8px;border-radius:50%;background:'+n.color+';flex-shrink:0;margin-top:4px"></div>'+
-   '<div style="flex:1;min-width:0">'+
-    '<div style="font-size:12px;font-weight:700;color:var(--txt)">'+n.text.slice(0,50)+(n.text.length>50?'…':'')+'</div>'+
-    '<div style="font-size:10px;color:var(--muted);margin-top:2px">'+ds+' · '+rm.n+'</div>'+
-   '</div>'+
-   '<span class="status-badge" style="background:'+sm.bg+';color:'+sm.color+'">'+sm.n+'</span>'+
-   '<button class="status-btn" style="background:var(--il);color:var(--ind);font-size:10px" onclick="restoreFromArchive(''+n.id+'')">استرجاع</button>'+
-  '</div>';
- }).join('');
+ items.forEach(function(n) {
+  var sm  = STATUS_META[getNoteStatus(n.id)] || STATUS_META.done;
+  var rm  = ROLE_META[n.from_role] || ROLE_META.general;
+  var dt  = new Date(n.date);
+  var ds  = isNaN(dt.getTime()) ? n.date : (dt.getDate()+' '+MONTHS[dt.getMonth()]+' '+dt.getFullYear());
+  var row = document.createElement('div');
+  row.className = 'archive-item';
+
+  var dot = document.createElement('div');
+  dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:'+n.color+';flex-shrink:0;margin-top:4px';
+  row.appendChild(dot);
+
+  var body = document.createElement('div');
+  body.style.cssText = 'flex:1;min-width:0';
+  var t1 = document.createElement('div');
+  t1.style.cssText = 'font-size:12px;font-weight:700;color:var(--txt)';
+  t1.textContent = n.text.slice(0,50)+(n.text.length>50?'…':'');
+  var t2 = document.createElement('div');
+  t2.style.cssText = 'font-size:10px;color:var(--muted);margin-top:2px';
+  t2.textContent = ds+' · '+rm.n;
+  body.appendChild(t1); body.appendChild(t2);
+  row.appendChild(body);
+
+  var badge = document.createElement('span');
+  badge.className = 'status-badge';
+  badge.style.cssText = 'background:'+sm.bg+';color:'+sm.color;
+  badge.textContent = sm.n;
+  row.appendChild(badge);
+
+  var btn = document.createElement('button');
+  btn.className = 'status-btn';
+  btn.style.cssText = 'background:var(--il);color:var(--ind);font-size:10px';
+  btn.textContent = 'استرجاع';
+  btn.addEventListener('click', (function(id){ return function(){ restoreFromArchive(id); }; })(n.id));
+  row.appendChild(btn);
+  el.appendChild(row);
+ });
 }
 
 // ── تنبيهات اليوم والغد ─────────────────────────────────────────────────
@@ -1718,27 +1742,47 @@ function showAlerts() {
   if (n.date === tmrwStr)   tmrwItems.push(n);
  });
 
- var html2 = '';
+ el.innerHTML = '';
  if (todayItems.length) {
-  html2 += '<div class="today-alert">اليوم — '+todayItems.length+' ملاحظة</div>';
-  html2 += todayItems.map(function(n){ return buildAlertItem(n,'today'); }).join('');
+  var th2 = document.createElement('div'); th2.className='today-alert';
+  th2.textContent='اليوم — '+todayItems.length+' ملاحظة'; el.appendChild(th2);
+  todayItems.forEach(function(n){ el.appendChild(document.createRange().createContextualFragment(buildAlertItem(n,'today'))); });
  }
  if (tmrwItems.length) {
-  html2 += '<div class="tomorrow-alert" style="margin-top:8px">الغد — '+tmrwItems.length+' ملاحظة</div>';
-  html2 += tmrwItems.map(function(n){ return buildAlertItem(n,'tomorrow'); }).join('');
+  var th = document.createElement('div'); th.className='tomorrow-alert'; th.style.marginTop='8px';
+  th.textContent='الغد — '+tmrwItems.length+' ملاحظة'; el.appendChild(th);
+  tmrwItems.forEach(function(n){ el.appendChild(document.createRange().createContextualFragment(buildAlertItem(n,'tomorrow'))); });
  }
- if (!html2) html2 = '<div style="text-align:center;color:var(--muted);padding:16px">لا توجد تنبيهات</div>';
- el.innerHTML = html2;
+ if (!el.children.length) {
+  el.textContent='لا توجد تنبيهات';
+  el.style.cssText='text-align:center;color:var(--muted);padding:16px';
+ }
  showOv('ovAlerts');
 }
 
 function buildAlertItem(n, type) {
- var rm = ROLE_META[n.from_role] || ROLE_META.general;
- return '<div class="note-item" style="cursor:pointer" onclick="closeOv('ovAlerts');openNoteDetail(''+n.id+'')">'+
-  '<div class="ni-dot" style="background:'+n.color+'"></div>'+
-  '<div class="ni-body"><div class="ni-text">'+n.text.slice(0,60)+'</div>'+
-  '<div class="ni-meta"><span class="ni-tag" style="background:'+rm.bg+'22;color:'+rm.bg+'">'+rm.n+'</span></div></div>'+
- '</div>';
+ var rm  = ROLE_META[n.from_role] || ROLE_META.general;
+ var div = document.createElement('div');
+ div.className = 'note-item';
+ div.style.cursor = 'pointer';
+ div.addEventListener('click', (function(id){ return function(){
+  closeOv('ovAlerts'); openNoteDetail(id);
+ }; })(n.id));
+
+ var dot = document.createElement('div');
+ dot.className='ni-dot'; dot.style.background=n.color;
+
+ var body = document.createElement('div');
+ body.className='ni-body';
+ var txt = document.createElement('div');
+ txt.className='ni-text'; txt.textContent=n.text.slice(0,60);
+ var meta = document.createElement('div');
+ meta.className='ni-meta';
+ var tag = document.createElement('span');
+ tag.className='ni-tag'; tag.style.cssText='background:'+rm.bg+'22;color:'+rm.bg; tag.textContent=rm.n;
+ meta.appendChild(tag); body.appendChild(txt); body.appendChild(meta);
+ div.appendChild(dot); div.appendChild(body);
+ return div.outerHTML;
 }
 
 // ── تفاصيل ملاحظة (الرئيسية الجديدة) ────────────────────────────────────
@@ -1798,26 +1842,50 @@ function renderStatusRow(id, n) {
  if (!row) return;
  var cur = getNoteStatus(id);
  var sm  = STATUS_META[cur] || STATUS_META.new;
+ row.innerHTML = '';
 
- // الحالة الحالية
- var html2 = '<span class="status-badge" style="background:'+sm.bg+';color:'+sm.color+'">'+sm.n+'</span>';
+ // شارة الحالة
+ var badge = document.createElement('span');
+ badge.className = 'status-badge';
+ badge.style.cssText = 'background:'+sm.bg+';color:'+sm.color;
+ badge.textContent = sm.n;
+ row.appendChild(badge);
 
- // أزرار تغيير الحالة — فقط للمعني أو المدير
  var isRecipient = n.to_role===currentRole || n.from_role===currentRole ||
                    (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll);
+
+ // زر تم التنفيذ
  if (isRecipient && cur!==NOTE_STATUS.DONE) {
-  html2 += '<button class="status-btn" style="background:#ecfdf5;color:#10b981" '+
-   'onclick="setNoteStatus(''+id+'',''+NOTE_STATUS.DONE+'');renderStatusRow(''+id+'',localNotes[''+id+'']||{})">تم التنفيذ</button>';
+  var b1 = document.createElement('button');
+  b1.className='status-btn'; b1.style.cssText='background:#ecfdf5;color:#10b981';
+  b1.textContent='تم التنفيذ';
+  b1.addEventListener('click', function(){
+   setNoteStatus(id, NOTE_STATUS.DONE);
+   renderStatusRow(id, localNotes[id]||{});
+  });
+  row.appendChild(b1);
  }
+
+ // زر مرفوضة
  if (isRecipient && cur!==NOTE_STATUS.REJECT && cur!==NOTE_STATUS.DONE) {
-  html2 += '<button class="status-btn" style="background:#fef2f2;color:#ef4444" '+
-   'onclick="setNoteStatus(''+id+'',''+NOTE_STATUS.REJECT+'');renderStatusRow(''+id+'',localNotes[''+id+'']||{})">مرفوضة</button>';
+  var b2 = document.createElement('button');
+  b2.className='status-btn'; b2.style.cssText='background:#fef2f2;color:#ef4444';
+  b2.textContent='مرفوضة';
+  b2.addEventListener('click', function(){
+   setNoteStatus(id, NOTE_STATUS.REJECT);
+   renderStatusRow(id, localNotes[id]||{});
+  });
+  row.appendChild(b2);
  }
+
+ // زر مشاركة للمدير
  if (ROLE_META[currentRole]&&ROLE_META[currentRole].seesAll && n.shared!=='yes') {
-  html2 += '<button class="status-btn" style="background:#e0f2fe;color:#0369a1" '+
-   'onclick="shareNote(''+n.date+'',''+id+'')">مشاركة</button>';
+  var b3 = document.createElement('button');
+  b3.className='status-btn'; b3.style.cssText='background:#e0f2fe;color:#0369a1';
+  b3.textContent='مشاركة';
+  b3.addEventListener('click', function(){ shareNote(n.date, id); });
+  row.appendChild(b3);
  }
- row.innerHTML = html2;
 }
 
 // ── الردود ────────────────────────────────────────────────────────────────
