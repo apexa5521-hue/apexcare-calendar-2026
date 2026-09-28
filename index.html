@@ -402,7 +402,8 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  </div>
  <div class="frow">
  <label class="flabel">رابط (اختياري)</label>
- <input class="finput" type="url" id="nLink" placeholder="https://..." dir="ltr" style="text-align:left;font-size:12px">
+ <div id="nLinks" style="display:flex;flex-direction:column;gap:5px"></div>
+ <button type="button" onclick="addLinkField('')" style="align-self:flex-start;border:none;background:none;color:var(--ind);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;cursor:pointer;padding:2px 0">＋ إضافة رابط آخر</button>
  <div style="font-size:10px;color:var(--muted);margin-top:3px">رابط لملف أو تقرير يمكن للمعني فتحه</div>
  </div>
  <div class="frow">
@@ -1507,7 +1508,13 @@ function openNoteDetail(date,id) {
  $t('detailTitle', n.title ? n.title : (n.text.length>30 ? n.text.slice(0,30)+'…' : n.text));
  $h('detailBody', `
   <div style="font-size:13px;line-height:1.6;white-space:pre-wrap">${escapeHtml(n.text)}</div>
-  ${n.link?`<a class="ni-link-btn" href="${n.link}" target="_blank" rel="noopener">&#128279; فتح الرابط</a>`:''}
+  ${(function(){
+   const links=splitLinks(n.link).filter(l=>/^https?:\/\//i.test(l));
+   if(!links.length) return '';
+   return '<div style="display:flex;flex-wrap:wrap;gap:5px">'+links.map((l,i)=>
+    `<a class="ni-link-btn" href="${escapeHtml(l)}" target="_blank" rel="noopener">&#128279; ${links.length>1?'الرابط '+(i+1):'فتح الرابط'}</a>`
+   ).join('')+'</div>';
+  })()}
   <div class="ni-meta" style="margin-top:4px">
    <span class="ni-tag" style="background:${fromMeta.bg}22;color:${fromMeta.bg}">${fromMeta.abbr} ${fromMeta.n}</span>
    <span style="color:#94a3b8">&larr;</span>
@@ -1681,7 +1688,7 @@ function showAddNote(date, editNote) {
  $e('nDate').value = editingNote ? editingNote.date : (date||'');
  $e('nText').value = editingNote ? editingNote.text : '';
  if($e('nTitle')) $e('nTitle').value = editingNote ? (editingNote.title||'') : '';
- if($e('nLink')) $e('nLink').value = editingNote ? (editingNote.link||'') : '';
+ resetLinkFields(editingNote ? splitLinks(editingNote.link) : []);
 
  selTo_val = editingNote ? editingNote.to_role : 'all';
  document.querySelectorAll('.ttab').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
@@ -1695,6 +1702,59 @@ function showAddNote(date, editNote) {
  document.querySelectorAll('.co').forEach(c=>c.classList.remove('sel'));
  (document.querySelector('.co[data-c="'+selColor_val+'"]') || document.querySelector('.co[data-c="#f59e0b"]'))?.classList.add('sel');
  showOv('ovAdd');
+}
+
+/* ══ روابط متعددة: تُخزَّن في حقل link مفصولة بسطر جديد ══ */
+function splitLinks(v) {
+ return String(v||'').split(/\s*\n\s*/).map(function(s){ return s.trim(); }).filter(Boolean);
+}
+
+function normalizeLink(s) {
+ s = s.trim();
+ if (!s) return '';
+ return /^https?:\/\//i.test(s) ? s : 'https://' + s;
+}
+
+function addLinkField(value) {
+ var box = $e('nLinks');
+ if (!box) return;
+ var row = document.createElement('div');
+ row.style.cssText = 'display:flex;gap:5px;align-items:center';
+ var inp = document.createElement('input');
+ inp.className = 'finput nLinkInput';
+ inp.type = 'url';
+ inp.placeholder = 'https://...';
+ inp.dir = 'ltr';
+ inp.style.cssText = 'text-align:left;font-size:12px';
+ inp.value = value || '';
+ var del = document.createElement('button');
+ del.type = 'button';
+ del.textContent = '×';
+ del.title = 'حذف الرابط';
+ del.style.cssText = 'border:none;background:none;color:#e53e3e;font-size:18px;cursor:pointer;padding:0 4px;line-height:1';
+ del.onclick = function() {
+  row.remove();
+  if (!box.children.length) addLinkField('');
+ };
+ row.appendChild(inp);
+ row.appendChild(del);
+ box.appendChild(row);
+ if (!value) inp.focus();
+}
+
+function resetLinkFields(links) {
+ var box = $e('nLinks');
+ if (!box) return;
+ box.innerHTML = '';
+ if (!links.length) { addLinkField(''); box.querySelector('input').blur(); return; }
+ links.forEach(function(l){ addLinkField(l); });
+}
+
+function getFormLinks() {
+ return Array.from(document.querySelectorAll('#nLinks .nLinkInput'))
+  .map(function(i){ return normalizeLink(i.value); })
+  .filter(Boolean)
+  .join('\n');
 }
 
 function openEditNote(date, id) {
@@ -1722,12 +1782,7 @@ function submitNote() {
  if (!text) { showToast('اكتب ملاحظتك','#f59e0b'); return; }
 
  var title = $e('nTitle') ? $e('nTitle').value.trim() : '';
- var rawLink = $e('nLink') ? $e('nLink').value.trim() : '';
- // تأكد أن الرابط صحيح
- var noteLink = '';
- if (rawLink) {
-  noteLink = rawLink.startsWith('http') ? rawLink : 'https://' + rawLink;
- }
+ var noteLink = getFormLinks();
 
  if (editingNote) {
   updateNote(editingNote, {date:date, title:title, text:text, link:noteLink, to_role:selTo_val, color:selColor_val});

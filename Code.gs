@@ -332,10 +332,13 @@ function saveNote(p) {
   var rowColors = {ceo:'#fee2e2',marketing:'#ede9fe',hr:'#dcfce7',ops:'#ffedd5',quality:'#e0f2fe',general:'#f8fafc'};
   sheet.getRange(sheet.getLastRow(),1,1,lc).setBackground(rowColors[p.from_role]||'#fff');
 
-  if (p.link && cm.link >= 0) {
+  if (p.link && cm.link >= 0 && (p.link.indexOf(String.fromCharCode(10)) >= 0 || p.link.indexOf('"') >= 0)) {
+    // روابط متعددة (مفصولة بسطر) — تُكتب نصاً عادياً بدل HYPERLINK
+    sheet.getRange(sheet.getLastRow(), cm.link+1).setValue(p.link);
+  } else if (p.link && cm.link >= 0) {
     try {
       sheet.getRange(sheet.getLastRow(), cm.link+1)
-        .setFormula('=HYPERLINK("'+p.link+'","'+(p.link.length>35?p.link.slice(0,35)+'...':p.link)+'")');
+        .setFormula('=HYPERLINK("'+p.link+'","'+p.link+'")');
     } catch(e) {
       sheet.getRange(sheet.getLastRow(), cm.link+1).setValue(p.link);
     }
