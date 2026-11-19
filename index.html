@@ -300,6 +300,10 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
 <link rel="stylesheet" href="calendar-experience.css">
 <link rel="stylesheet" href="calendar-export.css">
 <link rel="stylesheet" href="calendar-glass.css">
+<link rel="stylesheet" href="calendar-atmosphere.css">
+<link rel="stylesheet" href="calendar-clarity.css">
+<link rel="stylesheet" href="calendar-day-interaction.css">
+<link rel="stylesheet" href="calendar-wave.css">
 </head>
 <body>
 
@@ -1499,9 +1503,23 @@ function findNote(date,id){
   || archivedNotes.find(x=>x.id===id);
 }
 
+// Reading is automatic; execution status remains done/rejected until explicitly changed.
+function markNoteReadOnOpen(note,viewer){
+ if(!note||!viewer||note.from_role===viewer)return false;
+ var addressed=note.to_role===viewer||note.to_role==='all';
+ if(!addressed)return false;
+ if(note.status&&note.status!=='new')return false;
+ note.status='read';note.statusTs=new Date().toISOString();return true;
+}
+
 function openNoteDetail(date,id) {
  const n=findNote(date,id);
  if(!n) return;
+ if(markNoteReadOnOpen(n,currentRole)){
+  if(localNotes[id]){localNotes[id].status=n.status;localNotes[id].statusTs=n.statusTs;}
+  lsSave();
+  if(GAS_URL)gasWrite({action:'setStatus',id,status:'read'});
+ }
  curDay=date;
  readIds.add(id);
  localStorage.setItem('apex_read',JSON.stringify([...readIds]));
@@ -1530,7 +1548,7 @@ function openNoteDetail(date,id) {
 
  const canAct = ROLE_META[currentRole]?.canWrite && (n.from_role===currentRole || n.to_role===currentRole || n.to_role==='all' || ROLE_META[currentRole]?.seesAll);
  const st = n.status||'new';
- $h('detailStatusRow', NOTE_STATUS.map(s=>
+ $h('detailStatusRow', NOTE_STATUS.filter(s=>s.key==='done'||s.key==='rejected').map(s=>
   `<button class="mbtn" style="flex:1;font-size:11px;padding:7px;background:${st===s.key?s.color:'var(--bg)'};color:${st===s.key?'#fff':'var(--muted)'};border:1.5px solid ${s.color}" ${canAct?`onclick="setNoteStatus('${date}','${id}','${s.key}')"`:'disabled'}>${s.label}</button>`
  ).join(''));
 
@@ -2014,5 +2032,9 @@ function openLinkExternal() {
 <script src="calendar-experience.js"></script>
 <script src="calendar-export.js"></script>
 <script src="calendar-glass.js"></script>
+<script src="calendar-atmosphere.js"></script>
+<script src="calendar-clarity.js"></script>
+<script src="calendar-day-interaction.js"></script>
+<script src="calendar-wave.js"></script>
 </body>
 </html>
