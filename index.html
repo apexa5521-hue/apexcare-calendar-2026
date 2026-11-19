@@ -977,17 +977,10 @@ function lsDelete(id) {
 }
 
 /* ══ CONFIG - ضع رابط Apps Script في GAS_URL أدناه ══ */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyUibBlhhe-c7nUBwH2Oy_1PQJtEHKrCCfZseiciJvUKWQhvF9Y17jjzzufDNyB5tbZ/exec';
+const GAS_URL = '';
 
 /* رقم سري لكل دور — غيّرها قبل الرفع */
-const PINS = {
- ceo:       '1234',  // المدير التنفيذي
- marketing: '2345',  // التسويق
- hr:        '3456',  // الموارد البشرية
- ops:       '4567',  // العمليات
- quality:   '5678',  // الجودة
- general:   '0000',  // عرض فقط
-};
+const PINS = {};
 
 const ROLE_META = {
   ceo:       {n:'المدير التنفيذي', abbr:'CEO', bg:'#c0152a', canWrite:true,  seesAll:true},
@@ -2036,5 +2029,7 @@ function openLinkExternal() {
 <script src="calendar-clarity.js"></script>
 <script src="calendar-day-interaction.js"></script>
 <script src="calendar-wave.js"></script>
+<script src="/config.js"></script>
+<script src="calendar-live.js"></script>
 </body>
 </html>

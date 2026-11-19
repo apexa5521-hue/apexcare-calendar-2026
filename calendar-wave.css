@@ -6,3 +6,5 @@
 @media screen{#loginScreen .login-logo{height:86px;max-width:210px;margin:0 auto 4px}.wave-login-caption{text-align:center;color:#625284;font-size:19px;font-weight:500;margin:0 0 14px;line-height:1.6}@media(max-width:600px){#loginScreen .login-logo{height:78px}.wave-login-caption{font-size:18px}}}
 
 @media screen{#calendar-username{direction:rtl!important;text-align:right!important}#calendar-username::placeholder{direction:rtl;text-align:right}}
+
+@media screen{#calendar-password{direction:ltr;text-align:center;letter-spacing:12px;font-size:24px!important;font-variant-numeric:tabular-nums;padding-right:55px}.glass-pass-wrap #calendar-password::placeholder{letter-spacing:12px;color:#a397b9}}

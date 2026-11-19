@@ -1,2 +1,7 @@
 backups/
 apexcare_calendar.gs
+
+tmp/
+*-preview.html
+preview-login-fix.js
+.env*
