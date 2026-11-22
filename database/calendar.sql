@@ -50,7 +50,7 @@ begin
  if u.must_change_pin then return '{"ok":false,"error":"غيّر الرمز الأولي قبل استخدام التقويم"}';end if;
  if p_action='list' then
  select coalesce(jsonb_agg(data||jsonb_build_object('archived',archived) order by data->>'date'),'[]'::jsonb) into r from calendar_private.notes where u.role='ceo' or data->>'from_role'=u.department or data->>'to_role' in (u.department,'all') or data->>'shared'='yes';
- return jsonb_build_object('ok',true,'notes',r);end if;
+ return jsonb_build_object('ok',true,'notes',r,'readIds',(select coalesce(jsonb_agg(v.note_id),'[]'::jsonb) from calendar_private.reads v join calendar_private.notes z on z.id=v.note_id where v.user_id=u.id and v.read_at>=coalesce((z.data->>'last_activity_at')::timestamptz,'-infinity'::timestamptz)));end if;
  if p_action='users' then
  if u.role<>'ceo' then return '{"ok":false,"error":"غير مسموح"}';end if;
  select jsonb_agg(jsonb_build_object('username',username,'name',display_name,'department',department,'active',active)) into r from calendar_private.users;
@@ -96,7 +96,7 @@ begin
  if error_count>0 or conflict_count>0 then return jsonb_build_object('ok',false,'error','عالج الصفوف غير الصالحة أو المتعارضة قبل الحفظ','preview',preview);end if;
  for rowdata in select value from jsonb_array_elements(accepted) loop
  insert into calendar_private.years(year,state)values(left(rowdata->>'date',4)::int,'archived') on conflict do nothing;
- rowdata=(rowdata-'author_user_id')||jsonb_build_object('author_name',case when rowdata->>'from_role'='marketing' then 'التسويق' when rowdata->>'from_role'='ceo' then 'الإدارة التنفيذية' else rowdata->>'from_role' end,'imported_by',u.display_name,'imported_at',now());
+ rowdata=(rowdata-'author_user_id')||jsonb_build_object('author_name',case when rowdata->>'from_role'='marketing' then 'التسويق' when rowdata->>'from_role'='ceo' then 'الإدارة التنفيذية' else rowdata->>'from_role' end,'imported_by',u.display_name,'imported_at',now(),'last_activity_at',now());
  insert into calendar_private.notes(id,data,author_id,archived)values(rowdata->>'id',rowdata,null,coalesce(rowdata->>'archived','false') in ('true','yes','1')) on conflict do nothing;
  if found then inserted_count=inserted_count+1;end if;
  end loop;
@@ -113,7 +113,7 @@ begin
  perform (p_data->>'date')::date;
  if not exists(select 1 from calendar_private.years where year=left(p_data->>'date',4)::int and state='active') then return '{"ok":false,"error":"هذه السنة مؤرشفة أو غير مفعلة؛ فعّلها من إدارة السنوات قبل التعديل"}';end if;
 
- d=jsonb_build_object('id',v_id,'date',p_data->>'date','title',left(coalesce(p_data->>'title',''),200),'text',p_data->>'text','link',coalesce(p_data->>'link',''),'to_role',p_data->>'to_role','color',case when coalesce(p_data->>'color','')~'^#[0-9a-fA-F]{6}$' then p_data->>'color' else '#7B52AB' end);
+ d=jsonb_build_object('id',v_id,'date',p_data->>'date','title',left(coalesce(p_data->>'title',''),200),'text',p_data->>'text','link',coalesce(p_data->>'link',''),'to_role',p_data->>'to_role','last_activity_at',now(),'color',case when coalesce(p_data->>'color','')~'^#[0-9a-fA-F]{6}$' then p_data->>'color' else '#7B52AB' end);
  if n.id is null then
  d=d||jsonb_build_object('from_role',u.department,'author_name',u.display_name,'author_user_id',u.id,'shared','no','status','new','replies','[]'::jsonb,'editLog','[]'::jsonb,'ts',now());
  insert into calendar_private.notes values(v_id,d,u.id,false);
@@ -124,14 +124,14 @@ begin
  if not can_read then return '{"ok":false,"error":"غير مسموح"}';end if;
  if p_action<>'read' and not exists(select 1 from calendar_private.years where year=left(n.data->>'date',4)::int and state='active') then return '{"ok":false,"error":"السنة مؤرشفة للقراءة فقط"}';end if;
  if p_action='read' then
- insert into calendar_private.reads(note_id,user_id)values(v_id,u.id) on conflict do nothing;
+ insert into calendar_private.reads(note_id,user_id)values(v_id,u.id) on conflict(note_id,user_id) do update set read_at=now();
  if exists(select 1 from calendar_private.years where year=left(n.data->>'date',4)::int and state='active') and n.data->>'from_role'<>u.department and n.data->>'to_role' in(u.department,'all') and coalesce(n.data->>'status','new')='new' then update calendar_private.notes set data=data||jsonb_build_object('status','read','statusTs',now()) where id=v_id;end if;
  elsif p_action='status' then
  if p_data->>'status' not in ('done','rejected') or not(u.role='ceo' or n.data->>'to_role' in(u.department,'all') or can_edit) then return '{"ok":false,"error":"غير مسموح"}';end if;
- update calendar_private.notes set data=data||jsonb_build_object('status',p_data->>'status','statusTs',now(),'status_by',u.display_name) where id=v_id;
+ update calendar_private.notes set data=data||jsonb_build_object('status',p_data->>'status','statusTs',now(),'status_by',u.display_name,'last_activity_at',now()) where id=v_id;
  elsif p_action='reply' then
  if length(coalesce(p_data->>'text','')) not between 1 and 10000 then return '{"ok":false,"error":"الرد فارغ أو طويل جدًا"}';end if;
- update calendar_private.notes set data=data||jsonb_build_object('replies',coalesce(data->'replies','[]'::jsonb)||jsonb_build_array(jsonb_build_object('from_role',u.department,'author_name',u.display_name,'text',p_data->>'text','ts',now()))) where id=v_id;
+ update calendar_private.notes set data=data||jsonb_build_object('last_activity_at',now(),'replies',coalesce(data->'replies','[]'::jsonb)||jsonb_build_array(jsonb_build_object('from_role',u.department,'author_name',u.display_name,'text',p_data->>'text','ts',now()))) where id=v_id;
  elsif p_action in ('archive','restore','share') then
  if not can_edit then return '{"ok":false,"error":"غير مسموح"}';end if;
  if p_action='share' then update calendar_private.notes set data=data||jsonb_build_object('shared','yes') where id=v_id;

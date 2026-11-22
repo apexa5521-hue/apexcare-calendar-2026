@@ -1,0 +1,3 @@
+self.addEventListener('install',event=>{self.skipWaiting()});
+self.addEventListener('activate',event=>{event.waitUntil(self.clients.claim())});
+self.addEventListener('notificationclick',event=>{event.notification.close();const noteId=event.notification.data?.noteId;event.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(async clients=>{const client=clients.find(c=>new URL(c.url).origin===self.location.origin);if(client){if(noteId)client.postMessage({type:'calendar-open-note',noteId});return client.focus()}return self.clients.openWindow('/'+(noteId?'?note='+encodeURIComponent(noteId):''))}));});
