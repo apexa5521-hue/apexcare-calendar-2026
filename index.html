@@ -1000,7 +1000,8 @@ const NOTE_STATUS = [
  {key:'done',     label:'منجزة',   color:'#10b981'},
  {key:'rejected', label:'مرفوضة',  color:'#ef4444'}
 ];
-function statusMeta(key){ return NOTE_STATUS.find(s=>s.key===key) || NOTE_STATUS[0]; }
+function isApprovalNote(n){return !!n&&(n.to_role==='ceo'||(n.from_role==='marketing'&&n.to_role==='all'));}
+function statusMeta(key,n){var base=NOTE_STATUS.find(s=>s.key===key)||NOTE_STATUS[0];if(!n||!['done','rejected'].includes(key))return base;return Object.assign({},base,{label:isApprovalNote(n)?(key==='done'?'معتمد':'مرفوض'):(key==='done'?'منجز':'غير منجز'),color:key==='rejected'&&!isApprovalNote(n)?'#d97706':base.color});}
 function escapeHtml(s){
  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -1214,7 +1215,7 @@ function showReport(roleFilter) {
 function exportReportCsv() {
  var rows = [['التاريخ','العنوان','النص','من','إلى','الحالة','مشترك']];
  lastReportWeekNotes.forEach(function(n) {
-  rows.push([n.date, n.title||'', n.text, ROLE_META[n.from_role]?.n||n.from_role, n.to_role==='all'?'الكل':(ROLE_META[n.to_role]?.n||n.to_role), statusMeta(n.status||'new').label, n.shared==='yes'?'نعم':'لا']);
+  rows.push([n.date, n.title||'', n.text, ROLE_META[n.from_role]?.n||n.from_role, n.to_role==='all'?'الكل':(ROLE_META[n.to_role]?.n||n.to_role), statusMeta(n.status||'new',n).label, n.shared==='yes'?'نعم':'لا']);
  });
  var csv = rows.map(function(r){
   return r.map(function(v){ return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'; }).join(',');
@@ -1539,9 +1540,9 @@ function openNoteDetail(date,id) {
   </div>
  `);
 
- const canAct = ROLE_META[currentRole]?.canWrite && (n.from_role===currentRole || n.to_role===currentRole || n.to_role==='all' || ROLE_META[currentRole]?.seesAll);
+ const canAct = ROLE_META[currentRole]?.canWrite && (isApprovalNote(n)?currentRole==='ceo':(n.to_role===currentRole || (n.to_role==='all'&&currentRole!=='ceo')));
  const st = n.status||'new';
- $h('detailStatusRow', NOTE_STATUS.filter(s=>s.key==='done'||s.key==='rejected').map(s=>
+ $h('detailStatusRow', ['done','rejected'].map(key=>statusMeta(key,n)).map(s=>
   `<button class="mbtn" style="flex:1;font-size:11px;padding:7px;background:${st===s.key?s.color:'var(--bg)'};color:${st===s.key?'#fff':'var(--muted)'};border:1.5px solid ${s.color}" ${canAct?`onclick="setNoteStatus('${date}','${id}','${s.key}')"`:'disabled'}>${s.label}</button>`
  ).join(''));
 
@@ -1618,7 +1619,7 @@ function buildNoteItem(n, showDel, isArchiveView) {
  const canDel = showDel && (n.from_role===currentRole || ROLE_META[currentRole]?.seesAll);
  const [y,m,d]=n.date.split('-').map(Number);
  const dateStr=d+' '+MONTHS_AR[m-1];
- const sm = statusMeta(n.status||'new');
+ const sm = statusMeta(n.status||'new',n);
  const replyCount = (n.replies||[]).length;
  return `<div class="note-item" style="cursor:pointer" onclick="openNoteDetail('${n.date}','${n.id}')">
  <div class="ni-dot" style="background:${n.color}"></div>
