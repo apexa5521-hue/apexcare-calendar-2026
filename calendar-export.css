@@ -1,0 +1,27 @@
+#calendar-print{display:none}#export-options{border:0;border-radius:22px;padding:28px;max-width:460px;width:calc(100% - 32px);color:#353650;font-family:Tajawal,sans-serif;box-shadow:0 25px 90px #26223c25}#export-options::backdrop{background:#1b173c66;backdrop-filter:blur(4px)}#export-options h2{font-size:22px;margin:0 0 12px}#export-options p{font-size:13px;line-height:1.8;color:#73798e}#export-options label{display:block;margin:20px 0 10px;font-size:14px}#export-options select{display:block;width:100%;padding:12px;margin-top:8px;border:0;border-radius:12px;background:#f3f4f9;font:inherit}#export-options .export-check{display:flex;gap:9px;align-items:center}.export-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}.export-actions button{padding:11px 17px;border:0;border-radius:11px;font:inherit;cursor:pointer;background:#f1edf8;color:#65458b}#export-start{background:#4a4a9a!important;color:#fff!important}
+@media print{
+body.calendar-export{page:calendar-sheet;background:#fff!important;margin:0!important;color:#20243a!important}
+body.calendar-export> *:not(#calendar-print){display:none!important}
+body.calendar-export #calendar-print{display:block!important;direction:rtl;font-family:Tajawal,Arial,sans-serif}
+body.calendar-export .export-page{break-after:page;break-inside:avoid}
+body.calendar-export .export-page:last-child{break-after:auto}
+body.calendar-export .export-header{display:flex;align-items:center;gap:8mm;border-bottom:1pt solid #3dbdad;padding-bottom:4mm;margin-bottom:5mm}
+body.calendar-export .export-header img{width:32mm;height:15mm;object-fit:contain}
+body.calendar-export h1{font-size:19pt;color:#4a4a9a;margin:0 0 2mm}
+body.calendar-export .export-header p{font-size:10pt;margin:0;color:#657086}
+body.calendar-export .ctbl{min-width:0!important;width:100%;border-collapse:collapse;table-layout:fixed}
+body.calendar-export .ctbl thead th{background:#4a4a9a!important;color:#fff;font-size:10pt;padding:3mm 1mm}
+body.calendar-export .ctbl tbody td{height:21mm;border:.5pt solid #dce1ec;padding:2mm;vertical-align:top;background:#fff}
+body.calendar-export .dn{font-size:11pt}body.calendar-export .dh{font-size:7pt}
+body.calendar-export .pill,body.calendar-export .export-note{white-space:normal!important;overflow:visible!important;font-size:7.5pt!important;line-height:1.4;padding:.5mm 1mm;margin-top:.5mm;color:#343953!important;background:#edf4f3!important}
+body.calendar-export .export-note{border-right:2pt solid #7b52ab;background:#f2edf8!important}
+body.calendar-export .export-footer{font-size:8pt;color:#657086;margin-top:4mm}
+body.calendar-export .export-details{break-before:page}
+body.calendar-export .export-article{margin-bottom:6mm;border-bottom:.5pt solid #dce1ec;padding-bottom:4mm}
+body.calendar-export .export-article h2{font-size:13pt;margin:0 0 2mm;color:#4a4a9a}
+body.calendar-export .export-article p{font-size:10pt;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+body.calendar-export .export-meta{font-size:9pt!important;color:#657086}
+body.calendar-export .export-article a{display:block;direction:ltr;text-align:right;font-size:9pt;overflow-wrap:anywhere;color:#4a4a9a}
+body.calendar-export .export-reply{border-right:2pt solid #3dbdad;padding-right:3mm}
+@page calendar-sheet{size:A4 landscape;margin:10mm}
+}

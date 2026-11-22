@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzBmMTcyYSIvPgogIDxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIyNiIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iIzNEQkRBRCIvPgogIDxyZWN0IHg9IjMiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzRBNEE5QSIvPgogIDxyZWN0IHg9IjMiIHk9IjE2IiB3aWR0aD0iMjAiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzdCNTJBQiIvPgogIDxyZWN0IHg9IjMiIHk9IjIyIiB3aWR0aD0iMTMiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzNEQkRBRCIvPgogIDxjaXJjbGUgY3g9IjI2IiBjeT0iMjMuNSIgcj0iNSIgZmlsbD0iIzNEQkRBRCIvPgogIDxwYXRoIGQ9Ik0yMy41IDIzLjUgTDI1LjUgMjUuNSBMMjkgMjIiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>تقويم أبكس كير 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -295,6 +295,15 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
  .tw{overflow:visible}
 }
 </style>
+<link rel="stylesheet" href="calendar-polish.css">
+<link rel="stylesheet" href="calendar-workspace.css">
+<link rel="stylesheet" href="calendar-experience.css">
+<link rel="stylesheet" href="calendar-export.css">
+<link rel="stylesheet" href="calendar-glass.css">
+<link rel="stylesheet" href="calendar-atmosphere.css">
+<link rel="stylesheet" href="calendar-clarity.css">
+<link rel="stylesheet" href="calendar-day-interaction.css">
+<link rel="stylesheet" href="calendar-wave.css">
 </head>
 <body>
 
@@ -374,7 +383,7 @@ body.report-print .ov#ovReport .modal{max-width:100%!important;box-shadow:none!i
     <button class="btn btn-inbox" id="btnArchive" onclick="showArchive()">الأرشيف</button>
     <button class="btn btn-imp" id="btnReport" onclick="showReport()" style="display:none">تقرير</button>
     <button class="btn btn-imp" id="btnEditLog" onclick="showEditLog()" style="display:none">سجل التعديلات</button>
-    <button class="btn btn-imp" onclick="doImport()">استيراد</button>
+
     <button class="btn btn-pdf" onclick="window.print()">PDF</button>
     <button class="btn btn-logout" onclick="logout()">خروج</button>
   </div>
@@ -968,17 +977,10 @@ function lsDelete(id) {
 }
 
 /* ══ CONFIG - ضع رابط Apps Script في GAS_URL أدناه ══ */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyUibBlhhe-c7nUBwH2Oy_1PQJtEHKrCCfZseiciJvUKWQhvF9Y17jjzzufDNyB5tbZ/exec';
+const GAS_URL = '';
 
 /* رقم سري لكل دور — غيّرها قبل الرفع */
-const PINS = {
- ceo:       '1234',  // المدير التنفيذي
- marketing: '2345',  // التسويق
- hr:        '3456',  // الموارد البشرية
- ops:       '4567',  // العمليات
- quality:   '5678',  // الجودة
- general:   '0000',  // عرض فقط
-};
+const PINS = {};
 
 const ROLE_META = {
   ceo:       {n:'المدير التنفيذي', abbr:'CEO', bg:'#c0152a', canWrite:true,  seesAll:true},
@@ -998,7 +1000,8 @@ const NOTE_STATUS = [
  {key:'done',     label:'منجزة',   color:'#10b981'},
  {key:'rejected', label:'مرفوضة',  color:'#ef4444'}
 ];
-function statusMeta(key){ return NOTE_STATUS.find(s=>s.key===key) || NOTE_STATUS[0]; }
+function isApprovalNote(n){return !!n&&(n.to_role==='ceo'||(n.from_role==='marketing'&&n.to_role==='all'));}
+function statusMeta(key,n){var base=NOTE_STATUS.find(s=>s.key===key)||NOTE_STATUS[0];if(!n||!['done','rejected'].includes(key))return base;return Object.assign({},base,{label:isApprovalNote(n)?(key==='done'?'معتمد':'مرفوض'):(key==='done'?'منجز':'غير منجز'),color:key==='rejected'&&!isApprovalNote(n)?'#d97706':base.color});}
 function escapeHtml(s){
  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -1212,7 +1215,7 @@ function showReport(roleFilter) {
 function exportReportCsv() {
  var rows = [['التاريخ','العنوان','النص','من','إلى','الحالة','مشترك']];
  lastReportWeekNotes.forEach(function(n) {
-  rows.push([n.date, n.title||'', n.text, ROLE_META[n.from_role]?.n||n.from_role, n.to_role==='all'?'الكل':(ROLE_META[n.to_role]?.n||n.to_role), statusMeta(n.status||'new').label, n.shared==='yes'?'نعم':'لا']);
+  rows.push([n.date, n.title||'', n.text, ROLE_META[n.from_role]?.n||n.from_role, n.to_role==='all'?'الكل':(ROLE_META[n.to_role]?.n||n.to_role), statusMeta(n.status||'new',n).label, n.shared==='yes'?'نعم':'لا']);
  });
  var csv = rows.map(function(r){
   return r.map(function(v){ return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'; }).join(',');
@@ -1418,7 +1421,7 @@ function openDaySheet(date) {
  curDay=date;
  const [y,m,d]=date.split('-').map(Number);
  const dow=new Date(y,m-1,d).getDay();
- $t('sheetTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' 2026م');
+ $t('sheetTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' '+date.slice(0,4)+'م');
  const notes=notesMap[date]||[];
  const fu=notes.filter(needsFollowup).length;
  $t('sheetCount', notes.length ? notes.length+' ملاحظة لهذا اليوم'+(fu?' — ⚠ '+fu+' بلا رد منذ أيام':'') : 'لا توجد ملاحظات لهذا اليوم');
@@ -1453,7 +1456,7 @@ function openDayModal(date) {
  curDay=date;
  const [y,m,d]=date.split('-').map(Number);
  const dow=new Date(y,m-1,d).getDay();
- $t('dayTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' 2026م');
+ $t('dayTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' '+date.slice(0,4)+'م');
  $t('daySub', date);
  renderDayNotes();
  showOv('ovDay');
@@ -1494,9 +1497,23 @@ function findNote(date,id){
   || archivedNotes.find(x=>x.id===id);
 }
 
+// Reading is automatic; execution status remains done/rejected until explicitly changed.
+function markNoteReadOnOpen(note,viewer){
+ if(!note||!viewer||note.from_role===viewer)return false;
+ var addressed=note.to_role===viewer||note.to_role==='all';
+ if(!addressed)return false;
+ if(note.status&&note.status!=='new')return false;
+ note.status='read';note.statusTs=new Date().toISOString();return true;
+}
+
 function openNoteDetail(date,id) {
  const n=findNote(date,id);
  if(!n) return;
+ if(markNoteReadOnOpen(n,currentRole)){
+  if(localNotes[id]){localNotes[id].status=n.status;localNotes[id].statusTs=n.statusTs;}
+  lsSave();
+  if(GAS_URL)gasWrite({action:'setStatus',id,status:'read'});
+ }
  curDay=date;
  readIds.add(id);
  localStorage.setItem('apex_read',JSON.stringify([...readIds]));
@@ -1523,9 +1540,9 @@ function openNoteDetail(date,id) {
   </div>
  `);
 
- const canAct = ROLE_META[currentRole]?.canWrite && (n.from_role===currentRole || n.to_role===currentRole || n.to_role==='all' || ROLE_META[currentRole]?.seesAll);
+ const canAct = ROLE_META[currentRole]?.canWrite && (isApprovalNote(n)?currentRole==='ceo':(n.to_role===currentRole || (n.to_role==='all'&&currentRole!=='ceo')));
  const st = n.status||'new';
- $h('detailStatusRow', NOTE_STATUS.map(s=>
+ $h('detailStatusRow', ['done','rejected'].map(key=>statusMeta(key,n)).map(s=>
   `<button class="mbtn" style="flex:1;font-size:11px;padding:7px;background:${st===s.key?s.color:'var(--bg)'};color:${st===s.key?'#fff':'var(--muted)'};border:1.5px solid ${s.color}" ${canAct?`onclick="setNoteStatus('${date}','${id}','${s.key}')"`:'disabled'}>${s.label}</button>`
  ).join(''));
 
@@ -1602,7 +1619,7 @@ function buildNoteItem(n, showDel, isArchiveView) {
  const canDel = showDel && (n.from_role===currentRole || ROLE_META[currentRole]?.seesAll);
  const [y,m,d]=n.date.split('-').map(Number);
  const dateStr=d+' '+MONTHS_AR[m-1];
- const sm = statusMeta(n.status||'new');
+ const sm = statusMeta(n.status||'new',n);
  const replyCount = (n.replies||[]).length;
  return `<div class="note-item" style="cursor:pointer" onclick="openNoteDetail('${n.date}','${n.id}')">
  <div class="ni-dot" style="background:${n.color}"></div>
@@ -2003,5 +2020,22 @@ function openLinkExternal() {
  closeLinkPopup();
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script src="calendar-polish.js"></script>
+<script src="calendar-workspace.js"></script>
+<script src="calendar-experience.js"></script>
+<script src="calendar-export.js"></script>
+<script src="calendar-glass.js"></script>
+<script src="calendar-atmosphere.js"></script>
+<script src="calendar-clarity.js"></script>
+<script src="calendar-day-interaction.js"></script>
+<script src="calendar-wave.js"></script>
+<script src="/config.js"></script>
+<script src="calendar-live.js"></script>
+<link rel="stylesheet" href="calendar-records.css">
+<script src="calendar-records.js"></script>
+<link rel="stylesheet" href="calendar-app.css">
+<script src="calendar-notification-state.js"></script>
+<script src="calendar-app.js"></script>
 </body>
 </html>
