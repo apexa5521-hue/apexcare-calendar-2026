@@ -1,7 +1,7 @@
 name: Calendar keep awake
 on:
   schedule:
-    - cron: '3,13,23,33,43,53 * * * *'
+    - cron: '3-58/5 * * * *'
   workflow_dispatch:
 permissions: {}
 concurrency:
