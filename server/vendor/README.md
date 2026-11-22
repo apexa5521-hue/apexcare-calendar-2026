@@ -1,0 +1,1 @@
+ExcelJS 4.4.0, published dist/exceljs.min.js from the exact npm package. MIT license included. Bundled to retain the existing dependency-free Render build command. Source: https://github.com/exceljs/exceljs/tree/v4.4.0 .

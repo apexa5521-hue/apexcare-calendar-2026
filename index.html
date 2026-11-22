@@ -1421,7 +1421,7 @@ function openDaySheet(date) {
  curDay=date;
  const [y,m,d]=date.split('-').map(Number);
  const dow=new Date(y,m-1,d).getDay();
- $t('sheetTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' 2026م');
+ $t('sheetTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' '+date.slice(0,4)+'م');
  const notes=notesMap[date]||[];
  const fu=notes.filter(needsFollowup).length;
  $t('sheetCount', notes.length ? notes.length+' ملاحظة لهذا اليوم'+(fu?' — ⚠ '+fu+' بلا رد منذ أيام':'') : 'لا توجد ملاحظات لهذا اليوم');
@@ -1456,7 +1456,7 @@ function openDayModal(date) {
  curDay=date;
  const [y,m,d]=date.split('-').map(Number);
  const dow=new Date(y,m-1,d).getDay();
- $t('dayTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' 2026م');
+ $t('dayTitle', DAYS_AR[dow]+'، '+d+' '+MONTHS_AR[m-1]+' '+date.slice(0,4)+'م');
  $t('daySub', date);
  renderDayNotes();
  showOv('ovDay');
@@ -2032,5 +2032,7 @@ function openLinkExternal() {
 <script src="calendar-wave.js"></script>
 <script src="/config.js"></script>
 <script src="calendar-live.js"></script>
+<link rel="stylesheet" href="calendar-records.css">
+<script src="calendar-records.js"></script>
 </body>
 </html>
