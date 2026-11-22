@@ -1,24 +1,21 @@
-# Gmail attachment integration
+# Google Drive archive integration
 
-Implemented server module: `server/drive.mjs`. It is not deployed or wired to the legacy Apps Script backend. Do not expose upload routes before authenticated account and note authorization are implemented.
+The deployed calendar includes admin-only setup, OAuth authorization, and yearly Excel export to a private Drive folder. Image upload support remains in server/drive.mjs but image UI/routes are not yet enabled.
 
-## Required setup
-1. Create/select a dedicated Google Cloud project and enable Google Drive API.
-2. Configure an External OAuth consent screen for the Gmail owner, requesting only `drive.file`.
-3. Create a Web application OAuth client with the exact deployed callback URL.
-4. Store client ID, secret and a random 32-byte base64 encryption key in server secrets, never browser assets.
-5. Supply a durable private storage adapter for OAuth state (atomic single-use consumption), encrypted connection credentials, attachment metadata, and account/note permissions.
-6. Complete consent while signed in to the intended Gmail owner. The application creates its own dedicated folder; uploaded images remain private.
-7. Before release, check Google consent publishing status and refresh-token lifetime. External apps left in Testing can require reauthorization; do not promise permanent access.
+## One-time Google setup
+1. Use apexa2251@gmail.com in Google Cloud and enable Google Drive API.
+2. Configure External OAuth consent for the calendar. Scope: https://www.googleapis.com/auth/drive.file only.
+3. Create a Web application OAuth client. Authorized redirect URI: https://apexcare-calendar.onrender.com/api/drive/callback
+4. In the executive account open أرشفة Excel وDrive then إعداد ربط Google. Enter Client ID and Secret there, never in chat or source code.
+5. Complete Google consent with the intended archive account. A private folder named تقويم أبكس كير is created.
 
-## Storage contract
-Only attachment ID, note ID, uploader ID, Drive file ID, name, MIME type and byte count belong in the application attachment table. Image bytes are transient during transfer only and never written to Supabase Storage, database columns, logs or local disk. OAuth credentials are encrypted secrets, distinct from attachment records.
+## Security and operation
+- Client settings and refresh tokens use AES-256-GCM. CALENDAR_CREDENTIAL_KEY lives only in Render environment variables; do not rotate without reconnecting.
+- OAuth state is single use, ten minutes, bound to the administrator and session. Callback uses an encrypted HttpOnly Secure SameSite=Lax cookie.
+- The server validates the executive session for parse, export, settings, and authorization routes. Data tables remain private with RLS.
+- Excel bytes are transferred directly to Drive or the user; no archive/image bytes are stored in Supabase. Metadata and encrypted credentials are distinct from file content.
+- No public Drive permissions are created.
+- External apps left in Testing can need reauthorization. Verify publishing status and refresh-token lifetime for long-term use.
 
-## Remaining integration
-- Select an independent Supabase project; do not use Masar-Production.
-- Secure individual accounts and authorization for every data route; the legacy PIN and public Apps Script access are not a production authorization system.
-- Add admin-only Drive connection routes, session-bound callback, upload UI and streamed private image endpoint.
-- Add CSRF protection, request body limits and distributed rate limits at route level.
-- Verify real Gmail authorization, upload, read, permission denial, reconnect, and database metadata before deployment.
-
-Run `node --test server/drive.test.mjs` for the available isolation tests.
+## Verification remaining
+Real Google authorization and upload must be verified after the owner completes the client setup. Local tests cover encryption, session-bound OAuth, file restrictions, Excel import/export, and history retention.
