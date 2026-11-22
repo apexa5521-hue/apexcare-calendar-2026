@@ -1,0 +1,18 @@
+name: Calendar keep awake
+on:
+  schedule:
+    - cron: '3,13,23,33,43,53 * * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: calendar-keep-awake
+  cancel-in-progress: false
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check Render health endpoint
+        run: |
+          curl --fail --silent --show-error --max-time 85 https://apexcare-calendar.onrender.com/health |
+            jq -e '.ok == true'
